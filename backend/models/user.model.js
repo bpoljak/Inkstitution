@@ -1,6 +1,5 @@
 const sql = require("./db.js");
 
-// constructor
 const User = function(User) {
   this.userId = userId.title;
   this.userFirstName = User.UserFirstName;

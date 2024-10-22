@@ -6,3 +6,5 @@ const UserImage = function(userImage) {
     this.userImageLink = userImage.userImageLink;
     this.profileImageLink = userImage.profileImageLink;
   };
+
+//test komentar
