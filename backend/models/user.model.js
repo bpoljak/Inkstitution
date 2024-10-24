@@ -1,13 +1,13 @@
 const sql = require("./db.js");
 
 
-const User = function(User) {
+const User = function(user) {
   this.userId = user.userId;
-  this.userFirstName = User.userFirstName;
-  this.userLastName = User.userLastName;
-  this.userEmail = User.userEmail
-  this.userAccountName = User.userAccountName
-  this.userPassword = User.userPassword
+  this.userFirstName = user.userFirstName;
+  this.userLastName = user.userLastName;
+  this.userEmail = user.userEmail
+  this.userAccountName = user.userAccountName
+  this.userPassword = user.userPassword
 };
 
 User.createUser = (newUser, result) => {
