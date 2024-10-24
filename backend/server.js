@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const mysqlConnection = require("./config/db.config"); 
 
 const app = express();
 const PORT = 3000;
@@ -15,8 +16,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to Inkstitution!" });
-  });
+    res.json({ message: "Welcome to Inkstitution!." });
+});
+
+
 
 
 app.listen(PORT, ()=> {
