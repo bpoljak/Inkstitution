@@ -1,4 +1,4 @@
-const sql = require("./db.js");
+const sql = require("../config/db.config");
 
 
 const User = function(user) {
@@ -11,23 +11,30 @@ const User = function(user) {
 };
 
 User.createUser = (newUser, result) => {
-  const createUserQuery = "INSERT INTO Users (UserFirstName, UserLastName, UserEmail, UserAccountName, UserPassword) VALUES (?, ?, ?, ?, ?)";
-  sql.query(createUserQuery, newUser, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
+  const createUserQuery = `
+    INSERT INTO Users (UserFirstName, UserLastName, UserEmail, UserAccountName, UserPassword) 
+    VALUES (?, ?, ?, ?, ?)`;
 
-    console.log("created user: ", { id: res.insertId, ...newUser });
-    result(null, { id: res.insertId, ...newUser });
-  });
+  sql.query(
+    createUserQuery, 
+    [newUser.userFirstName, newUser.userLastName, newUser.userEmail, newUser.userAccountName, newUser.userPassword], 
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      console.log("created user: ", { id: res.insertId, ...newUser });
+      result(null, { id: res.insertId, ...newUser });
+    }
+  );
 };
 
-User.getAllUsers = (title, result) => {
+User.getAllUsers = (result) => {
   const getAllUsersQuery = "SELECT * FROM Users";
 
-  sql.getAllUsersQuery(query, (err, res) => {
+  sql.query(getAllUsersQuery, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -40,7 +47,7 @@ User.getAllUsers = (title, result) => {
 };
 
 User.getUserById = (id, result) => {
-  const getUserByIdQuery = `SELECT * FROM Users WHERE StudioID = ${id}`
+  const getUserByIdQuery = `SELECT * FROM Users WHERE UserID = ${id}`
   sql.query(getUserByIdQuery, (err, res) => {
     if (err) {
       console.log("error: ", err);
@@ -60,7 +67,7 @@ User.getUserById = (id, result) => {
 };
 
 
-User.updateById = (id, user, result) => {
+User.updateUserById = (id, user, result) => {
   const updateUserQuery = `
     UPDATE Users 
     SET UserFirstName = ?, UserLastName = ?, UserEmail = ?, UserAccountName = ?, UserPassword = ?
@@ -85,3 +92,24 @@ User.updateById = (id, user, result) => {
       }
     );
   };
+
+  User.deleteUserById = (id, result) => {
+    sql.query("DELETE FROM Users WHERE id = ?", id, (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+  
+      if (res.affectedRows == 0) {
+        // not found User with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+  
+      console.log("deleted User with id: ", id);
+      result(null, res);
+    });
+  };
+
+  module.exports = User;

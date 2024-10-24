@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const mysqlConnection = require("./config/db.config"); 
 
 const app = express();
 const PORT = 3000;
@@ -19,8 +18,7 @@ app.get("/", (req, res) => {
     res.json({ message: "Welcome to Inkstitution!." });
 });
 
-
-
+require("./routes/user.routes.js")(app);
 
 app.listen(PORT, ()=> {
     console.log(`Server listening on port ${PORT}`);
