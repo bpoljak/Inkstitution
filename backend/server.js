@@ -20,6 +20,7 @@ app.get("/", (req, res) => {
 
 require("./routes/user.routes.js")(app);
 require("./routes/aftercareproduct.routes.js")(app);
+require("./routes/studio.routes.js")(app);
 
 app.listen(PORT, ()=> {
     console.log(`Server listening on port ${PORT}`);
