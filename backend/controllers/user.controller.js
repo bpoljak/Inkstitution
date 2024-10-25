@@ -13,7 +13,7 @@ exports.createUser = (req, res) => {
       userLastName: req.body.userLastName,
       userEmail: req.body.userEmail,
       userAccountName: req.body.userAccountName,
-      userPassword: req.body.userPassword,
+      userPassword: req.body.userPassword
     });
   
     // Save User in the database
