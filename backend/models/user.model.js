@@ -94,7 +94,8 @@ User.updateUserById = (id, user, result) => {
   };
 
   User.deleteUserById = (id, result) => {
-    sql.query("DELETE FROM Users WHERE id = ?", id, (err, res) => {
+    const deleteUserByIdQuery = `DELETE FROM Users WHERE UserID = ${id}`;
+    sql.query(deleteUserByIdQuery, id, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);
