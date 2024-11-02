@@ -20,7 +20,6 @@
 
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
       bordered
     >
       <q-list>
@@ -68,7 +67,7 @@ const linksList = [
   {
     title: 'Log In',
     caption: 'Log into your account',
-    icon: 'chat',
+    icon: 'login',
     link: '/login'
   }
 ]
