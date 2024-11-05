@@ -9,8 +9,7 @@
       <h1>{{ $t("name") }}</h1>
     </div>
     <div class="flex flex-center">
-      <q-card>
-        <q-card-section class="flex q-gutter-md">
+        <div class="flex q-gutter-md">
           <q-card class="q-pa-md">
             <q-card-section>
               <q-icon name="home" size="50px" class="" />
@@ -23,8 +22,7 @@
             <p>Book an appointment with one click</p>
             <q-btn>Book an appointment</q-btn>
           </div>
-        </q-card-section>
-      </q-card>
+        </div>
     </div>
   </q-page>
 </template>
