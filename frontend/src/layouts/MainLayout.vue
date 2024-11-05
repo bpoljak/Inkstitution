@@ -14,7 +14,6 @@
         <q-toolbar-title>
           Inkstitution
         </q-toolbar-title>
-
       </q-toolbar>
     </q-header>
 
@@ -23,17 +22,25 @@
       bordered
     >
       <q-list>
-        <q-item-label
-          header
-        >
+        <q-item-label header>
           Essential Links
         </q-item-label>
 
-        <EssentialLink
+        <q-item
           v-for="link in linksList"
           :key="link.title"
-          v-bind="link"
-        />
+          clickable
+          tag="router-link"
+          :to="link.link"
+        >
+          <q-item-section avatar>
+            <q-icon :name="link.icon" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ link.title }}</q-item-label>
+            <q-item-label caption>{{ link.caption }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -45,30 +52,40 @@
 
 <script setup>
 import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { useI18n } from "vue-i18n";
 
-defineOptions({
-  name: 'MainLayout'
-})
+const { t } = useI18n();
 
 const linksList = [
   {
-    title: 'Home',
-    caption: 'Home page',
+    title: t('home'),
+    caption: t('homeCaption'),
     icon: 'home',
     link: '/'
   },
   {
-    title: 'Register',
-    caption: 'Create your account',
+    title: t('register'),
+    caption: t('registerCaption'),
     icon: 'code',
     link: '/register'
   },
   {
-    title: 'Log In',
-    caption: 'Log into your account',
+    title: t('login'),
+    caption: t('loginCaption'),
     icon: 'login',
     link: '/login'
+  },
+  {
+    title: t('about'),
+    caption: t('aboutCaption'),
+    icon: 'info',
+    link: '/about'
+  },
+  {
+    title: t('settings'),
+    caption: t('settingsCaption'),
+    icon: 'settings',
+    link: '/settings'
   }
 ]
 

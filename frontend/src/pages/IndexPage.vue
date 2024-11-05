@@ -1,10 +1,13 @@
 <template>
   <q-page class="flex flex-center">
     <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
+      alt="Inkstitution Logo"
+      src="~assets/logo1.png"
+      style="width: 275px; height: 200px"
     >
+    <div>
+      <h1>{{ $t("name") }}</h1>
+    </div>
   </q-page>
 </template>
 
