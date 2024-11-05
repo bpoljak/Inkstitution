@@ -26,6 +26,30 @@
         </q-card-section>
       </q-card>
     </div>
+
+    <div class="flex flex-center">
+
+      <div class="q-pa-md text-center">
+          <h2>TRY IT OUT!
+          </h2>
+          <p>Sign Up Today
+          </p>
+          <p>Find the right artist</p>
+          <q-btn>Sign Up</q-btn>
+      </div>
+
+        <div class="flex q-gutter-md">
+          <q-card class="q-pa-md">
+            <q-card-section>
+              <q-icon name="home" size="50px" class="" />
+            </q-card-section>
+          </q-card>
+
+        </div>
+    </div>
+
+
+    
   </q-page>
 </template>
 
