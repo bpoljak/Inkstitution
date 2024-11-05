@@ -78,19 +78,19 @@ const linksList = [
   {
     title: t('studios'),
     caption: t('studiosCaption'),
-    icon: '',
+    icon: 'store',
     link: '/studios'
   },
   {
     title: t('appointments'),
     caption: t('appointmentsCaption'),
-    icon: '',
+    icon: 'book',
     link: '/appointments'
   },
   {
     title: t('aftercare'),
     caption: t('aftercareCaption'),
-    icon: '',
+    icon: 'medication',
     link: '/aftercare'
   },
   {
