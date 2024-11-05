@@ -12,6 +12,9 @@ export default {
   register: "Registracija",
   registerCaption: "Kreiraj svoj račun",
   login: "Prijava",
-  loginCaption: "Prijavi se u svoj račun"
-
+  loginCaption: "Prijavi se u svoj račun",
+  studios: "Tattoo studiji",
+  studiosCaption:"Pregledajte dostupne tattoo studije",
+  appointments:"Termini",
+  appointmentsCaption:"Upravljajte svojim terminima"
 };

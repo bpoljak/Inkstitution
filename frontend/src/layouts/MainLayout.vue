@@ -76,6 +76,18 @@ const linksList = [
     link: '/login'
   },
   {
+    title: t('studios'),
+    caption: t('studiosCaption'),
+    icon: '',
+    link: '/studios'
+  },
+  {
+    title: t('appointments'),
+    caption: t('appointmentsCaption'),
+    icon: '',
+    link: '/appointments'
+  },
+  {
     title: t('about'),
     caption: t('aboutCaption'),
     icon: 'info',
