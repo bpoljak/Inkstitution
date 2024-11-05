@@ -88,6 +88,12 @@ const linksList = [
     link: '/appointments'
   },
   {
+    title: t('aftercare'),
+    caption: t('aftercareCaption'),
+    icon: '',
+    link: '/aftercare'
+  },
+  {
     title: t('about'),
     caption: t('aboutCaption'),
     icon: 'info',
@@ -107,3 +113,5 @@ function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>
+
+

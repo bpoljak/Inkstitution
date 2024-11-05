@@ -16,5 +16,7 @@ export default {
   studios: "Tattoo studiji",
   studiosCaption:"Pregledajte dostupne tattoo studije",
   appointments:"Termini",
-  appointmentsCaption:"Upravljajte svojim terminima"
+  appointmentsCaption:"Upravljajte svojim terminima",
+  aftercare:"Njega tetovaže",
+  aftercareCaption:"Kupite proizvode za njegu tetovaže"
 };
