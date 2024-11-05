@@ -10,6 +10,7 @@ const routes = [
       { path: 'settings', component: () => import('pages/SettingsPage.vue') },
       { path: 'studios', component: () => import('pages/StudiosPage.vue') },
       { path: 'appointments', component: () => import('pages/AppointmentsPage.vue') },
+      { path: 'aftercare', component: () => import('pages/AftercarePage.vue') },
 
     ]
   },
