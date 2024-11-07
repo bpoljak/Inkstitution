@@ -4,19 +4,24 @@ const Appointment = function(appointment) {
     this.appointmentId = appointment.appointmentId;
     this.appointmentDate = appointment.appointmentDate;
     this.appointmentTime = appointment.appointmentTime;
+    this.appointmentStatus = appointment.appointmentStatus;
+    this.appointmentCreatedAt = appointment.appointmentCreatedAt;
+    this.appointmentUpdatedAt = appointment.appointmentUpdatedAt;
   };
 
 
 Appointment.createAppointment = (newAppointment, result) => {
   const createAppointmentQuery = `
-    INSERT INTO Appointments (AppointmentID, AppointmentDate, AppointmentTime) 
-    VALUES (?, ?, ?)`;
+    INSERT INTO Appointments (AppointmentDate, AppointmentTime, Status, CreatedAt) 
+    VALUES (?,?,?,?)`;
 
   sql.query(
     createAppointmentQuery,
     [
       newAppointment.appointmentDate,
-      newAppointment.appointmentTime
+      newAppointment.appointmentTime,
+      newAppointment.appointmentStatus,
+      newAppointment.appointmentCreatedAt
     ],
     (err, res) => {
       if (err) {
