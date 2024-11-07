@@ -13,12 +13,10 @@ Appointment.createAppointment = (newAppointment, result) => {
     VALUES (?, ?, ?)`;
 
   sql.query(
-    createAftercareProductQuery,
+    createAppointmentQuery,
     [
-      newAftercareProduct.aftercareProductName,
-      newAftercareProduct.aftercareProductDescription,
-      newAftercareProduct.aftercareProductPrice,
-      newAftercareProduct.aftercareProductImage
+      newAppointment.appointmentDate,
+      newAppointment.appointmentTime
     ],
     (err, res) => {
       if (err) {
@@ -27,8 +25,43 @@ Appointment.createAppointment = (newAppointment, result) => {
         return;
       }
 
-      console.log("created aftercareproduct: ", { id: res.insertId, ...newAftercareProduct });
-      result(null, { id: res.insertId, ...newAftercareProduct });
+      console.log("created appointment: ", { id: res.insertId, ...newAppointment });
+      result(null, { id: res.insertId, ...newAppointment });
     }
   );
+};
+
+Appointment.getAllAppointments = (result) => {
+  const getAllAppointmentsQuery = "SELECT * FROM Appointments";
+
+  sql.query(getAllAppointmentsQuery, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log("appointments: ", res);
+    result(null, res);
+  });
+};
+
+Appointment.getAppointmentById = (id, result) => {
+  const getAppointmentByIdQuery = `SELECT * FROM Appointments WHERE AppointmentID = ${id}`
+  sql.query(getAppointmentByIdQuery, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found appointment: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found appointment with the id
+    result({ kind: "not_found" }, null);
+  });
 };
