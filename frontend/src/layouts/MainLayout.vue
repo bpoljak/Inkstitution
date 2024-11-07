@@ -100,8 +100,8 @@ const linksList = computed(() => [
     link: '/about'
   },
   {
-    title: t('settings'),
-    caption: t('settingsCaption'),
+    title: t('essentialLinks.settings'),
+    caption: t('essentialLinks.settingsCaption'),
     icon: 'settings',
     link: '/settings'
   }

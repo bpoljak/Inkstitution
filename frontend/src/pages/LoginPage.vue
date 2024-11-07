@@ -1,31 +1,30 @@
 <template>
   <q-page class="q-pa-md">
-    <q-form @submit="onSubmit" @reset="onReset" ref="form">
-      <div class="q-gutter-md">
-
-        <q-input
-          v-model="form.userEmail"
-          label="Email"
-          hint="Enter your email"
-          outlined
-          type="email"
-          :rules="[val => !!val || 'Email is required', val => /.+@.+\..+/.test(val) || 'Enter a valid email']"
-        />
-
-        <q-input
-          v-model="form.userPassword"
-          label="Password"
-          type="password"
-          hint="Enter your password"
-          outlined
-          :rules="[val => !!val || 'Password is required', val => val.length >= 6 || 'Password must be at least 6 characters']"
-        />
-
-        <div class="row justify-center q-col-gutter-md q-mt-md">
-          <q-btn label="Log In" type="submit" color="primary" />
+    <q-card class="login-card">
+      <q-form @submit="onSubmit" ref="form">
+        <div class="q-gutter-md">
+          <q-input
+            v-model="form.userEmail"
+            :label="$t('login.email')"
+            :hint="$t('login.emailHint')"
+            outlined
+            type="email"
+            :rules="[val => !!val || $t('login.validation.required')]"
+          />
+          <q-input
+            v-model="form.userPassword"
+            :label="$t('login.password')"
+            :hint="$t('login.passwordHint')"
+            outlined
+            type="password"
+            :rules="[val => !!val || $t('login.validation.required')]"
+          />
+          <div class="row justify-center q-col-gutter-md q-mt-md">
+            <q-btn :label="$t('login.submitButton')" type="submit" color="primary" />
+          </div>
         </div>
-      </div>
-    </q-form>
+      </q-form>
+    </q-card>
   </q-page>
 </template>
 
@@ -37,8 +36,7 @@ export default {
     return {
       form: {
         userEmail: '',
-        userPassword: '',
-        confirmPassword: '',
+        userPassword: ''
       }
     };
   },
@@ -52,13 +50,13 @@ export default {
               userPassword: this.form.userPassword
             })
             .then(response => {
-              alert('Login successfull!');
+              alert('Login successful!');
               console.log('Response:', response.data);
               this.onReset();
             })
             .catch(error => {
               console.error('Error:', error.response.data.message || error.message);
-              alert('An error occurred during log in.');
+              alert('An error occurred during login.');
             });
         }
       });
@@ -74,5 +72,10 @@ export default {
 .q-page {
   max-width: 400px;
   margin: auto;
+}
+.login-card {
+  background: #f1f1f1;
+  padding: 20px;
+  border-radius: 10px;
 }
 </style>

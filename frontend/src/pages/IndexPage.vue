@@ -12,7 +12,6 @@
     </div>
 
     <div class="card-container flex-cards q-my-lg q-gutter-lg">
-      <!-- Druga sekcija kartica -->
       <q-card :class="['q-pa-md', 'content-card', $q.dark.isActive ? 'dark-card' : 'light-card']">
         <q-card-section class="text-center card-content">
           <q-icon name="layers" size="50px" class="icon-style" />
