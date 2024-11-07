@@ -24,6 +24,7 @@ require("./routes/studio.routes.js")(app);
 require("./routes/artist.routes.js")(app);
 require("./routes/userimage.routes.js")(app);
 require("./routes/studioimage.routes.js")(app);
+require("./routes/appointment.routes.js")(app);
 
 app.listen(PORT, ()=> {
     console.log(`Server listening on port ${PORT}`);
