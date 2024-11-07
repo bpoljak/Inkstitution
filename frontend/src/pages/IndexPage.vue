@@ -3,47 +3,48 @@
     <div :class="['full-screen-section', $q.dark.isActive ? 'dark-mode' : 'light-mode']">
       <div class="q-pa-md text-center hero-section">
         <h1 :class="$q.dark.isActive ? 'text-white' : 'text-black'">
-          Choose your <span class="text-gradient">artist</span>
+          {{ $t('indexPage.chooseYour') }}
+          <span class="text-orange">{{ $t('indexPage.artist') }}</span>
         </h1>
-        <p :class="$q.dark.isActive ? 'text-gray' : 'text-dark-purple'">Fast and simple</p>
-        <q-btn class="custom-button q-my-md" label="Explore" />
+        <p :class="$q.dark.isActive ? 'text-gray' : 'text-dark-purple'">{{ $t('indexPage.fastAndSimple') }}</p>
+        <q-btn class="custom-button q-my-md" :label="$t('indexPage.explore')" />
       </div>
     </div>
 
     <div class="card-container flex-cards q-my-lg q-gutter-lg">
+      <!-- Druga sekcija kartica -->
       <q-card :class="['q-pa-md', 'content-card', $q.dark.isActive ? 'dark-card' : 'light-card']">
         <q-card-section class="text-center card-content">
           <q-icon name="layers" size="50px" class="icon-style" />
-          <h2 class="text-gradient">WHAT IS OUR MISSION?</h2>
+          <h2 class="text-gradient">{{ $t('indexPage.missionTitle') }}</h2>
           <div class="text-container">
-            <p class="text">We connect clients with tattoo artists</p>
-            <p class="text">Book an appointment with one click</p>
+            <p class="text">{{ $t('indexPage.missionDescription1') }}</p>
+            <p class="text">{{ $t('indexPage.missionDescription2') }}</p>
           </div>
-          <q-btn class="custom-button q-my-md" label="Find out more" />
+          <q-btn class="custom-button q-my-md" :label="$t('indexPage.missionButton')" />
         </q-card-section>
       </q-card>
 
       <q-card :class="['q-pa-md', 'content-card', $q.dark.isActive ? 'dark-card' : 'light-card']">
         <q-card-section class="text-center card-content">
           <q-icon name="groups" size="50px" class="icon-style" />
-          <h2 class="text-gradient">CREATE YOUR FREE ACCOUNT</h2>
+          <h2 class="text-gradient">{{ $t('indexPage.createAccountTitle') }}</h2>
           <div class="text-container">
-            <p class="text">Sign Up Today</p>
-            <p class="text">Find the right artist</p>
+            <p class="text">{{ $t('indexPage.createAccountDescription1') }}</p>
+            <p class="text">{{ $t('indexPage.createAccountDescription2') }}</p>
           </div>
-          <q-btn class="custom-button q-my-md" label="Sign Up"/>
+          <q-btn class="custom-button q-my-md" :label="$t('indexPage.createAccountButton')" />
         </q-card-section>
       </q-card>
 
       <q-card :class="['q-pa-md', 'content-card', $q.dark.isActive ? 'dark-card' : 'light-card']">
         <q-card-section class="text-center card-content">
           <q-icon name="store" size="50px" class="icon-style" />
-          <h2 class="text-gradient">DO YOU OWN A STUDIO?</h2>
+          <h2 class="text-gradient">{{ $t('indexPage.ownStudioTitle') }}</h2>
           <div class="text-container">
-            <p class="text">Register your studio and start booking clients</p>
-            <p class="text">Find tattoo artists and expand your community</p>
+            <p class="text">{{ $t('indexPage.ownStudioDescription') }}</p>
           </div>
-          <q-btn class="custom-button q-my-md" label="Register studio"/>
+          <q-btn class="custom-button q-my-md" :label="$t('indexPage.ownStudioButton')" />
         </q-card-section>
       </q-card>
     </div>
@@ -66,11 +67,11 @@ const $q = useQuasar();
 }
 
 .light-mode {
-  background-color: #f1f1f1; 
+  background-color: #f1f1f1;
 }
 
 .dark-mode {
-  background-color: #1e1e1e; 
+  background-color: #1e1e1e;
 }
 
 .hero-section {
@@ -89,6 +90,10 @@ const $q = useQuasar();
   color: #b0b0b0;
 }
 
+.text-orange {
+  color: #ff7e5f;
+}
+
 .text-gradient {
   background: linear-gradient(90deg, #ff7e5f, #feb47b);
   -webkit-background-clip: text;
@@ -99,12 +104,10 @@ const $q = useQuasar();
   color: #5a2d7b;
 }
 
-
 .custom-button {
   background: linear-gradient(90deg, #ff7e5f, #feb47b);
   color: white;
 }
-
 
 .content-card {
   border-radius: 10px;
@@ -119,11 +122,11 @@ const $q = useQuasar();
 }
 
 .light-card {
-  background-color: #f1f1f1; 
+  background-color: #f1f1f1;
 }
 
 .dark-card {
-  background-color: #333; 
+  background-color: #333;
 }
 
 .card-content {

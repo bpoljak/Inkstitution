@@ -51,51 +51,51 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const linksList = [
+const linksList = computed(() => [
   {
-    title: t('home'),
-    caption: t('homeCaption'),
+    title: t('essentialLinks.home'),
+    caption: t('essentialLinks.homeCaption'),
     icon: 'home',
     link: '/'
   },
   {
-    title: t('register'),
-    caption: t('registerCaption'),
+    title: t('essentialLinks.register'),
+    caption: t('essentialLinks.registerCaption'),
     icon: 'code',
     link: '/register'
   },
   {
-    title: t('login'),
-    caption: t('loginCaption'),
+    title: t('essentialLinks.login'),
+    caption: t('essentialLinks.loginCaption'),
     icon: 'login',
     link: '/login'
   },
   {
-    title: t('studios'),
-    caption: t('studiosCaption'),
+    title: t('essentialLinks.studios'),
+    caption: t('essentialLinks.studiosCaption'),
     icon: 'store',
     link: '/studios'
   },
   {
-    title: t('appointments'),
-    caption: t('appointmentsCaption'),
+    title: t('essentialLinks.appointments'),
+    caption: t('essentialLinks.appointmentsCaption'),
     icon: 'book',
     link: '/appointments'
   },
   {
-    title: t('aftercare'),
-    caption: t('aftercareCaption'),
+    title: t('essentialLinks.aftercare'),
+    caption: t('essentialLinks.aftercareCaption'),
     icon: 'medication',
     link: '/aftercare'
   },
   {
-    title: t('about'),
-    caption: t('aboutCaption'),
+    title: t('essentialLinks.about'),
+    caption: t('essentialLinks.aboutCaption'),
     icon: 'info',
     link: '/about'
   },
@@ -105,7 +105,7 @@ const linksList = [
     icon: 'settings',
     link: '/settings'
   }
-]
+]);
 
 const leftDrawerOpen = ref(false)
 
