@@ -96,9 +96,9 @@ exports.deleteUserById = (req, res) => {
 };
 
 exports.loginUser = (req, res) => {
-  const { email, password } = req.body;
+  const { userEmail, userPassword } = req.body;
 
-  User.loginUser(email, password, (err, user) => {
+  User.loginUser(userEmail, userPassword, (err, user) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({ message: "User not found." });

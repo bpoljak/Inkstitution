@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -40,9 +42,26 @@ export default {
     onSubmit() {
       this.$refs.form.validate().then(valid => {
         if (valid) {
-          // submit logika
+          axios
+            .post('http://localhost:3000/api/users/login', {
+              userEmail: this.form.userEmail,
+              userPassword: this.form.userPassword
+            })
+            .then(response => {
+              alert(this.$t('login.successMessage'));
+              console.log('Response:', response.data);
+              this.onReset();
+            })
+            .catch(error => {
+              console.error('Error:', error.response?.data?.message || error.message);
+              alert(this.$t('login.errorMessage'));
+            });
         }
       });
+    },
+    onReset() {
+      this.form.userEmail = '';
+      this.form.userPassword = '';
     }
   }
 };

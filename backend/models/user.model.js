@@ -11,30 +11,38 @@ const User = function (user) {
 };
 
 User.createUser = (newUser, result) => {
-  const createUserQuery = `
-    INSERT INTO Users (UserFirstName, UserLastName, UserEmail, UserAccountName, UserPassword) 
-    VALUES (?, ?, ?, ?, ?)`;
-
-  sql.query(
-    createUserQuery,
-    [
-      newUser.userFirstName,
-      newUser.userLastName,
-      newUser.userEmail,
-      newUser.userAccountName,
-      newUser.userPassword,
-    ],
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-
-      console.log("created user: ", { id: res.insertId, ...newUser });
-      result(null, { id: res.insertId, ...newUser });
+  bcrypt.hash(newUser.userPassword, 10, (err, hash) => {
+    if (err) {
+      console.log("Hashing error:", err);
+      result(err, null);
+      return;
     }
-  );
+
+    const createUserQuery = `
+      INSERT INTO Users (UserFirstName, UserLastName, UserEmail, UserAccountName, UserPassword) 
+      VALUES (?, ?, ?, ?, ?)`;
+
+    sql.query(
+      createUserQuery,
+      [
+        newUser.userFirstName,
+        newUser.userLastName,
+        newUser.userEmail,
+        newUser.userAccountName,
+        hash,
+      ],
+      (err, res) => {
+        if (err) {
+          console.log("error: ", err);
+          result(err, null);
+          return;
+        }
+
+        console.log("created user: ", { id: res.insertId, ...newUser });
+        result(null, { id: res.insertId, ...newUser });
+      }
+    );
+  });
 };
 
 User.getAllUsers = (result) => {
@@ -138,9 +146,18 @@ User.loginUser = (email, password, result) => {
     if (res.length) {
       const user = res[0];
 
+      console.log("Entered password:", password);
+      console.log("Stored password hash:", user.UserPassword);
+
+      if (!user.UserPassword) {
+        console.error("Error: User password hash is undefined.");
+        result({ kind: "invalid_password" }, null);
+        return;
+      }
+
       bcrypt.compare(password, user.UserPassword, (err, isMatch) => {
         if (err) {
-          console.log("error: ", err);
+          console.log("compare error: ", err);
           result(err, null);
           return;
         }

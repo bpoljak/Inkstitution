@@ -19,7 +19,7 @@ module.exports = (app) => {
   router.delete("/:id", users.deleteUserById);
 
   // Login user
-  router.post("/login", users.login);
+  router.post("/login", users.loginUser);
 
   app.use("/api/users", router);
 };
