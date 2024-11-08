@@ -50,8 +50,6 @@ export default {
     termsLabel: "Slažem se s uvjetima korištenja",
     studioLink: "Imaš svoj tattoo studio?",
     submitButton: "Registracija",
-    successMessage: "Registracija uspješna!",
-    errorMessage: "Došlo je do greške tijekom registracije.",
     validation: {
       required: "Ovo polje je obavezno",
       email: "Unesite valjanu email adresu",
@@ -75,4 +73,5 @@ export default {
       required: "Ovo polje je obavezno",
     },
   },
+  welcomeMessage: "Dobrodošli, {name}!",
 };

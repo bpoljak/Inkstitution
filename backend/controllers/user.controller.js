@@ -108,9 +108,9 @@ exports.loginUser = (req, res) => {
         res.status(500).send({ message: "Error logging in." });
       }
     } else {
-      req.session.userId = user.id;
-      req.session.userName = user.userFirstName;
-      res.send({ message: "Login successful", userName: user.userFirstName });
+      req.session.userId = user.UserID;
+      req.session.userName = user.UserFirstName;
+      res.send({ message: "Login successful", userName: user.UserFirstName });
     }
   });
 };

@@ -1,11 +1,21 @@
 <template>
-  <router-view />
+  <div :data-theme="$q.dark.isActive ? 'dark' : 'light'">
+    <router-view />
+  </div>
 </template>
 
 <script setup>
-defineOptions({
-  name: 'App'
-});
+import { watch } from 'vue';
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar();
+
+watch(
+  () => $q.dark.isActive,
+  () => {
+    document.documentElement.setAttribute('data-theme', $q.dark.isActive ? 'dark' : 'light');
+  }
+);
 </script>
 
 <style>
@@ -37,5 +47,9 @@ defineOptions({
   --button-background-color: var(--button-background-color-dark);
   --button-text-color: var(--button-text-color-dark);
   --link-color: var(--link-color-dark);
+}
+
+body {
+  background-color: var(--page-background-color);
 }
 </style>

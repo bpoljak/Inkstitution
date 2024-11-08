@@ -43,10 +43,14 @@ export default {
       this.$refs.form.validate().then(valid => {
         if (valid) {
           axios
-            .post('http://localhost:3000/api/users/login', {
-              userEmail: this.form.userEmail,
-              userPassword: this.form.userPassword
-            })
+            .post(
+              'http://localhost:3000/api/users/login',
+              {
+                userEmail: this.form.userEmail,
+                userPassword: this.form.userPassword
+              },
+              { withCredentials: true } // Omogućuje slanje kolačića
+            )
             .then(response => {
               alert(this.$t('login.successMessage'));
               console.log('Response:', response.data);
@@ -66,6 +70,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .login-page {

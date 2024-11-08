@@ -1,80 +1,117 @@
 <template>
-  <q-page>
-    <div :class="['full-screen-section', $q.dark.isActive ? 'dark-mode' : 'light-mode']">
-      <div class="q-pa-md text-center hero-section">
-        <h1 :class="$q.dark.isActive ? 'text-white' : 'text-black'">
-          {{ $t('indexPage.chooseYour') }}
-          <span class="text-orange">{{ $t('indexPage.artist') }}</span>
-        </h1>
-        <p :class="$q.dark.isActive ? 'text-gray' : 'text-dark-purple'">{{ $t('indexPage.fastAndSimple') }}</p>
-        <q-btn class="custom-button q-my-md" :label="$t('indexPage.explore')" />
-      </div>
+  <q-page :class="{ 'dark-mode': $q.dark.isActive }">
+    <div v-if="userName" class="header-bar">
+      <q-btn flat round icon="mdi-account" @click="goToProfile" color="primary" class="profile-button" />
+      <q-btn color="gradient-light" label="Logout" @click="logoutUser" class="logout-button" />
+    </div>
+    <div class="q-pa-md text-center">
+      <h1 :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}">
+        <span v-if="userName">{{ $t('welcomeMessage', { name: userName }) }}</span>
+        <span v-else>{{ $t('indexPage.chooseYour') }} <span class="text-gradient-light">{{ $t('indexPage.artist') }}</span></span>
+      </h1>
+      <p :class="{'text-light-gray': $q.dark.isActive, 'text-dark-purple': !$q.dark.isActive}">{{ $t('indexPage.fastAndSimple') }}</p>
+      <q-btn color="gradient-light" :label="$t('indexPage.explore')" class="q-my-md" />
     </div>
 
-    <div class="card-container flex-cards q-my-lg q-gutter-lg">
-      <q-card :class="['q-pa-md', 'content-card', $q.dark.isActive ? 'dark-card' : 'light-card']">
+    <div class="flex-cards q-my-lg q-gutter-lg">
+      <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md">
         <q-card-section class="text-center card-content">
-          <q-icon name="layers" size="50px" class="icon-style" />
-          <h2 class="text-gradient">{{ $t('indexPage.missionTitle') }}</h2>
-          <div class="text-container">
-            <p class="text">{{ $t('indexPage.missionDescription1') }}</p>
-            <p class="text">{{ $t('indexPage.missionDescription2') }}</p>
-          </div>
-          <q-btn class="custom-button q-my-md" :label="$t('indexPage.missionButton')" />
+          <q-icon name="layers" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+          <h2 class="text-gradient-light">{{ $t('indexPage.missionTitle') }}</h2>
+          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription1') }}</p>
+          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription2') }}</p>
+          <q-btn color="gradient-light" :label="$t('indexPage.missionButton')" class="q-my-md align-button" />
         </q-card-section>
       </q-card>
 
-      <q-card :class="['q-pa-md', 'content-card', $q.dark.isActive ? 'dark-card' : 'light-card']">
+      <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md">
         <q-card-section class="text-center card-content">
-          <q-icon name="groups" size="50px" class="icon-style" />
-          <h2 class="text-gradient">{{ $t('indexPage.createAccountTitle') }}</h2>
-          <div class="text-container">
-            <p class="text">{{ $t('indexPage.createAccountDescription1') }}</p>
-            <p class="text">{{ $t('indexPage.createAccountDescription2') }}</p>
-          </div>
-          <q-btn class="custom-button q-my-md" :label="$t('indexPage.createAccountButton')" />
+          <q-icon name="groups" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+          <h2 class="text-gradient-light">{{ $t('indexPage.createAccountTitle') }}</h2>
+          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription1') }}</p>
+          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription2') }}</p>
+          <q-btn color="gradient-light" :label="$t('indexPage.createAccountButton')" class="q-my-md align-button" />
         </q-card-section>
       </q-card>
 
-      <q-card :class="['q-pa-md', 'content-card', $q.dark.isActive ? 'dark-card' : 'light-card']">
+      <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md">
         <q-card-section class="text-center card-content">
-          <q-icon name="store" size="50px" class="icon-style" />
-          <h2 class="text-gradient">{{ $t('indexPage.ownStudioTitle') }}</h2>
-          <div class="text-container">
-            <p class="text">{{ $t('indexPage.ownStudioDescription') }}</p>
-          </div>
-          <q-btn class="custom-button q-my-md" :label="$t('indexPage.ownStudioButton')" />
+          <q-icon name="store" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+          <h2 class="text-gradient-light">{{ $t('indexPage.ownStudioTitle') }}</h2>
+          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.ownStudioDescription') }}</p>
+          <q-btn color="gradient-light" :label="$t('indexPage.ownStudioButton')" class="q-my-md align-button" />
         </q-card-section>
       </q-card>
     </div>
   </q-page>
 </template>
 
-<script setup>
-import { useQuasar } from "quasar";
-const $q = useQuasar();
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      userName: null
+    };
+  },
+  created() {
+    axios
+      .get('http://localhost:3000/api/users/session', { withCredentials: true })
+      .then(response => {
+        this.userName = response.data.userName;
+      })
+      .catch(() => {
+        console.log("User not logged in or session expired");
+      });
+  },
+  methods: {
+    goToProfile() {
+      console.log("Navigating to profile...");
+    },
+    logoutUser() {
+      axios
+        .post('http://localhost:3000/api/users/logout', {}, { withCredentials: true })
+        .then(() => {
+          this.userName = null;
+          this.$router.push('/login');
+        })
+        .catch(error => {
+          console.error("Logout failed:", error);
+        });
+    }
+  },
+  watch: {
+    '$q.dark.isActive'() {
+      this.$forceUpdate();
+    }
+  }
+};
 </script>
 
 <style scoped>
-
-.full-screen-section {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.3s ease;
-}
-
-.light-mode {
-  background-color: #f1f1f1;
-}
-
 .dark-mode {
-  background-color: #1e1e1e;
+  background: var(--page-background-color-dark);
+  color: white;
 }
 
-.hero-section {
-  text-align: center;
+.text-gradient-light {
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.q-btn {
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  color: white;
+}
+
+.text-dark-purple {
+  color: #5a2d7b;
+}
+
+.text-light-gray {
+  color: #b0b0b0;
 }
 
 .text-black {
@@ -85,30 +122,8 @@ const $q = useQuasar();
   color: white;
 }
 
-.text-gray {
-  color: #b0b0b0;
-}
-
-.text-orange {
-  color: #ff7e5f;
-}
-
-.text-gradient {
-  background: linear-gradient(90deg, #ff7e5f, #feb47b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-dark-purple {
-  color: #5a2d7b;
-}
-
-.custom-button {
-  background: linear-gradient(90deg, #ff7e5f, #feb47b);
-  color: white;
-}
-
-.content-card {
+.content-card-light {
+  background: var(--card-background-color-light);
   border-radius: 10px;
   max-width: 400px;
   margin: 10px;
@@ -117,15 +132,18 @@ const $q = useQuasar();
   align-items: center;
   padding: 20px;
   min-height: 450px;
-  transition: background-color 0.3s ease;
 }
 
-.light-card {
-  background-color: #f1f1f1;
-}
-
-.dark-card {
-  background-color: #333;
+.content-card-dark {
+  background: var(--card-background-color-dark);
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  min-height: 450px;
 }
 
 .card-content {
@@ -136,20 +154,22 @@ const $q = useQuasar();
   height: 100%;
 }
 
-.text-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  min-height: 80px;
-}
-
 .align-button {
   align-self: center;
 }
 
 .icon-style {
   margin-bottom: 20px;
+}
+
+.text-spacing {
+  margin: 5px 0;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .flex-cards {
@@ -165,5 +185,24 @@ const $q = useQuasar();
 
 .q-gutter-lg {
   gap: 30px;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+  background-color: #333;
+}
+
+.header-bar .profile-button {
+  margin-right: 10px;
+}
+
+.logout-button {
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  color: white;
+  border-radius: 8px;
+  padding: 5px 15px;
 }
 </style>

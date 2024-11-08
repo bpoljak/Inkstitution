@@ -50,8 +50,6 @@ export default {
     termsLabel: "I agree to the terms and conditions",
     studioLink: "Do you have your own tattoo studio?",
     submitButton: "Register Now",
-    successMessage: "Registration successful!",
-    errorMessage: "An error occurred during registration.",
     validation: {
       required: "This field is required",
       email: "Please enter a valid email address",
@@ -75,4 +73,5 @@ export default {
       required: "This field is required",
     },
   },
+  welcomeMessage: "Welcome, {name}!",
 };
