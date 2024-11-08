@@ -3,6 +3,14 @@ module.exports = (app) => {
 
   const router = require("express").Router();
 
+  router.get("/session", (req, res) => {
+    if (req.session.userId) {
+      res.send({ userName: req.session.userName });
+    } else {
+      res.status(401).send({ message: "Not logged in" });
+    }
+  });
+
   // Create a new User
   router.post("/", users.createUser);
 
@@ -20,6 +28,9 @@ module.exports = (app) => {
 
   // Login user
   router.post("/login", users.loginUser);
+
+  //Logout user
+  router.post("/logout", users.logoutUser);
 
   app.use("/api/users", router);
 };

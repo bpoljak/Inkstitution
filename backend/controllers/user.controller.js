@@ -108,7 +108,18 @@ exports.loginUser = (req, res) => {
         res.status(500).send({ message: "Error logging in." });
       }
     } else {
-      res.send(user);
+      req.session.userId = user.id;
+      req.session.userName = user.userFirstName;
+      res.send({ message: "Login successful", userName: user.userFirstName });
     }
+  });
+};
+
+exports.logoutUser = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send({ message: "Could not log out." });
+    }
+    res.send({ message: "Logged out successfully" });
   });
 };
