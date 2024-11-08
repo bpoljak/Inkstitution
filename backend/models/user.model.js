@@ -1,13 +1,13 @@
 const sql = require("../config/db.config");
+const bcrypt = require("bcrypt");
 
-
-const User = function(user) {
+const User = function (user) {
   this.userId = user.userId;
   this.userFirstName = user.userFirstName;
   this.userLastName = user.userLastName;
-  this.userEmail = user.userEmail
-  this.userAccountName = user.userAccountName
-  this.userPassword = user.userPassword
+  this.userEmail = user.userEmail;
+  this.userAccountName = user.userAccountName;
+  this.userPassword = user.userPassword;
 };
 
 User.createUser = (newUser, result) => {
@@ -16,8 +16,14 @@ User.createUser = (newUser, result) => {
     VALUES (?, ?, ?, ?, ?)`;
 
   sql.query(
-    createUserQuery, 
-    [newUser.userFirstName, newUser.userLastName, newUser.userEmail, newUser.userAccountName, newUser.userPassword], 
+    createUserQuery,
+    [
+      newUser.userFirstName,
+      newUser.userLastName,
+      newUser.userEmail,
+      newUser.userAccountName,
+      newUser.userPassword,
+    ],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -47,7 +53,7 @@ User.getAllUsers = (result) => {
 };
 
 User.getUserById = (id, result) => {
-  const getUserByIdQuery = `SELECT * FROM Users WHERE UserID = ${id}`
+  const getUserByIdQuery = `SELECT * FROM Users WHERE UserID = ${id}`;
   sql.query(getUserByIdQuery, (err, res) => {
     if (err) {
       console.log("error: ", err);
@@ -66,51 +72,90 @@ User.getUserById = (id, result) => {
   });
 };
 
-
 User.updateUserById = (id, user, result) => {
   const updateUserQuery = `
     UPDATE Users 
     SET UserFirstName = ?, UserLastName = ?, UserEmail = ?, UserAccountName = ?, UserPassword = ?
     WHERE UserID = ?`;
-    sql.query(
-      updateUserQuery, 
-      [user.userFirstName, user.userLastName, user.userEmail, user.userAccountName, user.userPassword, id],
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(null, err);
-          return;
-        }
-  
-        if (res.affectedRows == 0) {
-          result({ kind: "not_found" }, null);
-          return;
-        }
-  
-        console.log("updated user: ", { id: id, ...user });
-        result(null, { id: id, ...user });
-      }
-    );
-  };
-
-  User.deleteUserById = (id, result) => {
-    const deleteUserByIdQuery = `DELETE FROM Users WHERE UserID = ${id}`;
-    sql.query(deleteUserByIdQuery, id, (err, res) => {
+  sql.query(
+    updateUserQuery,
+    [
+      user.userFirstName,
+      user.userLastName,
+      user.userEmail,
+      user.userAccountName,
+      user.userPassword,
+      id,
+    ],
+    (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);
         return;
       }
-  
+
       if (res.affectedRows == 0) {
-        // not found User with the id
         result({ kind: "not_found" }, null);
         return;
       }
-  
-      console.log("deleted User with id: ", id);
-      result(null, res);
-    });
-  };
 
-  module.exports = User;
+      console.log("updated user: ", { id: id, ...user });
+      result(null, { id: id, ...user });
+    }
+  );
+};
+
+User.deleteUserById = (id, result) => {
+  const deleteUserByIdQuery = `DELETE FROM Users WHERE UserID = ${id}`;
+  sql.query(deleteUserByIdQuery, id, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      // not found User with the id
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log("deleted User with id: ", id);
+    result(null, res);
+  });
+};
+
+User.loginUser = (email, password, result) => {
+  const loginUserQuery = `SELECT * FROM Users WHERE UserEmail = ?`;
+
+  sql.query(loginUserQuery, [email], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      const user = res[0];
+
+      bcrypt.compare(password, user.UserPassword, (err, isMatch) => {
+        if (err) {
+          console.log("error: ", err);
+          result(err, null);
+          return;
+        }
+
+        if (isMatch) {
+          console.log("login successful: ", user);
+          result(null, { id: user.UserID, ...user });
+        } else {
+          result({ kind: "invalid_password" }, null);
+        }
+      });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  });
+};
+
+module.exports = User;
