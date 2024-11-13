@@ -6,8 +6,8 @@ const app = express();
 const PORT = 3000;
 
 const corsOptions = {
-  origin: "http://localhost:9000", // Frontend URL
-  credentials: true, // Omogućava slanje kolačića
+  origin: "http://localhost:9000",
+  credentials: true,
 };
 
 app.use(cors(corsOptions));

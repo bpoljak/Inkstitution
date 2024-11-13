@@ -7,7 +7,6 @@ exports.createUser = (req, res) => {
     });
   }
 
-  // Create a User
   const user = new User({
     userFirstName: req.body.userFirstName,
     userLastName: req.body.userLastName,
@@ -16,7 +15,6 @@ exports.createUser = (req, res) => {
     userPassword: req.body.userPassword,
   });
 
-  // Save User in the database
   User.createUser(user, (err, data) => {
     if (err)
       res.status(500).send({
@@ -26,7 +24,6 @@ exports.createUser = (req, res) => {
   });
 };
 
-// Retrieve all Users from the database.
 exports.getAllUsers = (req, res) => {
   User.getAllUsers((err, data) => {
     if (err)
@@ -55,7 +52,6 @@ exports.getUserById = (req, res) => {
 };
 
 exports.updateUserById = (req, res) => {
-  // Validate Request
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!",
