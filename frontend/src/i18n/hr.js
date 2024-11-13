@@ -16,6 +16,8 @@ export default {
     aboutCaption: "O Inkstitutionu",
     settings: "Postavke",
     settingsCaption: "Promijenite postavke aplikacije",
+    contactUs: "Kontaktirajte nas",
+    contactUsCaption: "Ustupite s nama u kontakt",
   },
   indexPage: {
     chooseYour: "Izaberi svog",

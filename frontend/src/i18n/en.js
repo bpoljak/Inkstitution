@@ -16,6 +16,8 @@ export default {
     aboutCaption: "About Inkstitution",
     settings: "Settings",
     settingsCaption: "Change application settings",
+    contactUs: "Contact Us",
+    contactUsCaption: "Get in touch with us",
   },
   indexPage: {
     chooseYour: "Choose your",

@@ -100,11 +100,17 @@ const linksList = computed(() => [
     link: '/about'
   },
   {
+    title: t('essentialLinks.contactUs'),
+    caption: t('essentialLinks.contactUsCaption'),
+    icon: 'message',
+    link: '/contactUs'
+  },
+  {
     title: t('essentialLinks.settings'),
     caption: t('essentialLinks.settingsCaption'),
     icon: 'settings',
     link: '/settings'
-  }
+  },
 ]);
 
 const leftDrawerOpen = ref(false)
