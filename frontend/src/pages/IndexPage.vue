@@ -1,48 +1,48 @@
 <template>
   <q-page :class="{ 'dark-mode': $q.dark.isActive }">
-    <div v-if="userName" class="header-bar">
-      <q-btn flat round icon="mdi-account" @click="goToProfile" color="primary" class="profile-button" />
-      <q-btn color="gradient-light" label="Logout" @click="logoutUser" class="logout-button" />
-    </div>
-    <div class="q-pa-md text-center">
-      <h1 :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}">
-        <span v-if="userName">{{ $t('welcomeMessage', { name: userName }) }}</span>
-        <span v-else>{{ $t('indexPage.chooseYour') }} <span class="text-gradient-light">{{ $t('indexPage.artist') }}</span></span>
-      </h1>
-      <p :class="{'text-light-gray': $q.dark.isActive, 'text-dark-purple': !$q.dark.isActive}">{{ $t('indexPage.fastAndSimple') }}</p>
-      <q-btn color="gradient-light" :label="$t('indexPage.explore')" class="q-my-md" />
-    </div>
+    <q-card class="hero-card" :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}">
+      <div class="q-pa-md text-center hero-content">
+        <h1 :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}">
+          <span v-if="userName">{{ $t('welcomeMessage', { name: userName }) }}</span>
+          <span v-else>{{ $t('indexPage.chooseYour') }} <span class="text-gradient-light">{{ $t('indexPage.artist') }}</span></span>
+        </h1>
+        <p :class="{'text-light-gray': $q.dark.isActive, 'text-dark-purple': !$q.dark.isActive}">{{ $t('indexPage.fastAndSimple') }}</p>
+        <q-btn color="gradient-light" :label="$t('indexPage.explore')" class="q-my-md" />
+      </div>
+    </q-card>
 
-    <div class="flex-cards q-my-lg q-gutter-lg">
-      <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md">
-        <q-card-section class="text-center card-content">
-          <q-icon name="layers" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
-          <h2 class="text-gradient-light">{{ $t('indexPage.missionTitle') }}</h2>
-          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription1') }}</p>
-          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription2') }}</p>
-          <q-btn color="gradient-light" :label="$t('indexPage.missionButton')" class="q-my-md align-button" />
-        </q-card-section>
-      </q-card>
+    <q-card class="parent-card" :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}">
+      <div class="flex-cards q-my-lg q-gutter-lg">
+        <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md child-card equal-height">
+          <q-card-section class="text-center card-content">
+            <q-icon name="layers" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+            <h2 class="text-gradient-light">{{ $t('indexPage.missionTitle') }}</h2>
+            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription1') }}</p>
+            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription2') }}</p>
+            <q-btn color="gradient-light" :label="$t('indexPage.missionButton')" class="q-my-md align-button" />
+          </q-card-section>
+        </q-card>
 
-      <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md">
-        <q-card-section class="text-center card-content">
-          <q-icon name="groups" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
-          <h2 class="text-gradient-light">{{ $t('indexPage.createAccountTitle') }}</h2>
-          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription1') }}</p>
-          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription2') }}</p>
-          <q-btn color="gradient-light" :label="$t('indexPage.createAccountButton')" class="q-my-md align-button" />
-        </q-card-section>
-      </q-card>
+        <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md child-card equal-height">
+          <q-card-section class="text-center card-content">
+            <q-icon name="groups" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+            <h2 class="text-gradient-light">{{ $t('indexPage.createAccountTitle') }}</h2>
+            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription1') }}</p>
+            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription2') }}</p>
+            <q-btn color="gradient-light" :label="$t('indexPage.createAccountButton')" class="q-my-md align-button" />
+          </q-card-section>
+        </q-card>
 
-      <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md">
-        <q-card-section class="text-center card-content">
-          <q-icon name="store" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
-          <h2 class="text-gradient-light">{{ $t('indexPage.ownStudioTitle') }}</h2>
-          <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.ownStudioDescription') }}</p>
-          <q-btn color="gradient-light" :label="$t('indexPage.ownStudioButton')" class="q-my-md align-button" />
-        </q-card-section>
-      </q-card>
-    </div>
+        <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md child-card equal-height">
+          <q-card-section class="text-center card-content">
+            <q-icon name="store" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+            <h2 class="text-gradient-light">{{ $t('indexPage.ownStudioTitle') }}</h2>
+            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.ownStudioDescription') }}</p>
+            <q-btn color="gradient-light" :label="$t('indexPage.ownStudioButton')" class="q-my-md align-button" />
+          </q-card-section>
+        </q-card>
+      </div>
+    </q-card>
   </q-page>
 </template>
 
@@ -81,11 +81,6 @@ export default {
         });
     }
   },
-  watch: {
-    '$q.dark.isActive'() {
-      this.$forceUpdate();
-    }
-  }
 };
 </script>
 
@@ -93,6 +88,27 @@ export default {
 .dark-mode {
   background: var(--page-background-color-dark);
   color: white;
+}
+
+.hero-card {
+  width: 100%;
+  height: 100vh; 
+  margin: 0 auto;
+  padding: 60px 0; 
+}
+
+.hero-content {
+  margin-top: 50px;
+}
+
+.parent-card {
+  width: 100%;
+  margin: 20px auto;
+  padding: 30px;
+}
+
+.child-card {
+  flex: 1;
 }
 
 .text-gradient-light {
@@ -125,25 +141,11 @@ export default {
 .content-card-light {
   background: var(--card-background-color-light);
   border-radius: 10px;
-  max-width: 400px;
-  margin: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  min-height: 450px;
 }
 
 .content-card-dark {
   background: var(--card-background-color-dark);
   border-radius: 10px;
-  max-width: 400px;
-  margin: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  min-height: 450px;
 }
 
 .card-content {
@@ -154,28 +156,10 @@ export default {
   height: 100%;
 }
 
-.align-button {
-  align-self: center;
-}
-
-.icon-style {
-  margin-bottom: 20px;
-}
-
-.text-spacing {
-  margin: 5px 0;
-}
-
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .flex-cards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .q-my-lg {
