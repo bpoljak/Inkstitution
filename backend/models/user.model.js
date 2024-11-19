@@ -18,8 +18,7 @@ User.createUser = (newUser, result) => {
       return;
     }
 
-    const createUserQuery = `
-      INSERT INTO Users (UserFirstName, UserLastName, UserEmail, UserAccountName, UserPassword) 
+    const createUserQuery = `INSERT INTO Users (UserFirstName, UserLastName, UserEmail, UserAccountName, UserPassword) 
       VALUES (?, ?, ?, ?, ?)`;
 
     sql.query(
@@ -81,8 +80,7 @@ User.getUserById = (id, result) => {
 };
 
 User.updateUserById = (id, user, result) => {
-  const updateUserQuery = `
-    UPDATE Users 
+  const updateUserQuery = `UPDATE Users 
     SET UserFirstName = ?, UserLastName = ?, UserEmail = ?, UserAccountName = ?, UserPassword = ?
     WHERE UserID = ?`;
   sql.query(

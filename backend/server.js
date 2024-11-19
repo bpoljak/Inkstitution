@@ -15,8 +15,8 @@ app.use(cors(corsOptions));
 app.use(
   session({
     secret: "your_secret_key",
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     cookie: { secure: false },
   })
 );
@@ -29,6 +29,13 @@ app.get("/", (req, res) => {
 });
 
 require("./routes/user.routes.js")(app);
+require("./routes/aftercareproduct.routes.js")(app);
+require("./routes/studio.routes.js")(app);
+require("./routes/artist.routes.js")(app);
+require("./routes/userimage.routes.js")(app);
+require("./routes/studioimage.routes.js")(app);
+require("./routes/appointment.routes.js")(app);
+require("./routes/email.routes.js")(app);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

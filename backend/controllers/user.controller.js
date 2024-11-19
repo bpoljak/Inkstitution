@@ -106,6 +106,7 @@ exports.loginUser = (req, res) => {
     } else {
       req.session.userId = user.UserID;
       req.session.userName = user.UserFirstName;
+      req.session.userEmail = user.UserEmail;
       res.send({ message: "Login successful", userName: user.UserFirstName });
     }
   });
@@ -118,4 +119,20 @@ exports.logoutUser = (req, res) => {
     }
     res.send({ message: "Logged out successfully" });
   });
+};
+
+exports.getCurrentUserEmail = (req, res) => {
+  if (req.session.userId) {
+    User.getUserById(req.session.userId, (err, user) => {
+      if (err) {
+        res
+          .status(500)
+          .send({ message: "Pogreška prilikom dohvaćanja korisnika." });
+      } else {
+        res.send({ email: user.userEmail });
+      }
+    });
+  } else {
+    res.status(401).send({ message: "Korisnik nije prijavljen." });
+  }
 };

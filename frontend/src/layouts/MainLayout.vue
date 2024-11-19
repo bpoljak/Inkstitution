@@ -111,6 +111,12 @@ const linksList = computed(() => [
     icon: 'settings',
     link: '/settings'
   },
+  {
+    title: t('essentialLinks.email'),
+    caption: t('essentialLinks.emailCaption'),
+    icon: 'email',
+    link: '/email'
+  },
 ]);
 
 const leftDrawerOpen = ref(false)
