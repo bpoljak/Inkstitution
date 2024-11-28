@@ -15,7 +15,7 @@ export default {
     about: "O nama",
     aboutCaption: "O Inkstitutionu",
     settings: "Postavke",
-    settingsCaption: "Promijenite postavke aplikacije"
+    settingsCaption: "Promijenite postavke aplikacije",
   },
   indexPage: {
     chooseYour: "Izaberi svog",
@@ -72,6 +72,23 @@ export default {
     validation: {
       required: "Ovo polje je obavezno"
     }
+  },
+  contactUs: {
+    title: "Kontakt",
+    description:
+      "Molimo vas da ispunite formu kako bismo vas mogli kontaktirati.",
+    emailLabel: "Email",
+    emailRequired: "Email je obavezan",
+    messageLabel: "Poruka",
+    messageRequired: "Poruka je obavezna",
+    submitButton: "Pošalji",
+    confirmationTitle: "Potvrda slanja",
+    confirmationText: "Želite li stvarno poslati poruku?",
+    cancelButton: "Otkaži",
+    confirmButton: "Pošalji",
+    successMessage: "Poruka je uspješno poslana!",
+    errorMessage: "Greška prilikom slanja poruke. Pokušajte ponovo.",
+    findUs: "Kako nas možete pronaći?",
   },
   welcomeMessage: "Dobrodošli, {name}!",
   aboutPage: {

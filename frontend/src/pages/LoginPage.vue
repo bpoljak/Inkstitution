@@ -40,29 +40,30 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$refs.form.validate().then(valid => {
-        if (valid) {
-          axios
-            .post(
-              'http://localhost:3000/api/users/login',
-              {
-                userEmail: this.form.userEmail,
-                userPassword: this.form.userPassword
-              },
-              { withCredentials: true } // Omogućuje slanje kolačića
-            )
-            .then(response => {
-              alert(this.$t('login.successMessage'));
-              console.log('Response:', response.data);
-              this.onReset();
-            })
-            .catch(error => {
-              console.error('Error:', error.response?.data?.message || error.message);
-              alert(this.$t('login.errorMessage'));
-            });
-        }
-      });
-    },
+  this.$refs.form.validate().then((valid) => {
+    if (valid) {
+      axios
+        .post(
+          "http://localhost:3000/api/users/login",
+          {
+            userEmail: this.form.userEmail,
+            userPassword: this.form.userPassword,
+          },
+          { withCredentials: true }
+        )
+        .then((response) => {
+          console.log("Login successful:", response.data);
+          this.userName = response.data.userName;
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.error("Login error:", error.response?.data?.message || error.message);
+          alert(this.$t("login.errorMessage"));
+        });
+    }
+  });
+}
+,
     onReset() {
       this.form.userEmail = '';
       this.form.userPassword = '';
@@ -70,7 +71,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .login-page {

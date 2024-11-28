@@ -1,26 +1,22 @@
-const mysql = require("mysql");
+const knex = require("knex");
 const path = require("path");
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 
 try {
-    const connection = mysql.createConnection({
-        host: process.env.host, 
-        user: process.env.user, 
-        password: process.env.password, 
-        database: process.env.database, 
-        port: process.env.port
-    });
+  const db = knex({
+    client: "mysql",
+    connection: {
+      host: process.env.host, // Vaš host iz .env datoteke
+      user: process.env.user, // Vaše korisničko ime iz .env datoteke
+      password: process.env.password, // Vaša lozinka iz .env datoteke
+      database: process.env.database, // Naziv baze podataka iz .env datoteke
+      port: process.env.port, // Port iz .env datoteke
+    },
+  });
 
-    connection.connect((error) => {
-        if (error) {
-            console.error("Error connecting to the database:", error);
-            return;
-        }
-        console.log("Successfully connected to the database.");
-    });
+  console.log("Successfully connected to the database using Knex.");
 
-    module.exports = connection;
-
+  module.exports = db;
 } catch (error) {
-    console.error("Error in database config setup:", error);
+  console.error("Error in Knex database config setup:", error);
 }

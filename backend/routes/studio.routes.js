@@ -1,30 +1,14 @@
-module.exports = app => {
-    const studios = require("../controllers/studio.controller.js");
-  
-    const router = require("express").Router();
-  
-    // Create a new Studio
-    router.post("/", studios.createStudio);
+module.exports = (app) => {
+  const studios = require("../controllers/studio.controller.js");
+  const router = require("express").Router();
 
-    // Get all Studios
-    router.get("/", studios.getAllStudios);
+  router.post("/", studios.createStudio);
+  router.get("/", studios.getAllStudios);
+  router.get("/:id", studios.getStudioById);
+  router.get("/:id/createdAt", studios.getStudioCreatedAt);
+  router.get("/:id/updatedAt", studios.getStudioUpdatedAt);
+  router.put("/:id", studios.updateStudioById);
+  router.delete("/:id", studios.deleteStudioById);
 
-    // Get Studio by id
-    router.get("/:id", studios.getStudioById);
-  
-    // Get Studio created at
-    router.get("/:id/createdAt", studios.getStudioCreatedAt);
-
-     // Get Studio updated at
-    router.get("/:id/updatedAt", studios.getStudioUpdatedAt);
-
-    // Update Studio by id
-    router.put("/:id", studios.updateStudioById);
-
-    // Delete Studio by id
-    router.delete("/:id", studios.deleteStudioById);
-
-
-
-    app.use('/api/studios', router);
-  };
+  app.use("/api/studios", router);
+};

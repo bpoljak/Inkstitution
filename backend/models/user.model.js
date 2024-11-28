@@ -1,4 +1,4 @@
-const sql = require("../config/db.config");
+const knex = require("../config/db.config");
 const bcrypt = require("bcrypt");
 
 const User = function (user) {
@@ -10,169 +10,121 @@ const User = function (user) {
   this.userPassword = user.userPassword;
 };
 
-User.createUser = (newUser, result) => {
-  bcrypt.hash(newUser.userPassword, 10, (err, hash) => {
-    if (err) {
-      console.log("Hashing error:", err);
-      result(err, null);
-      return;
-    }
-
-    const createUserQuery = `
-      INSERT INTO Users (UserFirstName, UserLastName, UserEmail, UserAccountName, UserPassword) 
-      VALUES (?, ?, ?, ?, ?)`;
-
-    sql.query(
-      createUserQuery,
-      [
-        newUser.userFirstName,
-        newUser.userLastName,
-        newUser.userEmail,
-        newUser.userAccountName,
-        hash,
-      ],
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
-        }
-
-        console.log("created user: ", { id: res.insertId, ...newUser });
-        result(null, { id: res.insertId, ...newUser });
-      }
-    );
-  });
+// Kreiranje korisnika
+User.createUser = async (newUser, result) => {
+  try {
+    const hashedPassword = await bcrypt.hash(newUser.userPassword, 10);
+    const [userId] = await knex("Users").insert({
+      UserFirstName: newUser.userFirstName,
+      UserLastName: newUser.userLastName,
+      UserEmail: newUser.userEmail,
+      UserAccountName: newUser.userAccountName,
+      UserPassword: hashedPassword,
+    });
+    console.log("created user: ", { id: userId, ...newUser });
+    result(null, { id: userId, ...newUser });
+  } catch (err) {
+    console.error("Error creating user:", err);
+    result(err, null);
+  }
 };
 
-User.getAllUsers = (result) => {
-  const getAllUsersQuery = "SELECT * FROM Users";
-
-  sql.query(getAllUsersQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-
-    console.log("Users: ", res);
-    result(null, res);
-  });
+// Dohvat svih korisnika
+User.getAllUsers = async (result) => {
+  try {
+    const users = await knex("Users").select("*");
+    console.log("Users: ", users);
+    result(null, users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    result(null, err);
+  }
 };
 
-User.getUserById = (id, result) => {
-  const getUserByIdQuery = `SELECT * FROM Users WHERE UserID = ${id}`;
-  sql.query(getUserByIdQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
+// Dohvat korisnika po ID-u
+User.getUserById = async (id, result) => {
+  try {
+    const user = await knex("Users").where("UserID", id).first();
+    if (user) {
+      console.log("found user: ", user);
+      result(null, user);
+    } else {
+      result({ kind: "not_found" }, null);
     }
-
-    if (res.length) {
-      console.log("found user: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found User with the id
-    result({ kind: "not_found" }, null);
-  });
+  } catch (err) {
+    console.error("Error fetching user by ID:", err);
+    result(err, null);
+  }
 };
 
-User.updateUserById = (id, user, result) => {
-  const updateUserQuery = `
-    UPDATE Users 
-    SET UserFirstName = ?, UserLastName = ?, UserEmail = ?, UserAccountName = ?, UserPassword = ?
-    WHERE UserID = ?`;
-  sql.query(
-    updateUserQuery,
-    [
-      user.userFirstName,
-      user.userLastName,
-      user.userEmail,
-      user.userAccountName,
-      user.userPassword,
-      id,
-    ],
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(null, err);
-        return;
-      }
-
-      if (res.affectedRows == 0) {
-        result({ kind: "not_found" }, null);
-        return;
-      }
-
+// Ažuriranje korisnika po ID-u
+User.updateUserById = async (id, user, result) => {
+  try {
+    const updatedRows = await knex("Users").where("UserID", id).update({
+      UserFirstName: user.userFirstName,
+      UserLastName: user.userLastName,
+      UserEmail: user.userEmail,
+      UserAccountName: user.userAccountName,
+      UserPassword: user.userPassword,
+    });
+    if (updatedRows > 0) {
       console.log("updated user: ", { id: id, ...user });
       result(null, { id: id, ...user });
-    }
-  );
-};
-
-User.deleteUserById = (id, result) => {
-  const deleteUserByIdQuery = `DELETE FROM Users WHERE UserID = ${id}`;
-  sql.query(deleteUserByIdQuery, id, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-
-    if (res.affectedRows == 0) {
-      // not found User with the id
+    } else {
       result({ kind: "not_found" }, null);
-      return;
     }
-
-    console.log("deleted User with id: ", id);
-    result(null, res);
-  });
+  } catch (err) {
+    console.error("Error updating user:", err);
+    result(null, err);
+  }
 };
 
-User.loginUser = (email, password, result) => {
-  const loginUserQuery = `SELECT * FROM Users WHERE UserEmail = ?`;
-
-  sql.query(loginUserQuery, [email], (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
+// Brisanje korisnika po ID-u
+User.deleteUserById = async (id, result) => {
+  try {
+    const deletedRows = await knex("Users").where("UserID", id).del();
+    if (deletedRows > 0) {
+      console.log("deleted user with id: ", id);
+      result(null, { message: "User deleted successfully" });
+    } else {
+      result({ kind: "not_found" }, null);
     }
+  } catch (err) {
+    console.error("Error deleting user:", err);
+    result(null, err);
+  }
+};
 
-    if (res.length) {
-      const user = res[0];
-
-      console.log("Entered password:", password);
-      console.log("Stored password hash:", user.UserPassword);
-
-      if (!user.UserPassword) {
-        console.error("Error: User password hash is undefined.");
-        result({ kind: "invalid_password" }, null);
-        return;
+// Prijava korisnika
+User.loginUser = (email, password, result) => {
+  knex("Users")
+    .where({ UserEmail: email })
+    .first()
+    .then((user) => {
+      if (!user) {
+        return result({ kind: "not_found" }, null);
       }
 
       bcrypt.compare(password, user.UserPassword, (err, isMatch) => {
         if (err) {
-          console.log("compare error: ", err);
-          result(err, null);
-          return;
+          return result(err, null);
         }
 
         if (isMatch) {
-          console.log("login successful: ", user);
-          result(null, { id: user.UserID, ...user });
+          result(null, {
+            id: user.UserID,
+            userFirstName: user.UserFirstName,
+            userEmail: user.UserEmail,
+          });
         } else {
           result({ kind: "invalid_password" }, null);
         }
       });
-    } else {
-      result({ kind: "not_found" }, null);
-    }
-  });
+    })
+    .catch((err) => {
+      console.error("Greška prilikom prijave:", err);
+      result(err, null);
+    });
 };
 
 module.exports = User;

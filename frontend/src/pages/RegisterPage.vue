@@ -90,10 +90,9 @@ export default {
               userEmail: this.form.userEmail,
               userPassword: this.form.userPassword
             })
-            .then(response => {
+            .then(() => {
               alert(this.$t('registration.successMessage'));
-              console.log('Response:', response.data);
-              this.onReset();
+              this.$router.push('/login');
             })
             .catch(error => {
               console.error('Error:', error.response?.data?.message || error.message);

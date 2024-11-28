@@ -1,145 +1,137 @@
-const sql = require("../config/db.config");
+const knex = require("../config/db.config");
 
-const UserImage = function(userImage) {
-    this.userImageId = userImage.userImageId;
-    this.userImageDescription = userImage.userImageDescription;
-    this.userImageLink = userImage.userImageLink;
-    this.profileImageLink = userImage.profileImageLink;
+const UserImage = function (userImage) {
+  this.userImageId = userImage.userImageId;
+  this.userImageDescription = userImage.userImageDescription;
+  this.userImageLink = userImage.userImageLink;
+  this.profileImageLink = userImage.profileImageLink;
 };
 
 // Create User Image
-UserImage.createUserImage = (newUserImage, result) => {
-    const createUserImageQuery = `
-      INSERT INTO UserImages (UserImageDescription, UserImageLink, UserProfileImageLink) 
-      VALUES (?, ?, ?)`;
-  
-    sql.query(
-      createUserImageQuery, 
-      [newUserImage.userImageDescription, newUserImage.userImageLink, newUserImage.profileImageLink], 
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
-        }
-  
-        console.log("Created user image: ", { id: res.insertId, ...newUserImage });
-        result(null, { id: res.insertId, ...newUserImage });
-      }
-    );
+UserImage.createUserImage = async (newUserImage, result) => {
+  try {
+    const [id] = await knex("UserImages").insert({
+      UserImageDescription: newUserImage.userImageDescription,
+      UserImageLink: newUserImage.userImageLink,
+      UserProfileImageLink: newUserImage.profileImageLink,
+      CreatedAt: knex.fn.now(),
+      UpdatedAt: knex.fn.now(),
+    });
+
+    console.log("Created user image: ", { id, ...newUserImage });
+    result(null, { id, ...newUserImage });
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
 // Get all user images
-UserImage.getAllUserImages = (result) => {
-    const getAllUserImagesQuery = "SELECT * FROM UserImages";
-    sql.query(getAllUserImagesQuery, (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(null, err);
-            return;
-        }
-        console.log("User Images: ", res);
-        result(null, res);
-    });
+UserImage.getAllUserImages = async (result) => {
+  try {
+    const images = await knex("UserImages").select("*");
+    console.log("User Images: ", images);
+    result(null, images);
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
 // Update User Image
-UserImage.updateUserImageById = (id, userImage, result) => {
-    const updateUserImageByIdQuery = `
-      UPDATE UserImages 
-      SET UserImageDescription = ?, UserImageLink = ?, UserProfileImageLink = ?
-      WHERE UserImageID = ?`;
-    sql.query(
-      updateUserImageByIdQuery, 
-      [userImage.userImageDescription, userImage.userImageLink, userImage.profileImageLink, id],
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(null, err);
-          return;
-        }
-        if (res.affectedRows == 0) {
-          result({ kind: "not_found" }, null);
-          return;
-        }
-        console.log("Updated user image: ", { id: id, ...userImage });
-        result(null, { id: id, ...userImage });
-      }
-    );
+UserImage.updateUserImageById = async (id, userImage, result) => {
+  try {
+    const updated = await knex("UserImages").where({ UserImageID: id }).update({
+      UserImageDescription: userImage.userImageDescription,
+      UserImageLink: userImage.userImageLink,
+      UserProfileImageLink: userImage.profileImageLink,
+      UpdatedAt: knex.fn.now(),
+    });
+
+    if (updated) {
+      console.log("Updated user image: ", { id, ...userImage });
+      result(null, { id, ...userImage });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
 // Delete User Image
-UserImage.deleteUserImageById = (id, result) => {
-    const deleteUserImageByIdQuery = `DELETE FROM UserImages WHERE UserImageID = ?`;
-    sql.query(deleteUserImageByIdQuery, [id], (err, res) => {
-        if (err) {
-            console.log("error: ", err);
-            result(null, err);
-            return;
-        }
-        if (res.affectedRows == 0) {
-            result({ kind: "not_found" }, null);
-            return;
-        }
-        console.log("Deleted User Image with id: ", id);
-        result(null, res);
-    });
+UserImage.deleteUserImageById = async (id, result) => {
+  try {
+    const deleted = await knex("UserImages").where({ UserImageID: id }).del();
+
+    if (deleted) {
+      console.log("Deleted user image with id: ", id);
+      result(null, { success: true });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
 // Get User Image Created At
-UserImage.getUserImageCreatedAt = (id, result) => {
-    const getUserImageCreatedAt = `SELECT CreatedAt FROM UserImages WHERE UserImageID = ?`;
-    sql.query(getUserImageCreatedAt, [id], (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(err, null);
-            return;
-        }
-        if (res.length) {
-            console.log("User Image created at: ", res[0]);
-            result(null, res[0]);
-            return;
-        }
-        result({ kind: "not_found" }, null);
-    });
-};
+UserImage.getUserImageCreatedAt = async (id, result) => {
+  try {
+    const createdAt = await knex("UserImages")
+      .where({ UserImageID: id })
+      .select("CreatedAt")
+      .first();
 
-UserImage.getUserImageById = (id, result) => {
-  const getUserImageByIdQuery = `SELECT * FROM UserImages WHERE UserImageID = ${id}`
-  sql.query(getUserImageByIdQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found user image: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found User with the id
-    result({ kind: "not_found" }, null);
-  });
-};
-
-UserImage.getUserImageUpdatedAt = (id, result) => {
-  const getUserImageUpdatedAt = `SELECT UpdatedAt FROM UserImages WHERE UserImageID = ?`;
-  sql.query(getUserImageUpdatedAt, [id], (err, res) => {
-      if (err) {
-          console.log("Error: ", err);
-          result(err, null);
-          return;
-      }
-      if (res.length) {
-          console.log("User images updated created at: ", res[0]);
-          result(null, res[0]);
-          return;
-      }
+    if (createdAt) {
+      console.log("User Image created at: ", createdAt);
+      result(null, createdAt);
+    } else {
       result({ kind: "not_found" }, null);
-  });
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
+// Get User Image by ID
+UserImage.getUserImageById = async (id, result) => {
+  try {
+    const image = await knex("UserImages").where({ UserImageID: id }).first();
+
+    if (image) {
+      console.log("Found user image: ", image);
+      result(null, image);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+// Get User Image Updated At
+UserImage.getUserImageUpdatedAt = async (id, result) => {
+  try {
+    const updatedAt = await knex("UserImages")
+      .where({ UserImageID: id })
+      .select("UpdatedAt")
+      .first();
+
+    if (updatedAt) {
+      console.log("User Image updated at: ", updatedAt);
+      result(null, updatedAt);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
 
 module.exports = UserImage;

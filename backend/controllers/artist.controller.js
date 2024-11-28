@@ -1,88 +1,97 @@
 const Artist = require("../models/artist.model");
 
-exports.createArtist = (req, res) => {
+exports.createArtist = async (req, res) => {
   if (!req.body) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Content can not be empty!",
     });
-    return;
   }
 
-  const artist = new Artist({
+  const artist = {
     artistName: req.body.artistName,
     artistProfileImageLink: req.body.artistProfileImageLink,
-  });
+  };
 
-  Artist.createArtist(artist, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || "Some error occurred while creating the artist.",
+  try {
+    const data = await Artist.createArtist(artist);
+    res.send(data);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message || "Some error occurred while creating the artist.",
+    });
+  }
+};
+
+exports.getAllArtists = async (req, res) => {
+  try {
+    const data = await Artist.getAllArtists();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Some error occurred while retrieving artists.",
+    });
+  }
+};
+
+exports.getArtistById = async (req, res) => {
+  try {
+    const data = await Artist.getArtistById(req.params.id);
+    if (!data) {
+      res.status(404).send({
+        message: `Not found artist with id ${req.params.id}.`,
       });
-    else res.send(data);
-  });
+    } else {
+      res.send(data);
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: `Error retrieving artist with id ${req.params.id}.`,
+    });
+  }
 };
 
-exports.getAllArtists = (req, res) => {
-  Artist.getAllArtists((err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving artists.",
-      });
-    else res.send(data);
-  });
-};
-
-exports.getArtistById = (req, res) => {
-  Artist.getArtistById(req.params.id, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Not found artist with id ${req.params.id}.`,
-        });
-      } else {
-        res.status(500).send({
-          message: `Error retrieving artist with id ${req.params.id}.`,
-        });
-      }
-    } else res.send(data);
-  });
-};
-
-exports.updateArtistById = (req, res) => {
+exports.updateArtistById = async (req, res) => {
   if (!req.body) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Content can not be empty!",
     });
-    return;
   }
 
-  Artist.updateArtistById(req.params.id, new Artist(req.body), (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Not found artist with id ${req.params.id}.`,
-        });
-      } else {
-        res.status(500).send({
-          message: `Error updating artist with id ${req.params.id}.`,
-        });
-      }
-    } else res.send(data);
-  });
+  const artist = {
+    artistName: req.body.artistName,
+    artistProfileImageLink: req.body.artistProfileImageLink,
+  };
+
+  try {
+    const data = await Artist.updateArtistById(req.params.id, artist);
+    if (!data) {
+      res.status(404).send({
+        message: `Not found artist with id ${req.params.id}.`,
+      });
+    } else {
+      res.send(data);
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: `Error updating artist with id ${req.params.id}.`,
+    });
+  }
 };
 
-exports.deleteArtistById = (req, res) => {
-  Artist.deleteArtistById(req.params.id, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Not found artist with id ${req.params.id}.`,
-        });
-      } else {
-        res.status(500).send({
-          message: `Could not delete artist with id ${req.params.id}.`,
-        });
-      }
-    } else res.send({ message: `Artist was deleted successfully!` });
-  });
+exports.deleteArtistById = async (req, res) => {
+  try {
+    const data = await Artist.deleteArtistById(req.params.id);
+    if (!data) {
+      res.status(404).send({
+        message: `Not found artist with id ${req.params.id}.`,
+      });
+    } else {
+      res.send({ message: `Artist was deleted successfully!` });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: `Could not delete artist with id ${req.params.id}.`,
+    });
+  }
 };

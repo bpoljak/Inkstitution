@@ -1,35 +1,30 @@
 module.exports = (app) => {
   const users = require("../controllers/user.controller.js");
-
-  const router = require("express").Router();
+  const express = require("express");
+  const router = express.Router();
 
   router.get("/session", (req, res) => {
-    if (req.session.userId) {
-      res.send({ userName: req.session.userName });
-    } else {
-      res.status(401).send({ message: "Not logged in" });
+    if (req.session && req.session.userId) {
+      return res.send({
+        userName: req.session.userName,
+        userEmail: req.session.userEmail,
+      });
     }
+    res.status(401).send({ message: "User not logged in or session expired." });
   });
 
-  // Create a new User
   router.post("/", users.createUser);
 
-  // Get all users
   router.get("/", users.getAllUsers);
 
-  // Get user by id
   router.get("/:id", users.getUserById);
 
-  // Update user by id
   router.put("/:id", users.updateUserById);
 
-  // Delete user by id
   router.delete("/:id", users.deleteUserById);
 
-  // Login user
   router.post("/login", users.loginUser);
 
-  //Logout user
   router.post("/logout", users.logoutUser);
 
   app.use("/api/users", router);

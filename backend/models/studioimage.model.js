@@ -1,199 +1,164 @@
-const sql = require("../config/db.config");
+const knex = require("../config/db.config");
 
-const StudioImage = function(studioImage) {
-    this.studioImageID = studioImage.studioImageID;
-    this.studioImageDescription = studioImage.studioImageDescription;
-    this.studioImageLink = studioImage.studioImageLink;
-    this.studioProfileImageLink = studioImage.studioProfileImageLink;
-    this.createdAt = studioImage.createdAt;
-    this.updatedAt = studioImage.updatedAt;
+const StudioImage = function (studioImage) {
+  this.studioImageID = studioImage.studioImageID;
+  this.studioImageDescription = studioImage.studioImageDescription;
+  this.studioImageLink = studioImage.studioImageLink;
+  this.studioProfileImageLink = studioImage.studioProfileImageLink;
+  this.createdAt = studioImage.createdAt;
+  this.updatedAt = studioImage.updatedAt;
 };
 
-// Kreiranje nove slike za studio
-StudioImage.createStudioImage = (newStudioImage, result) => {
-    const createStudioImageQuery = `
-        INSERT INTO StudioImages (StudioImageDescription, StudioImageLink, StudioProfileImageLink, CreatedAt, UpdatedAt) 
-        VALUES (?, ?, ?, ?, ?)`;
-
-    const currentTimestamp = new Date(); // Trenutni datum i vrijeme
-
-    sql.query(
-        createStudioImageQuery,
-        [
-            newStudioImage.studioImageDescription,
-            newStudioImage.studioImageLink,
-            newStudioImage.studioProfileImageLink,
-            currentTimestamp,
-            currentTimestamp
-        ],
-        (err, res) => {
-            if (err) {
-                console.log("error: ", err);
-                result(err, null);
-                return;
-            }
-
-            console.log("created studio image: ", { id: res.insertId, ...newStudioImage });
-            result(null, { id: res.insertId, ...newStudioImage });
-        }
-    );
-};
-
-// Ažuriranje slike za studio po ID-u
-StudioImage.updateStudioImageById = (id, studioImage, result) => {
-    const updateStudioImageQuery = `
-        UPDATE StudioImages 
-        SET StudioImageDescription = ?, StudioImageLink = ?, StudioProfileImageLink = ?, UpdatedAt = ?
-        WHERE StudioImageID = ?`;
-
-    const currentTimestamp = new Date(); // Trenutni datum i vrijeme
-
-    sql.query(
-        updateStudioImageQuery,
-        [
-            studioImage.studioImageDescription,
-            studioImage.studioImageLink,
-            studioImage.studioProfileImageLink,
-            currentTimestamp,
-            id
-        ],
-        (err, res) => {
-            if (err) {
-                console.log("error: ", err);
-                result(null, err);
-                return;
-            }
-
-            if (res.affectedRows == 0) {
-                result({ kind: "not_found" }, null);
-                return;
-            }
-
-            console.log("updated studio image: ", { id: id, ...studioImage });
-            result(null, { id: id, ...studioImage });
-        }
-    );
-};
-
-// Ažuriranje datuma i vremena samo za UpdatedAt
-StudioImage.updateStudioImageTimestamp = (id, result) => {
-    const updateTimestampQuery = `
-        UPDATE StudioImages 
-        SET UpdatedAt = ?
-        WHERE StudioImageID = ?`;
-
-    const currentTimestamp = new Date(); // Trenutni datum i vrijeme
-
-    sql.query(updateTimestampQuery, [currentTimestamp, id], (err, res) => {
-        if (err) {
-            console.log("error: ", err);
-            result(null, err);
-            return;
-        }
-
-        if (res.affectedRows == 0) {
-            result({ kind: "not_found" }, null);
-            return;
-        }
-
-        console.log("updated timestamp for studio image with id: ", id);
-        result(null, res);
+// Create a new studio image
+StudioImage.createStudioImage = async (newStudioImage, result) => {
+  try {
+    const [id] = await knex("StudioImages").insert({
+      StudioImageDescription: newStudioImage.studioImageDescription,
+      StudioImageLink: newStudioImage.studioImageLink,
+      StudioProfileImageLink: newStudioImage.studioProfileImageLink,
+      CreatedAt: knex.fn.now(),
+      UpdatedAt: knex.fn.now(),
     });
+
+    console.log("Created studio image: ", { id, ...newStudioImage });
+    result(null, { id, ...newStudioImage });
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
-StudioImage.getAllStudioImages = (result) => {
-    const getAllStudioImagesQuery = `SELECT * FROM StudioImages`;
-    sql.query(getAllStudioImagesQuery, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-  
-      if (res.length) {
-        console.log("Found all studio images: ", res[0]);
-        result(null, res[0]);
-        return;
-      }
-  
-      // not found User with the id
+// Update a studio image by ID
+StudioImage.updateStudioImageById = async (id, studioImage, result) => {
+  try {
+    const updated = await knex("StudioImages")
+      .where({ StudioImageID: id })
+      .update({
+        StudioImageDescription: studioImage.studioImageDescription,
+        StudioImageLink: studioImage.studioImageLink,
+        StudioProfileImageLink: studioImage.studioProfileImageLink,
+        UpdatedAt: knex.fn.now(),
+      });
+
+    if (updated) {
+      console.log("Updated studio image: ", { id, ...studioImage });
+      result(null, { id, ...studioImage });
+    } else {
       result({ kind: "not_found" }, null);
-    });
-  };
-
-  StudioImage.getStudioImageById = (id, result) => {
-    const getStudioImageByIdQuery = `SELECT * FROM StudioImages WHERE StudioImageID = ${id}`
-    sql.query(getStudioImageByIdQuery, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-  
-      if (res.length) {
-        console.log("found studio images: ", res[0]);
-        result(null, res[0]);
-        return;
-      }
-  
-      // not found User with the id
-      result({ kind: "not_found" }, null);
-    });
-  };
-
-  StudioImage.deleteStudioImageById = (id, result) => {
-    const deleteStudioImageByIdQuery = `DELETE FROM StudioImages WHERE StudioImageID = ${id}`;
-    sql.query(deleteStudioImageByIdQuery, id, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(null, err);
-        return;
-      }
-  
-      if (res.affectedRows == 0) {
-        // not found User with the id
-        result({ kind: "not_found" }, null);
-        return;
-      }
-  
-      console.log("deleted Studio image with id: ", id);
-      result(null, res);
-    });
-  };
-
-
-  StudioImage.getStudioImageCreatedAt = (id, result) => {
-    const getStudioImageCreatedAt = `SELECT CreatedAt FROM StudioImages WHERE StudioImageID = ?`;
-    sql.query(getStudioImageCreatedAt, [id], (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(err, null);
-            return;
-        }
-        if (res.length) {
-            console.log("Studio Image created at: ", res[0]);
-            result(null, res[0]);
-            return;
-        }
-        result({ kind: "not_found" }, null);
-    });
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
-StudioImage.getStudioImageUpdatedAt = (id, result) => {
-    const getStudioImageUpdatedAt = `SELECT UpdatedAt FROM StudioImages WHERE StudioImageID = ?`;
-    sql.query(getStudioImageUpdatedAt, [id], (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(err, null);
-            return;
-        }
-        if (res.length) {
-            console.log("Studio updated created at: ", res[0]);
-            result(null, res[0]);
-            return;
-        }
-        result({ kind: "not_found" }, null);
-    });
+// Update only the UpdatedAt timestamp
+StudioImage.updateStudioImageTimestamp = async (id, result) => {
+  try {
+    const updated = await knex("StudioImages")
+      .where({ StudioImageID: id })
+      .update({
+        UpdatedAt: knex.fn.now(),
+      });
+
+    if (updated) {
+      console.log("Updated timestamp for studio image with id: ", id);
+      result(null, { success: true });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+// Get all studio images
+StudioImage.getAllStudioImages = async (result) => {
+  try {
+    const images = await knex("StudioImages").select("*");
+    console.log("All studio images: ", images);
+    result(null, images);
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+// Get a studio image by ID
+StudioImage.getStudioImageById = async (id, result) => {
+  try {
+    const image = await knex("StudioImages")
+      .where({ StudioImageID: id })
+      .first();
+    if (image) {
+      console.log("Found studio image: ", image);
+      result(null, image);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+// Delete a studio image by ID
+StudioImage.deleteStudioImageById = async (id, result) => {
+  try {
+    const deleted = await knex("StudioImages")
+      .where({ StudioImageID: id })
+      .del();
+    if (deleted) {
+      console.log("Deleted studio image with id: ", id);
+      result(null, { success: true });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+// Get creation timestamp for a studio image
+StudioImage.getStudioImageCreatedAt = async (id, result) => {
+  try {
+    const createdAt = await knex("StudioImages")
+      .where({ StudioImageID: id })
+      .select("CreatedAt")
+      .first();
+
+    if (createdAt) {
+      console.log("Studio image created at: ", createdAt);
+      result(null, createdAt);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+// Get update timestamp for a studio image
+StudioImage.getStudioImageUpdatedAt = async (id, result) => {
+  try {
+    const updatedAt = await knex("StudioImages")
+      .where({ StudioImageID: id })
+      .select("UpdatedAt")
+      .first();
+
+    if (updatedAt) {
+      console.log("Studio image updated at: ", updatedAt);
+      result(null, updatedAt);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
 module.exports = StudioImage;

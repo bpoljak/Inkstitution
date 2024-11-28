@@ -15,7 +15,9 @@ export default {
     about: "About Us",
     aboutCaption: "About Inkstitution",
     settings: "Settings",
-    settingsCaption: "Change application settings"
+    settingsCaption: "Change application settings",
+    contactUs: "Contact Us",
+    contactUsCaption: "Get in touch with us",
   },
   indexPage: {
     chooseYour: "Choose your",
@@ -72,6 +74,23 @@ export default {
     validation: {
       required: "This field is required"
     }
+  },
+  contactUs: {
+    title: "Contact",
+    description: "Please fill out the form so we can contact you.",
+    emailLabel: "Email",
+    emailRequired: "Email is required",
+    messageLabel: "Message",
+    messageRequired: "Message is required",
+    submitButton: "Send",
+    confirmationTitle: "Confirm Sending",
+    confirmationText: "Are you sure you want to send the message?",
+    cancelButton: "Cancel",
+    confirmButton: "Send",
+    successMessage: "Message sent successfully!",
+    errorMessage:
+      "An error occurred while sending the message. Please try again.",
+    findUs: "How can you find us?",
   },
   welcomeMessage: "Welcome, {name}!",
   aboutPage: {

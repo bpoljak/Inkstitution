@@ -1,198 +1,153 @@
-const sql = require("../config/db.config");
+const knex = require("../config/db.config");
 
-const Artist = function(artist) {
-    this.artistId = artist.artistId;
-    this.artistName = artist.artistName;
-    this.artistProfileImageLink = artist.artistProfileImageLink;
-  };
-
-Artist.createArtist = (newArtist, result) => {
-  const createArtistQuery = `
-    INSERT INTO Artists (ArtistName, ArtistProfileImageLink) 
-    VALUES (?, ?)`;
-  
-  sql.query(
-    createArtistQuery, 
-    [newArtist.artistName, newArtist.artistProfileImageLink], 
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-  
-      console.log("created artist: ", { id: res.insertId, ...newArtist });
-      result(null, { id: res.insertId, ...newArtist });
-    }
-  );
+const Artist = function (artist) {
+  this.artistId = artist.artistId;
+  this.artistName = artist.artistName;
+  this.artistProfileImageLink = artist.artistProfileImageLink;
 };
 
-Artist.createArtistProfileImage = (newArtistProfileImage, result) => {
-  const createArtistProfileImageQuery = `
-    INSERT INTO Artists (ArtistProfileImageLink) 
-    VALUES (?)`;
-  
-  sql.query(
-    createArtistProfileImageQuery, 
-    [newArtistProfileImage.artistProfileImageLink], 
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-  
-      console.log("created artist profile image: ", { id: res.insertId, ...newArtistProfileImage });
-      result(null, { id: res.insertId, ...newArtistProfileImage });
-    }
-  );
+Artist.createArtist = async (newArtist, result) => {
+  try {
+    const [id] = await knex("Artists").insert({
+      ArtistName: newArtist.artistName,
+      ArtistProfileImageLink: newArtist.artistProfileImageLink,
+    });
+    console.log("Created artist: ", { id, ...newArtist });
+    result(null, { id, ...newArtist });
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
-Artist.getAllArtists = (result) => {
-  const getAllArtistsQuery = "SELECT * FROM Artists";
-
-  sql.query(getAllArtistsQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-
-    console.log("Artists: ", res);
-    result(null, res);
-  });
+Artist.createArtistProfileImage = async (newArtistProfileImage, result) => {
+  try {
+    const [id] = await knex("Artists").insert({
+      ArtistProfileImageLink: newArtistProfileImage.artistProfileImageLink,
+    });
+    console.log("Created artist profile image: ", {
+      id,
+      ...newArtistProfileImage,
+    });
+    result(null, { id, ...newArtistProfileImage });
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
-Artist.getArtistById = (id, result) => {
-  const getArtistByIdQuery = `SELECT * FROM Artists WHERE ArtistID = ${id}`
-  sql.query(getArtistByIdQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found artist: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found artist with the id
-    result({ kind: "not_found" }, null);
-  });
+Artist.getAllArtists = async (result) => {
+  try {
+    const artists = await knex("Artists").select("*");
+    console.log("Artists: ", artists);
+    result(null, artists);
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
-Artist.getArtistProfileImageByArtistId = (id, result) => {
-  const getArtistProfileImageByArtistIdQuery = `SELECT ArtistProfileImage FROM Artists WHERE ArtistID = ${id}`
-  sql.query(getArtistProfileImageByArtistIdQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found artist profile image: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found artist profile image with the artist id
-    result({ kind: "not_found" }, null);
-  });
-};
-
-Artist.updateArtistById = (id, artist, result) => {
-  const updateArtistQuery = `
-    UPDATE Artists 
-    SET ArtistName = ?, ArtistProfileImageLink = ?
-    WHERE ArtistID = ?`;
-    sql.query(
-      updateArtistQuery, 
-      [artist.artistName, artist.artistProfileImageLink, id],
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(null, err);
-          return;
-        }
-  
-        if (res.affectedRows == 0) {
-          result({ kind: "not_found" }, null);
-          return;
-        }
-  
-        console.log("updated artist: ", { id: id, ...artist });
-        result(null, { id: id, ...artist });
-      }
-    );
-  };
-
-Artist.updateArtistProfileImageByArtistId = (id, artist, result) => {
-  const updateArtistProfileImageQuery = `
-    UPDATE Artists 
-    SET ArtistProfileImageLink = ?
-    WHERE ArtistID = ?`;
-    sql.query(
-      updateArtistProfileImageQuery, 
-      [artist.artistProfileImageLink, id],
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(null, err);
-          return;
-        }
-    
-        if (res.affectedRows == 0) {
-          result({ kind: "not_found" }, null);
-          return;
-        }
-    
-        console.log("updated artist image: ", { id: id, ...artist });
-        result(null, { id: id, ...artist });
-      }
-    );
-  };
-
-Artist.deleteArtistById = (id, result) => {
-  const deleteArtistByIdQuery = `DELETE FROM Artists WHERE ArtistID = ${id}`;
-  sql.query(deleteArtistByIdQuery, id, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-  
-    if (res.affectedRows == 0) {
-      // not found artist with the id
+Artist.getArtistById = async (id, result) => {
+  try {
+    const artist = await knex("Artists").where({ ArtistID: id }).first();
+    if (artist) {
+      console.log("Found artist: ", artist);
+      result(null, artist);
+    } else {
       result({ kind: "not_found" }, null);
-      return;
     }
-  
-    console.log("deleted artist with id: ", id);
-    result(null, res);
-  });
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
-Artist.deleteArtistProfileImageByArtistId = (id, result) => {
-  const deleteArtistByIdQuery = `DELETE ArtistProfileImage FROM Artists WHERE ArtistID = ${id}`;
-  sql.query(deleteArtistByIdQuery, id, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-  
-    if (res.affectedRows == 0) {
-      // not found artist with the id
+Artist.getArtistProfileImageByArtistId = async (id, result) => {
+  try {
+    const artist = await knex("Artists")
+      .where({ ArtistID: id })
+      .select("ArtistProfileImageLink")
+      .first();
+    if (artist) {
+      console.log("Found artist profile image: ", artist);
+      result(null, artist);
+    } else {
       result({ kind: "not_found" }, null);
-      return;
     }
-  
-    console.log("deleted artist with id: ", id);
-    result(null, res);
-  });
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Artist.updateArtistById = async (id, artist, result) => {
+  try {
+    const updatedRows = await knex("Artists").where({ ArtistID: id }).update({
+      ArtistName: artist.artistName,
+      ArtistProfileImageLink: artist.artistProfileImageLink,
+    });
+
+    if (updatedRows) {
+      console.log("Updated artist: ", { id, ...artist });
+      result(null, { id, ...artist });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Artist.updateArtistProfileImageByArtistId = async (id, artist, result) => {
+  try {
+    const updatedRows = await knex("Artists").where({ ArtistID: id }).update({
+      ArtistProfileImageLink: artist.artistProfileImageLink,
+    });
+
+    if (updatedRows) {
+      console.log("Updated artist profile image: ", { id, ...artist });
+      result(null, { id, ...artist });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Artist.deleteArtistById = async (id, result) => {
+  try {
+    const deletedRows = await knex("Artists").where({ ArtistID: id }).del();
+    if (deletedRows) {
+      console.log("Deleted artist with id: ", id);
+      result(null, deletedRows);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Artist.deleteArtistProfileImageByArtistId = async (id, result) => {
+  try {
+    const deletedRows = await knex("Artists")
+      .where({ ArtistID: id })
+      .update({ ArtistProfileImageLink: null });
+
+    if (deletedRows) {
+      console.log("Deleted artist profile image with id: ", id);
+      result(null, deletedRows);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
 module.exports = Artist;
