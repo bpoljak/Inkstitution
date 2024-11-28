@@ -14,6 +14,7 @@
             :label="$t('contactUs.emailLabel')"
             type="email"
             :rules="[(val) => !!val || $t('contactUs.emailRequired')]"
+            :readonly="isLoggedIn"
             required
           />
 
@@ -63,29 +64,29 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { ref, onMounted } from "vue";
 import { useQuasar } from "quasar";
-import emailjs from "emailjs-com";
+import axios from "axios";
 
 export default {
   setup() {
+    const $q = useQuasar();
     const form = ref({
       email: "",
       message: "",
-      image: "",
     });
 
     const dialogVisible = ref(false);
-    const $q = useQuasar();
+    const isLoggedIn = ref(false);
 
     const initMap = () => {
       const map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 45.34023, lng: 14.41410 },
+        center: { lat: 45.34023, lng: 14.4141 },
         zoom: 14,
       });
 
       new google.maps.Marker({
-        position: { lat: 45.34023, lng: 14.41410 },
+        position: { lat: 45.34023, lng: 14.4141 },
         map: map,
         title: "Inkstitution",
       });
@@ -99,6 +100,16 @@ export default {
         initMap();
       };
       document.body.appendChild(script);
+
+      axios
+        .get("http://localhost:3000/api/users/session", { withCredentials: true })
+        .then((response) => {
+          form.value.email = response.data.userEmail;
+          isLoggedIn.value = true;
+        })
+        .catch(() => {
+          isLoggedIn.value = false;
+        });
     });
 
     const openDialog = () => {
@@ -107,7 +118,7 @@ export default {
 
     const handleSubmit = async () => {
       dialogVisible.value = false;
-      const { email, message, image } = form.value;
+      const { email, message } = form.value;
 
       if (!email || !message) {
         $q.notify({
@@ -118,33 +129,30 @@ export default {
       }
 
       try {
-        await emailjs.send(
-          import.meta.env.VITE_EMAILJS_SERVICE_ID,
-          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-          { email, message, image },
-          import.meta.env.VITE_EMAILJS_USER_ID
+        const response = await axios.post(
+          "http://localhost:3000/api/emails/send",
+          { email, subject: $t('contactUs.emailSubject'), message },
+          { withCredentials: true }
         );
-        $q.notify({ type: "positive", message: $t('contactUs.successMessage') });
 
-        form.value.email = "";
+        $q.notify({ type: "positive", message: response.data.message });
         form.value.message = "";
       } catch (error) {
         $q.notify({
           type: "negative",
           message: $t('contactUs.errorMessage'),
         });
-      } finally {
-        dialogVisible.value = false;
       }
     };
 
     return {
       form,
       dialogVisible,
+      isLoggedIn,
       openDialog,
       handleSubmit,
     };
-  }
+  },
 };
 </script>
 

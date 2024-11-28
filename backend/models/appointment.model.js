@@ -1,180 +1,139 @@
-const sql = require("../config/db.config");
+const knex = require("../config/db.config");
 
-const Appointment = function(appointment) {
-    this.appointmentId = appointment.appointmentId;
-    this.appointmentDate = appointment.appointmentDate;
-    this.appointmentTime = appointment.appointmentTime;
-    this.appointmentStatus = appointment.appointmentStatus;
-    this.appointmentCreatedAt = appointment.appointmentCreatedAt;
-    this.appointmentUpdatedAt = appointment.appointmentUpdatedAt;
-  };
-
-
-Appointment.createAppointment = (newAppointment, result) => {
-  const createAppointmentQuery = `
-    INSERT INTO Appointments (AppointmentDate, AppointmentTime, Status, CreatedAt) 
-    VALUES (?,?,?,?)`;
-
-  sql.query(
-    createAppointmentQuery,
-    [
-      newAppointment.appointmentDate,
-      newAppointment.appointmentTime,
-      newAppointment.appointmentStatus,
-      newAppointment.appointmentCreatedAt
-    ],
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-
-      console.log("created appointment: ", { id: res.insertId, ...newAppointment });
-      result(null, { id: res.insertId, ...newAppointment });
-    }
-  );
+const Appointment = function (appointment) {
+  this.appointmentId = appointment.appointmentId;
+  this.appointmentDate = appointment.appointmentDate;
+  this.appointmentTime = appointment.appointmentTime;
+  this.appointmentStatus = appointment.appointmentStatus;
+  this.appointmentCreatedAt = appointment.appointmentCreatedAt;
+  this.appointmentUpdatedAt = appointment.appointmentUpdatedAt;
 };
 
-Appointment.getAllAppointments = (result) => {
-  const getAllAppointmentsQuery = "SELECT * FROM Appointments";
-
-  sql.query(getAllAppointmentsQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-
-    console.log("appointments: ", res);
-    result(null, res);
-  });
-};
-
-Appointment.getAppointmentById = (id, result) => {
-  const getAppointmentByIdQuery = `SELECT * FROM Appointments WHERE AppointmentID = ${id}`
-  sql.query(getAppointmentByIdQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found appointment: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found appointment with the id
-    result({ kind: "not_found" }, null);
-  });
-};
-
-Appointment.getAllAppointmentsByStudioId = (id, result) => {
-  const getAllAppointmentsByStudioIdQuery = `SELECT * FROM Appointments WHERE StudioID = ${id}`
-  sql.query(getAllAppointmentsByStudioIdQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found appointment: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found appointment with the id
-    result({ kind: "not_found" }, null);
-  });
-};
-
-Appointment.getAllAppointmentsByArtistId = (id, result) => {
-  const getAllAppointmentsByArtistIdQuery = `SELECT * FROM Appointments WHERE ArtistID = ${id}`
-  sql.query(getAllAppointmentsByArtistIdQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found appointment: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found appointment with the id
-    result({ kind: "not_found" }, null);
-  });
-};
-
-Appointment.getAllAppointmentsByUserId = (id, result) => {
-  const getAllAppointmentsByUserIdQuery = `SELECT * FROM Appointments WHERE UserID = ${id}`
-  sql.query(getAllAppointmentsByUserIdQuery, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found appointment: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found appointment with the id
-    result({ kind: "not_found" }, null);
-  });
-};
-
-Appointment.updateAppointmentById = (id, appointment, result) => {
-  const updateAppointmentQuery = `
-    UPDATE Appointments 
-    SET AppointmentDate = ?, AppointmentTime = ?
-    WHERE AppointmentID = ?`;
-    sql.query(
-      updateAppointmentQuery, 
-      [appointment.appointmentDate, appointment.appointmentTime, id],
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(null, err);
-          return;
-        }
-  
-        if (res.affectedRows == 0) {
-          result({ kind: "not_found" }, null);
-          return;
-        }
-  
-        console.log("updated appointment: ", { id: id, ...user });
-        result(null, { id: id, ...user });
-      }
-    );
-  };
-
-  Appointment.deleteAppointmentById = (id, result) => {
-    const deleteAppointmentByIdQuery = `DELETE FROM Appointments WHERE AppointmentID = ${id}`;
-    sql.query(deleteAppointmentByIdQuery, id, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(null, err);
-        return;
-      }
-  
-      if (res.affectedRows == 0) {
-        // not found User with the id
-        result({ kind: "not_found" }, null);
-        return;
-      }
-  
-      console.log("deleted appointment with id: ", id);
-      result(null, res);
+Appointment.createAppointment = async (newAppointment, result) => {
+  try {
+    const [id] = await knex("Appointments").insert({
+      AppointmentDate: newAppointment.appointmentDate,
+      AppointmentTime: newAppointment.appointmentTime,
+      Status: newAppointment.appointmentStatus,
+      CreatedAt: newAppointment.appointmentCreatedAt,
     });
-  };
+    console.log("Created appointment: ", { id, ...newAppointment });
+    result(null, { id, ...newAppointment });
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Appointment.getAllAppointments = async (result) => {
+  try {
+    const appointments = await knex("Appointments").select("*");
+    console.log("Appointments: ", appointments);
+    result(null, appointments);
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Appointment.getAppointmentById = async (id, result) => {
+  try {
+    const appointment = await knex("Appointments")
+      .where({ AppointmentID: id })
+      .first();
+    if (appointment) {
+      console.log("Found appointment: ", appointment);
+      result(null, appointment);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Appointment.getAllAppointmentsByStudioId = async (id, result) => {
+  try {
+    const appointments = await knex("Appointments").where({ StudioID: id });
+    if (appointments.length) {
+      console.log("Found appointments: ", appointments);
+      result(null, appointments);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Appointment.getAllAppointmentsByArtistId = async (id, result) => {
+  try {
+    const appointments = await knex("Appointments").where({ ArtistID: id });
+    if (appointments.length) {
+      console.log("Found appointments: ", appointments);
+      result(null, appointments);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Appointment.getAllAppointmentsByUserId = async (id, result) => {
+  try {
+    const appointments = await knex("Appointments").where({ UserID: id });
+    if (appointments.length) {
+      console.log("Found appointments: ", appointments);
+      result(null, appointments);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Appointment.updateAppointmentById = async (id, appointment, result) => {
+  try {
+    const updatedRows = await knex("Appointments")
+      .where({ AppointmentID: id })
+      .update({
+        AppointmentDate: appointment.appointmentDate,
+        AppointmentTime: appointment.appointmentTime,
+      });
+
+    if (updatedRows) {
+      console.log("Updated appointment: ", { id, ...appointment });
+      result(null, { id, ...appointment });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Appointment.deleteAppointmentById = async (id, result) => {
+  try {
+    const deletedRows = await knex("Appointments")
+      .where({ AppointmentID: id })
+      .del();
+    if (deletedRows) {
+      console.log("Deleted appointment with id: ", id);
+      result(null, deletedRows);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
 
 module.exports = Appointment;

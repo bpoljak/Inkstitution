@@ -5,7 +5,6 @@ module.exports = (app) => {
   const router = express.Router();
 
   router.post("/send", emailController.receiveEmailFromUser);
-
   router.get("/current-user-email", (req, res) => {
     if (req.session.userEmail) {
       return res.status(200).send({ email: req.session.userEmail });

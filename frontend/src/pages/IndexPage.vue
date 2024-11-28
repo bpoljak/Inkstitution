@@ -59,15 +59,15 @@ export default {
     axios
       .get('http://localhost:3000/api/users/session', { withCredentials: true })
       .then(response => {
-        this.userName = response.data.userName;
+        this.userName = response.data.userName || null;
       })
       .catch(() => {
-        console.log("User not logged in or session expired");
+        this.userName = null;
       });
   },
   methods: {
     goToProfile() {
-      console.log("Navigating to profile...");
+      this.$router.push('/profile');
     },
     logoutUser() {
       axios
@@ -76,11 +76,11 @@ export default {
           this.userName = null;
           this.$router.push('/login');
         })
-        .catch(error => {
-          console.error("Logout failed:", error);
+        .catch(() => {
+          console.error("Logout failed");
         });
     }
-  },
+  }
 };
 </script>
 
@@ -92,9 +92,9 @@ export default {
 
 .hero-card {
   width: 100%;
-  height: 100vh; 
+  height: 100vh;
   margin: 0 auto;
-  padding: 60px 0; 
+  padding: 60px 0;
 }
 
 .hero-content {

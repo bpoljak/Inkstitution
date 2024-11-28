@@ -1,169 +1,134 @@
-const sql = require("../config/db.config");
+const knex = require("../config/db.config");
 
-// Constructor for the Studio model
-const Studio = function(studio) {
-    this.studioName = studio.studioName;
-    this.studioAddress = studio.studioAddress;  // Corrected to Address
-    this.studioWorkingHours = studio.studioWorkingHours;
-    this.studioEmail = studio.studioEmail;
-    this.studioAccountName = studio.studioAccountName;
-    this.studioPassword = studio.studioPassword;
-    this.createdAt = studio.createdAt;
-    this.updatedAt = studio.updatedAt;
+const Studio = function (studio) {
+  this.studioName = studio.studioName;
+  this.studioAddress = studio.studioAddress;
+  this.studioWorkingHours = studio.studioWorkingHours;
+  this.studioEmail = studio.studioEmail;
+  this.studioAccountName = studio.studioAccountName;
+  this.studioPassword = studio.studioPassword;
+  this.createdAt = studio.createdAt;
+  this.updatedAt = studio.updatedAt;
 };
 
-// Create a new Studio
-Studio.createStudio = (newStudio, result) => {
-    const createStudioQuery = `INSERT INTO Studios 
-      (StudioName, StudioAddress, StudioWorkingHours, StudioEmail, StudioAccountName, StudioPassword) 
-      VALUES (?, ?, ?, ?, ?, ?)`;
-
-    sql.query(createStudioQuery, [
-        newStudio.studioName,
-        newStudio.studioAddress,
-        newStudio.studioWorkingHours,
-        newStudio.studioEmail,
-        newStudio.studioAccountName,
-        newStudio.studioPassword
-    ], (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(err, null);
-            return;
-        }
-
-        console.log("Created studio: ", { id: res.insertId, ...newStudio});
-        result(null, { id: res.insertId, ...newStudio});
+Studio.createStudio = async (newStudio, result) => {
+  try {
+    const [id] = await knex("Studios").insert({
+      StudioName: newStudio.studioName,
+      StudioAddress: newStudio.studioAddress,
+      StudioWorkingHours: newStudio.studioWorkingHours,
+      StudioEmail: newStudio.studioEmail,
+      StudioAccountName: newStudio.studioAccountName,
+      StudioPassword: newStudio.studioPassword,
     });
+
+    console.log("Created studio: ", { id, ...newStudio });
+    result(null, { id, ...newStudio });
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
-// Get all studios
-Studio.getAllStudios = (result) => {
-    const getAllStudiosQuery = "SELECT * FROM Studios";
-    sql.query(getAllStudiosQuery, (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(null, err);
-            return;
-        }
+Studio.getAllStudios = async (result) => {
+  try {
+    const studios = await knex("Studios").select("*");
+    console.log("Studios: ", studios);
+    result(null, studios);
+  } catch (err) {
+    console.error("Error: ", err);
+    result(null, err);
+  }
+};
 
-        console.log("Studios: ", res);
-        result(null, res);
+Studio.getStudioById = async (id, result) => {
+  try {
+    const studio = await knex("Studios").where({ StudioID: id }).first();
+    if (studio) {
+      console.log("Found studio: ", studio);
+      result(null, studio);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Studio.getStudioCreatedAt = async (id, result) => {
+  try {
+    const createdAt = await knex("Studios")
+      .where({ StudioID: id })
+      .select("CreatedAt")
+      .first();
+    if (createdAt) {
+      console.log("Studio created at: ", createdAt);
+      result(null, createdAt);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Studio.getStudioUpdatedAt = async (id, result) => {
+  try {
+    const updatedAt = await knex("Studios")
+      .where({ StudioID: id })
+      .select("UpdatedAt")
+      .first();
+    if (updatedAt) {
+      console.log("Studio updated at: ", updatedAt);
+      result(null, updatedAt);
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
+};
+
+Studio.updateStudioById = async (id, studio, result) => {
+  try {
+    const updated = await knex("Studios").where({ StudioID: id }).update({
+      StudioName: studio.studioName,
+      StudioAddress: studio.studioAddress,
+      StudioWorkingHours: studio.studioWorkingHours,
+      StudioEmail: studio.studioEmail,
+      StudioAccountName: studio.studioAccountName,
+      StudioPassword: studio.studioPassword,
+      UpdatedAt: knex.fn.now(),
     });
+
+    if (updated) {
+      console.log("Updated studio: ", { id, ...studio });
+      result(null, { id, ...studio });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
-// Get a studio by ID
-Studio.getStudioById = (id, result) => {
-    const getStudioByIdQuery = `SELECT * FROM Studios WHERE StudioID = ?`;
-    sql.query(getStudioByIdQuery, [id], (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(err, null);
-            return;
-        }
-
-        if (res.length) {
-            console.log("Found studio: ", res[0]);
-            result(null, res[0]);
-            return;
-        }
-
-        result({ kind: "not_found" }, null);
-    });
-};
-
-// Get studio creation timestamp by ID
-Studio.getStudioCreatedAt = (id, result) => {
-    const getStudioCreatedAtQuery = `SELECT CreatedAt FROM Studios WHERE StudioID = ?`;
-    sql.query(getStudioCreatedAtQuery, [id], (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(err, null);
-            return;
-        }
-
-        if (res.length) {
-            console.log("Studio created at: ", res[0]);
-            result(null, res[0]);
-            return;
-        }
-        result({ kind: "not_found" }, null);
-    });
-};
-
-// Get studio update timestamp by ID
-Studio.getStudioUpdatedAt = (id, result) => {
-    const getStudioUpdatedAtQuery = `SELECT UpdatedAt FROM Studios WHERE StudioID = ?`;
-    sql.query(getStudioUpdatedAtQuery, [id], (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(err, null);
-            return;
-        }
-
-        if (res.length) {
-            console.log("Studio updated at: ", res[0]);
-            result(null, res[0]);
-            return;
-        }
-        result({ kind: "not_found" }, null);
-    });
-};
-
-// Update a studio by ID
-Studio.updateStudioById = (id, studio, result) => {
-    const updateStudioQuery = `
-      UPDATE Studios 
-      SET StudioName = ?, StudioAddress = ?, StudioWorkingHours = ?, StudioEmail = ?, StudioAccountName = ?, StudioPassword = ?, UpdatedAt = NOW()
-      WHERE StudioID = ?`;
-
-    sql.query(
-        updateStudioQuery, 
-        [
-            studio.studioName, 
-            studio.studioAddress, 
-            studio.studioWorkingHours, 
-            studio.studioEmail, 
-            studio.studioAccountName, 
-            studio.studioPassword, 
-            id
-        ], 
-        (err, res) => {
-            if (err) {
-                console.log("Error: ", err);
-                result(null, err);
-                return;
-            }
-
-            if (res.affectedRows == 0) {
-                result({ kind: "not_found" }, null);
-                return;
-            }
-
-            console.log("Updated studio: ", { id: id, ...studio });
-            result(null, { id: id, ...studio });
-        }
-    );
-};
-
-// Delete a studio by ID
-Studio.deleteStudioById = (id, result) => {
-    const deleteStudioByIdQuery = `DELETE FROM Studios WHERE StudioID = ?`;
-    sql.query(deleteStudioByIdQuery, [id], (err, res) => {
-        if (err) {
-            console.log("Error: ", err);
-            result(null, err);
-            return;
-        }
-
-        if (res.affectedRows == 0) {
-            result({ kind: "not_found" }, null);
-            return;
-        }
-
-        console.log("Deleted studio with id: ", id);
-        result(null, res);
-    });
+Studio.deleteStudioById = async (id, result) => {
+  try {
+    const deleted = await knex("Studios").where({ StudioID: id }).del();
+    if (deleted) {
+      console.log("Deleted studio with id: ", id);
+      result(null, { success: true });
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    result(err, null);
+  }
 };
 
 module.exports = Studio;

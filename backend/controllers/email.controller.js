@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 exports.receiveEmailFromUser = async (req, res) => {
   try {
-    const userEmail = req.session.userEmail;
+    const userEmail = req.session.userEmail || req.body.email;
     const { subject, message } = req.body;
 
     if (!userEmail || !subject || !message) {
@@ -10,15 +10,18 @@ exports.receiveEmailFromUser = async (req, res) => {
     }
 
     let transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: process.env.EMAIL_SECURE === "true",
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
       },
     });
 
+    // Slanje emaila
     await transporter.sendMail({
-      from: userEmail,
+      from: `"Inkstitution" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: `Poruka od ${userEmail}: ${subject}`,
       text: message,
@@ -27,8 +30,9 @@ exports.receiveEmailFromUser = async (req, res) => {
     res.status(200).send({ message: "Vaša poruka je uspješno poslana!" });
   } catch (error) {
     console.error("Greška pri slanju emaila:", error);
-    res
-      .status(500)
-      .send({ message: "Slanje poruke nije uspjelo.", error: error.message });
+    res.status(500).send({
+      message: "Slanje poruke nije uspjelo.",
+      error: error.message,
+    });
   }
 };

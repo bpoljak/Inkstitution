@@ -1,9 +1,17 @@
 const express = require("express");
 const session = require("express-session");
+const KnexSessionStore = require("connect-session-knex")(session);
+const knex = require("./config/db.config");
 const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
+
+const store = new KnexSessionStore({
+  knex: knex,
+  tablename: "sessions",
+  createtable: true,
+});
 
 const corsOptions = {
   origin: "http://localhost:9000",
@@ -17,6 +25,7 @@ app.use(
     secret: "your_secret_key",
     resave: false,
     saveUninitialized: false,
+    store: store,
     cookie: { secure: false },
   })
 );
