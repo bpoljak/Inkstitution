@@ -90,7 +90,6 @@ const linksList = computed(() => [
 const leftDrawerOpen = ref(false);
 const isLoggedIn = ref(false);
 
-
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
@@ -101,7 +100,7 @@ function goToProfile() {
 
 function logoutUser() {
   axios
-    .post("http://localhost:3000/api/users/logout", {}, { withCredentials: true })
+    .post(`${process.env.API_URL}/api/users/logout`, {}, { withCredentials: true })
     .then(() => {
       isLoggedIn.value = false;
       router.push("/login");
@@ -123,7 +122,7 @@ onBeforeRouteUpdate((to, from, next) => {
 
 async function checkLoginStatus() {
   await axios
-    .get("http://localhost:3000/api/users/session", { withCredentials: true })
+    .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
     .then((response) => {
       console.log("Session data fetched:", response.data);
       if (response.data && response.data.userName) {
@@ -137,9 +136,18 @@ async function checkLoginStatus() {
       isLoggedIn.value = false;
     });
 }
-
-
 </script>
+
+<style scoped>
+.q-toolbar-title {
+  flex-grow: 1;
+}
+
+.row {
+  gap: 10px;
+}
+</style>
+
 
 <style scoped>
 .q-toolbar-title {

@@ -9,8 +9,14 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 const { configure } = require("quasar/wrappers");
+const { config } = require("dotenv");
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
+  const env = ctx.mode.cordova
+    ? config({ path: ".env.android" }).parsed
+    : config({ path: ctx.dev ? ".env.development" : ".env.production" }).parsed;
+  console.log("Loaded environment variables:", env);
+
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -42,6 +48,11 @@ module.exports = configure(function (/* ctx */) {
       target: {
         browser: ["es2019", "edge88", "firefox78", "chrome87", "safari13.1"],
         node: "node20",
+      },
+
+      env: {
+        API_URL: env.API_URL,
+        VITE_GOOGLE_MAPS_API_KEY: env.VITE_GOOGLE_MAPS_API_KEY,
       },
 
       vueRouterMode: "hash", // available values: 'hash', 'history'

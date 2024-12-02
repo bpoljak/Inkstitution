@@ -83,7 +83,7 @@ export default {
       this.$refs.form.validate().then(valid => {
         if (valid) {
           axios
-            .post('http://localhost:3000/api/users', {
+            .post(`${process.env.API_URL}/api/users`, {
               userFirstName: this.form.userFirstName,
               userLastName: this.form.userLastName,
               userAccountName: this.form.userAccountName,
@@ -95,7 +95,6 @@ export default {
               this.$router.push('/login');
             })
             .catch(error => {
-              console.error('Error:', error.response?.data?.message || error.message);
               alert(this.$t('registration.errorMessage'));
             });
         }
@@ -110,6 +109,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .register-page {

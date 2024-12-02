@@ -66,7 +66,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useQuasar } from "quasar";
-import { useI18n } from 'vue-i18n';
+import { useI18n } from "vue-i18n";
 import axios from "axios";
 
 export default {
@@ -104,7 +104,7 @@ export default {
       document.body.appendChild(script);
 
       axios
-        .get("http://localhost:3000/api/users/session", { withCredentials: true })
+        .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
         .then((response) => {
           form.value.email = response.data.userEmail;
           isLoggedIn.value = true;
@@ -132,7 +132,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/emails/send",
+          `${process.env.API_URL}/api/emails/send`,
           { email, subject: t('contactUs.emailSubject'), message },
           { withCredentials: true }
         );
@@ -158,6 +158,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .form-card,
