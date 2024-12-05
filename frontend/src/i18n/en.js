@@ -34,7 +34,7 @@ export default {
     createAccountButton: "Sign Up",
     ownStudioTitle: "DO YOU OWN A STUDIO?",
     ownStudioDescription: "Register your studio and start booking clients",
-    ownStudioButton: "Register Studio"
+    ownStudioButton: "Register Studio",
   },
   registration: {
     firstName: "First Name",
@@ -56,8 +56,8 @@ export default {
       required: "This field is required",
       email: "Please enter a valid email address",
       minLength: "Password must be at least 6 characters",
-      matchPassword: "Passwords must match"
-    }
+      matchPassword: "Passwords must match",
+    },
   },
   login: {
     email: "Email",
@@ -72,8 +72,8 @@ export default {
     successMessage: "Login successful!",
     errorMessage: "An error occurred during login.",
     validation: {
-      required: "This field is required"
-    }
+      required: "This field is required",
+    },
   },
   contactUs: {
     title: "Contact",
@@ -99,24 +99,46 @@ export default {
     faq: {
       whoAreWe: {
         question: "Who are we?",
-        answer: "We are a team that developed an app for booking tattoo appointments. Our goal is to provide users with an easy way to schedule appointments, view styles, and choose artists based on their preferences."
+        answer: "We are a team that developed an app for booking tattoo appointments. Our goal is to provide users with an easy way to schedule appointments, view styles, and choose artists based on their preferences.",
       },
       bookingProcess: {
         question: "How does the booking process work?",
-        answer: "The booking process is simple: select the desired studio, date, and tattoo style, then the artist confirms your appointment."
+        answer: "The booking process is simple: select the desired studio, date, and tattoo style, then the artist confirms your appointment.",
       },
       paymentOptions: {
         question: "What are the available payment methods?",
-        answer: "You can pay in cash at the studio or by card through the web app, but a deposit is required for booking."
+        answer: "You can pay in cash at the studio or by card through the web app, but a deposit is required for booking.",
       },
       viewPreviousWorks: {
         question: "Can I view the studio's previous works?",
-        answer: "It's possible to view a gallery of each tattoo studio's works."
+        answer: "It's possible to view a gallery of each tattoo studio's works.",
       },
       careProducts: {
         question: "Can I browse aftercare products?",
-        answer: "Through our site, you can find tattoo aftercare products."
-      }
-    }
-  }
-}
+        answer: "Through our site, you can find tattoo aftercare products.",
+      },
+    },
+  },
+  studioRegistration: {
+    title: "Studio Registration",
+    studioName: "Studio Name",
+    studioNameHint: "Enter studio name",
+    address: "Address",
+    addressHint: "Enter studio address",
+    phone: "Phone",
+    phoneHint: "Enter phone number",
+    ownerEmail: "Owner's Email",
+    ownerEmailHint: "Enter owner's email",
+    password: "Password",
+    passwordHint: "Enter password",
+    termsLabel: "I accept the terms",
+    submitButton: "Submit",
+    successMessage: "Studio successfully registered",
+    errorMessage: "An error occurred during registration",
+    validation: {
+      required: "This field is required",
+      email: "Please enter a valid email address",
+      minLength: "Password must be at least 6 characters",
+    },
+  }}
+  

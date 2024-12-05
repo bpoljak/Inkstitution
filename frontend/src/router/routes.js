@@ -15,6 +15,7 @@ const routes = [
       },
       { path: "aftercare", component: () => import("pages/AftercarePage.vue") },
       { path: "contactUs", component: () => import("pages/ContactUsPage.vue") },
+      { path: "studio-register", component: () => import("pages/StudioRegisterPage.vue") }
     ],
   },
   {

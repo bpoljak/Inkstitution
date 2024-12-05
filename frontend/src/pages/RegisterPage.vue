@@ -54,7 +54,14 @@
             :rules="[val => !!val || $t('registration.validation.required')]"
           />
           <q-btn :label="$t('registration.submitButton')" type="submit" color="primary" class="register-button" />
-          <div class="studio-link" @click="navigateToStudio">{{ $t('registration.studioLink') }}</div>
+          <q-btn
+            flat
+            color="primary"
+            class="studio-link"
+            @click="navigateToStudio"
+          >
+            {{ $t('registration.studioLink') }}
+          </q-btn>
         </div>
       </q-form>
     </q-card>
@@ -105,7 +112,7 @@ export default {
       this.$refs.form.reset();
     },
     navigateToStudio() {
-      this.$router.push('/studio-registration');
+      this.$router.push('/studio-register'); // Navigacija na stranicu za registraciju studija
     }
   }
 };
@@ -136,7 +143,8 @@ export default {
 .studio-link {
   text-align: center;
   margin-top: 16px;
-  color: var(--link-color);
+  font-weight: bold;
+  text-decoration: underline;
   cursor: pointer;
 }
 </style>
