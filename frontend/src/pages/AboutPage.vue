@@ -76,8 +76,8 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 20px;
-  background: linear-gradient(135deg, #e0f7fa, #80deea); /* Dodan gradijent pozadine */
-  min-height: 100vh; /* Pozadina će pokriti cijelu visinu stranice */
+  background: linear-gradient(135deg, #e0f7fa, #80deea);
+  min-height: 100vh;
 }
 
 .about-content {
@@ -91,13 +91,13 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: -450px; /* Podiže tekst prema gore */
+  margin-top: -450px;
 }
 
 .text-section h2 {
   font-size: 1.75rem;
   font-weight: bold;
-  font-family: Arial, sans-serif; /* Promijenjen font za naslov */
+  font-family: Arial, sans-serif;
 }
 
 .image-section {
@@ -124,10 +124,10 @@ img {
 .faq-section {
   padding: 15px;
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.05); /* Lagana prozirna pozadina za čišći izgled */
+  background-color: rgba(0, 0, 0, 0.05);
   margin-top: 15px;
-  opacity: 0.9; /* Blaga prozirnost */
-  box-shadow: none; /* Uklanja bijeli okvir/sjenu */
+  opacity: 0.9;
+  box-shadow: none;
 }
 
 .box-title {
@@ -165,10 +165,10 @@ img {
     color: #f9f9f9;
     border: 1px solid #444;
   }
-  
+
   .faq-section {
     background-color: #444;
-    opacity: 0.85; /* Još niža opacity za tamni mod */
+    opacity: 0.85;
   }
 
   .box-title {
