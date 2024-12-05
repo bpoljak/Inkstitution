@@ -3,6 +3,8 @@ node_modules/
 
 # Environment variables
 .env
+.env.android
+.env.development
 
 # Logs
 *.log
@@ -33,3 +35,38 @@ coverage/
 # Build files (ako ih budeš imao kasnije)
 dist/
 build/
+
+# Quasar build output
+dist-ssr/
+dist-spa/
+dist-pwa/
+dist-electron/
+dist-bex/
+
+# Cordova generated files
+src-cordova/platforms/
+src-cordova/plugins/
+src-cordova/www/
+src-cordova/node_modules/
+
+# Cordova build artifacts
+src-cordova/build/
+src-cordova/merges/
+src-cordova/config.xml.bak
+src-cordova/.idea/
+src-cordova/.gradle/
+src-cordova/.tmp/
+
+# Android/Gradle files
+src-cordova/gradle.properties
+src-cordova/gradlew*
+src-cordova/.gradle/
+src-cordova/build/
+src-cordova/local.properties
+src-cordova/out/
+src-cordova/app/build/
+
+# macOS/iOS specific files
+*.xcuserstate
+*.xcworkspace
+*.xcodeproj/

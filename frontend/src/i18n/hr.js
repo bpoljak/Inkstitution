@@ -35,6 +35,9 @@ export default {
     ownStudioTitle: "IMATE LI VLASTITI STUDIO?",
     ownStudioDescription: "Registrirajte svoj studio i počnite primati klijente",
     ownStudioButton: "Registrirajte Studio",
+    ownStudioTitle: "IMAŠ SVOJ TATTOO STUDIO?",
+    ownStudioDescription: "Registriraj studio i počni primati klijente",
+    ownStudioButton: "Registriraj studio",
   },
   registration: {
     firstName: "Ime",
@@ -56,6 +59,8 @@ export default {
       required: "Ovo polje je obavezno",
       email: "Molimo unesite valjanu email adresu",
       minLength: "Lozinka mora sadržavati najmanje 6 znakova",
+      email: "Unesite valjanu email adresu",
+      minLength: "Lozinka mora imati najmanje 6 znakova",
       matchPassword: "Lozinke se moraju podudarati",
     },
   },
@@ -90,6 +95,7 @@ export default {
     successMessage: "Poruka uspješno poslana!",
     errorMessage: "Došlo je do pogreške prilikom slanja poruke. Pokušajte ponovno.",
     findUs: "Kako nas možete pronaći?",
+    emailSubject: "Poruka sa stranice Kontakt", // Dodano
   },
   welcomeMessage: "Dobrodošli, {name}!",
   aboutPage: {
@@ -140,3 +146,4 @@ export default {
       minLength: "Lozinka mora imati najmanje 6 znakova",
     },
   }}  
+    

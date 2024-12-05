@@ -47,18 +47,18 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
-      userName: null
+      userName: null,
     };
   },
   created() {
     axios
-      .get('http://localhost:3000/api/users/session', { withCredentials: true })
-      .then(response => {
+      .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
+      .then((response) => {
         this.userName = response.data.userName || null;
       })
       .catch(() => {
@@ -67,22 +67,23 @@ export default {
   },
   methods: {
     goToProfile() {
-      this.$router.push('/profile');
+      this.$router.push("/profile");
     },
     logoutUser() {
       axios
-        .post('http://localhost:3000/api/users/logout', {}, { withCredentials: true })
+        .post(`${process.env.API_URL}/api/users/logout`, {}, { withCredentials: true })
         .then(() => {
           this.userName = null;
-          this.$router.push('/login');
+          this.$router.push("/login");
         })
         .catch(() => {
           console.error("Logout failed");
         });
-    }
-  }
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .dark-mode {

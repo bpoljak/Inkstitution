@@ -66,11 +66,13 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useQuasar } from "quasar";
+import { useI18n } from "vue-i18n";
 import axios from "axios";
 
 export default {
   setup() {
     const $q = useQuasar();
+    const { t } = useI18n();
     const form = ref({
       email: "",
       message: "",
@@ -102,7 +104,7 @@ export default {
       document.body.appendChild(script);
 
       axios
-        .get("http://localhost:3000/api/users/session", { withCredentials: true })
+        .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
         .then((response) => {
           form.value.email = response.data.userEmail;
           isLoggedIn.value = true;
@@ -123,15 +125,15 @@ export default {
       if (!email || !message) {
         $q.notify({
           type: "negative",
-          message: $t('contactUs.errorMessage'),
+          message: t('contactUs.errorMessage'),
         });
         return;
       }
 
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/emails/send",
-          { email, subject: $t('contactUs.emailSubject'), message },
+          `${process.env.API_URL}/api/emails/send`,
+          { email, subject: t('contactUs.emailSubject'), message },
           { withCredentials: true }
         );
 
@@ -140,7 +142,7 @@ export default {
       } catch (error) {
         $q.notify({
           type: "negative",
-          message: $t('contactUs.errorMessage'),
+          message: t('contactUs.errorMessage'),
         });
       }
     };
@@ -151,10 +153,12 @@ export default {
       isLoggedIn,
       openDialog,
       handleSubmit,
+      t,
     };
   },
 };
 </script>
+
 
 <style scoped>
 .form-card,
