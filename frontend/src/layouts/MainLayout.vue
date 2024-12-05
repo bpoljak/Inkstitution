@@ -15,6 +15,17 @@
           Inkstitution
         </q-toolbar-title>
 
+        <div class="dark-mode-toggle">
+          <q-icon name="light_mode" size="sm" />
+          <q-toggle
+            v-model="darkMode"
+            dense
+            @update:model-value="changeDarkMode"
+            class="custom-toggle"
+          />
+          <q-icon name="dark_mode" size="sm" />
+        </div>
+
         <div v-if="isLoggedIn" class="q-gutter-sm row items-center">
           <q-btn
             flat
@@ -70,10 +81,18 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter, onBeforeRouteUpdate } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useQuasar } from "quasar";
 import axios from "axios";
 
+const $q = useQuasar();
 const { t } = useI18n();
 const router = useRouter();
+
+const darkMode = ref($q.dark.isActive);
+const changeDarkMode = () => {
+  $q.dark.toggle();
+  $q.localStorage.set("isDarkActive", $q.dark.isActive);
+};
 
 const linksList = computed(() => [
   { title: t("essentialLinks.home"), caption: t("essentialLinks.homeCaption"), icon: "home", link: "/" },
@@ -124,21 +143,19 @@ async function checkLoginStatus() {
   await axios
     .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
     .then((response) => {
-      console.log("Session data fetched:", response.data);
       if (response.data && response.data.userName) {
         isLoggedIn.value = true;
       } else {
         isLoggedIn.value = false;
       }
     })
-    .catch((error) => {
-      console.error("Error fetching session data:", error);
+    .catch(() => {
       isLoggedIn.value = false;
     });
 }
 </script>
 
-<style scoped>
+<style>
 .q-toolbar-title {
   flex-grow: 1;
 }
@@ -146,15 +163,37 @@ async function checkLoginStatus() {
 .row {
   gap: 10px;
 }
-</style>
 
-
-<style scoped>
-.q-toolbar-title {
-  flex-grow: 1;
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.row {
-  gap: 10px;
+.custom-toggle .q-toggle__track {
+  background-color: #e0e0e0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: none !important;
 }
+
+.custom-toggle .q-toggle__thumb {
+  background-color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 50% !important;
+  transition: none !important;
+}
+
+.custom-toggle .q-toggle__thumb--on,
+.custom-toggle .q-toggle__thumb--off {
+  background-color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+
+
+
+
 </style>

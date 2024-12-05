@@ -2,11 +2,6 @@
   <q-page class="q-pa-md">
     <h1>Postavke</h1>
     <q-card-section class="q-pt-none">
-      <q-toggle
-        v-model="darkMode"
-        :label="$t('darkMode')"
-        @update:model-value="changeDarkMode"
-      />
 
       <q-select
         v-model="locale"
@@ -29,12 +24,6 @@ import { useI18n } from "vue-i18n";
 
 const $q = useQuasar();
 const { locale } = useI18n({ useScope: "global" });
-
-const darkMode = ref($q.dark.isActive);
-const changeDarkMode = () => {
-  $q.dark.toggle();
-  $q.localStorage.set("isDarkActive", $q.dark.isActive);
-};
 
 const currentLang = ref("hr");
 
