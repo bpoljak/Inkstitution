@@ -47,7 +47,6 @@ require("./routes/userimage.routes.js")(app);
 require("./routes/studioimage.routes.js")(app);
 require("./routes/appointment.routes.js")(app);
 require("./routes/email.routes.js")(app);
-require("./routes/studioregister.routes.js")(app);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server listening on port ${PORT}`);

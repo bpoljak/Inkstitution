@@ -61,10 +61,10 @@ export default {
     return {
       formData: {
         studioName: '',
-        address: '',
-        phone: '',
-        ownerEmail: '',
-        password: '',
+        studioAddress: '',
+        studioPhone: '',
+        studioEmail: '',
+        studioPassword: '',
         termsAccepted: false,
       },
       isSubmitting: false,
@@ -84,10 +84,10 @@ export default {
       try {
         const response = await axios.post('http://localhost:3000/api/studios', {
           studioName: this.formData.studioName,
-          address: this.formData.address,
-          phone: this.formData.phone,
-          ownerEmail: this.formData.ownerEmail,
-          password: this.formData.password,
+          studioAddress: this.formData.studioAddress,
+          studioPhone: this.formData.phone,
+          studioEmail: this.formData.ownerEmail,
+          studioPassword: this.formData.password,
         });
 
         this.$q.notify({
