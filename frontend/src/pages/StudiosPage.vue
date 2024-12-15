@@ -1,7 +1,19 @@
 <template>
   <q-page class="studios-page">
     <div class="studios-container">
-      <q-card v-for="studio in studios" :key="studio.StudioID" class="studio-card">
+      <q-input
+        filled
+        v-model="searchQuery"
+        :label="$t('studiosPage.searchBar.label')"
+        debounce="300"
+        class="search-bar"
+        :placeholder="$t('studiosPage.searchBar.placeholder')"
+      />
+      <q-card
+        v-for="studio in filteredStudios"
+        :key="studio.StudioID"
+        class="studio-card"
+      >
         <div class="studio-logo">
           <img src="/path/to/logo.png" alt="Studio Logo" />
         </div>
@@ -17,27 +29,38 @@
 
 <script>
 import axios from "axios";
+import { ref, computed } from "vue";
 
 export default {
-  data() {
-    return {
-      studios: [],
+  setup() {
+    const studios = ref([]);
+    const searchQuery = ref("");
+
+    const fetchStudios = async () => {
+      try {
+        const response = await axios.get(`${process.env.API_URL}/api/studios`);
+        studios.value = response.data;
+      } catch (error) {
+        console.error("Error fetching studios:", error);
+      }
     };
-  },
-  methods: {
-    fetchStudios() {
-      axios
-        .get(`${process.env.API_URL}/api/studios`)
-        .then((response) => {
-          this.studios = response.data;
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
-    },
-  },
-  mounted() {
-    this.fetchStudios();
+
+    const filteredStudios = computed(() => {
+      if (!searchQuery.value) {
+        return studios.value;
+      }
+      return studios.value.filter((studio) =>
+        studio.StudioName.toLowerCase().includes(searchQuery.value.toLowerCase())
+      );
+    });
+
+    fetchStudios();
+
+    return {
+      studios,
+      searchQuery,
+      filteredStudios,
+    };
   },
 };
 </script>
@@ -49,6 +72,12 @@ export default {
   flex-direction: column;
   align-items: center;
   background-color: var(--q-page);
+}
+
+.search-bar {
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 900px;
 }
 
 .studios-container {

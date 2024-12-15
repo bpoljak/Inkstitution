@@ -85,9 +85,9 @@ export default {
         const response = await axios.post('http://localhost:3000/api/studios', {
           studioName: this.formData.studioName,
           studioAddress: this.formData.studioAddress,
-          studioPhone: this.formData.phone,
-          studioEmail: this.formData.ownerEmail,
-          studioPassword: this.formData.password,
+          studioPhone: this.formData.studioPhone,
+          studioEmail: this.formData.studioEmail,
+          studioPassword: this.formData.studioPassword,
         });
 
         this.$q.notify({

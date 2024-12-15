@@ -101,19 +101,23 @@ export default {
     faq: {
       whoAreWe: {
         question: "Who are we?",
-        answer: "We are a team that developed an app for booking tattoo appointments. Our goal is to provide users with an easy way to schedule appointments, view styles, and choose artists based on their preferences.",
+        answer:
+          "We are a team that developed an app for booking tattoo appointments. Our goal is to provide users with an easy way to schedule appointments, view styles, and choose artists based on their preferences.",
       },
       bookingProcess: {
         question: "How does the booking process work?",
-        answer: "The booking process is simple: select the desired studio, date, and tattoo style, then the artist confirms your appointment.",
+        answer:
+          "The booking process is simple: select the desired studio, date, and tattoo style, then the artist confirms your appointment.",
       },
       paymentOptions: {
         question: "What are the available payment methods?",
-        answer: "You can pay in cash at the studio or by card through the web app, but a deposit is required for booking.",
+        answer:
+          "You can pay in cash at the studio or by card through the web app, but a deposit is required for booking.",
       },
       viewPreviousWorks: {
         question: "Can I view the studio's previous works?",
-        answer: "It's possible to view a gallery of each tattoo studio's works.",
+        answer:
+          "It's possible to view a gallery of each tattoo studio's works.",
         answer:
           "We are a team that developed an app for booking tattoo appointments. Our goal is to provide users with an easy way to schedule appointments, view styles, and choose artists based on their preferences.",
       },
@@ -159,5 +163,11 @@ export default {
       email: "Please enter a valid email address",
       minLength: "Password must be at least 6 characters",
     },
-  }};
-
+  },
+  studiosPage: {
+    searchBar: {
+      label: "Search Studios",
+      placeholder: "Enter the studio name...",
+    },
+  },
+};

@@ -33,7 +33,8 @@ export default {
     createAccountDescription2: "Pronađite savršenog artista",
     createAccountButton: "Registracija",
     ownStudioTitle: "IMATE LI VLASTITI STUDIO?",
-    ownStudioDescription: "Registrirajte svoj studio i počnite primati klijente",
+    ownStudioDescription:
+      "Registrirajte svoj studio i počnite primati klijente",
     ownStudioButton: "Registrirajte Studio",
     ownStudioTitle: "IMAŠ SVOJ TATTOO STUDIO?",
     ownStudioDescription: "Registriraj studio i počni primati klijente",
@@ -93,26 +94,31 @@ export default {
     cancelButton: "Odustani",
     confirmButton: "Pošalji",
     successMessage: "Poruka uspješno poslana!",
-    errorMessage: "Došlo je do pogreške prilikom slanja poruke. Pokušajte ponovno.",
+    errorMessage:
+      "Došlo je do pogreške prilikom slanja poruke. Pokušajte ponovno.",
     findUs: "Kako nas možete pronaći?",
     emailSubject: "Poruka sa stranice Kontakt", // Dodano
   },
   welcomeMessage: "Dobrodošli, {name}!",
   aboutPage: {
     goalTitle: "Naš cilj je olakšati rezervaciju termina za tetoviranje",
-    goalDescription: "Naš tim čine ambiciozni studenti koji su odlučili modernizirati i olakšati proces rezerviranja termina za tetoviranje. Putem naše aplikacije omogućili smo korisnicima da na jednostavan način rezerviraju termine kod omiljenih tattoo artista, obavljaju plaćanja unutar aplikacije te kupuju proizvode za njegu tetovaža. Naša misija je pružiti brzu, sigurnu i praktičnu uslugu koja na jednom mjestu zadovoljava sve korisničke potrebe.",
+    goalDescription:
+      "Naš tim čine ambiciozni studenti koji su odlučili modernizirati i olakšati proces rezerviranja termina za tetoviranje. Putem naše aplikacije omogućili smo korisnicima da na jednostavan način rezerviraju termine kod omiljenih tattoo artista, obavljaju plaćanja unutar aplikacije te kupuju proizvode za njegu tetovaža. Naša misija je pružiti brzu, sigurnu i praktičnu uslugu koja na jednom mjestu zadovoljava sve korisničke potrebe.",
     faq: {
       whoAreWe: {
         question: "Tko smo mi?",
-        answer: "Mi smo tim koji je razvio aplikaciju za rezervaciju termina za tetoviranje. Naš cilj je korisnicima omogućiti jednostavan način zakazivanja termina, pregled stilova i odabir artista prema vlastitim željama.",
+        answer:
+          "Mi smo tim koji je razvio aplikaciju za rezervaciju termina za tetoviranje. Naš cilj je korisnicima omogućiti jednostavan način zakazivanja termina, pregled stilova i odabir artista prema vlastitim željama.",
       },
       bookingProcess: {
         question: "Kako funkcionira proces rezervacije?",
-        answer: "Proces rezervacije je jednostavan: odaberite željeni studio, datum i stil tetovaže, a umjetnik potvrđuje vaš termin.",
+        answer:
+          "Proces rezervacije je jednostavan: odaberite željeni studio, datum i stil tetovaže, a umjetnik potvrđuje vaš termin.",
       },
       paymentOptions: {
         question: "Koji su načini plaćanja?",
-        answer: "Plaćanje je moguće gotovinom u studiju ili karticom putem web aplikacije, ali je za rezervaciju obavezna uplata depozita.",
+        answer:
+          "Plaćanje je moguće gotovinom u studiju ili karticom putem web aplikacije, ali je za rezervaciju obavezna uplata depozita.",
       },
       viewPreviousWorks: {
         question: "Mogu li vidjeti prethodne radove studija?",
@@ -120,7 +126,8 @@ export default {
       },
       careProducts: {
         question: "Mogu li pregledati proizvode za njegu tetovaža?",
-        answer: "Putem naše stranice možete pronaći proizvode za njegu tetovaža.",
+        answer:
+          "Putem naše stranice možete pronaći proizvode za njegu tetovaža.",
       },
     },
   },
@@ -145,5 +152,11 @@ export default {
       email: "Unesite valjanu e-mail adresu",
       minLength: "Lozinka mora imati najmanje 6 znakova",
     },
-  }}  
-    
+  },
+  studiosPage: {
+    searchBar: {
+      label: "Pretraži studije",
+      placeholder: "Unesite naziv studija...",
+    },
+  },
+};
