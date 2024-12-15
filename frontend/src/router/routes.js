@@ -7,7 +7,6 @@ const routes = [
       { path: "register", component: () => import("pages/RegisterPage.vue") },
       { path: "login", component: () => import("pages/LoginPage.vue") },
       { path: "about", component: () => import("pages/AboutPage.vue") },
-      { path: "settings", component: () => import("pages/SettingsPage.vue") },
       { path: "studios", component: () => import("pages/StudiosPage.vue") },
       {
         path: "appointments",
@@ -15,7 +14,10 @@ const routes = [
       },
       { path: "aftercare", component: () => import("pages/AftercarePage.vue") },
       { path: "contactUs", component: () => import("pages/ContactUsPage.vue") },
-      { path: "studio-register", component: () => import("pages/StudioRegisterPage.vue") }
+      {
+        path: "studio-register",
+        component: () => import("pages/StudioRegisterPage.vue"),
+      },
     ],
   },
   {

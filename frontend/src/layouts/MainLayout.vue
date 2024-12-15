@@ -26,24 +26,40 @@
           <q-icon name="dark_mode" size="sm" />
         </div>
 
-        <div v-if="isLoggedIn" class="q-gutter-sm row items-center">
-          <q-btn
-            flat
-            dense
-            round
-            icon="account_circle"
-            aria-label="Profile"
-            @click="goToProfile"
-          />
-          <q-btn
-            flat
-            dense
-            round
-            icon="logout"
-            aria-label="Logout"
-            @click="logoutUser"
-          />
-        </div>
+        <q-btn-dropdown flat round icon="language" dense>
+          <q-list>
+            <q-item
+              clickable
+              v-for="lang in languages"
+              :key="lang.value"
+              @click="changeLanguage(lang.value)"
+            >
+              <q-item-section>
+                {{ lang.label }}
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+
+        <q-btn-dropdown v-if="isLoggedIn" flat round icon="account_circle" dense>
+          <q-list>
+            <q-item clickable @click="goToProfile">
+              <q-item-section>
+                {{ t("profileButton.myProfile") }}
+              </q-item-section>
+            </q-item>
+            <q-item clickable @click="goToProfileSettings">
+              <q-item-section>
+                {{ t("profileButton.profileSettings") }}
+              </q-item-section>
+            </q-item>
+            <q-item clickable @click="logoutUser">
+              <q-item-section>
+                {{ t("profileButton.logout") }}
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-toolbar>
     </q-header>
 
@@ -85,13 +101,29 @@ import { useQuasar } from "quasar";
 import axios from "axios";
 
 const $q = useQuasar();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const router = useRouter();
 
 const darkMode = ref($q.dark.isActive);
 const changeDarkMode = () => {
   $q.dark.toggle();
-  $q.localStorage.set("isDarkActive", $q.dark.isActive);
+  if ($q.localStorage) {
+    $q.localStorage.set("isDarkActive", $q.dark.isActive);
+  }
+};
+
+const languages = [
+  { value: "en", label: "English" },
+  { value: "hr", label: "Hrvatski" },
+];
+const currentLang = ref($q.localStorage?.getItem("language") || "hr");
+
+const changeLanguage = (value) => {
+  locale.value = value;
+  currentLang.value = value;
+  if ($q.localStorage) {
+    $q.localStorage.set("language", value);
+  }
 };
 
 const linksList = computed(() => [
@@ -103,7 +135,6 @@ const linksList = computed(() => [
   { title: t("essentialLinks.aftercare"), caption: t("essentialLinks.aftercareCaption"), icon: "medication", link: "/aftercare" },
   { title: t("essentialLinks.about"), caption: t("essentialLinks.aboutCaption"), icon: "info", link: "/about" },
   { title: t("essentialLinks.contactUs"), caption: t("essentialLinks.contactUsCaption"), icon: "message", link: "/contactUs" },
-  { title: t("essentialLinks.settings"), caption: t("essentialLinks.settingsCaption"), icon: "settings", link: "/settings" },
 ]);
 
 const leftDrawerOpen = ref(false);
@@ -115,6 +146,10 @@ function toggleLeftDrawer() {
 
 function goToProfile() {
   router.push("/profile");
+}
+
+function goToProfileSettings() {
+  router.push("/profile/settings");
 }
 
 function logoutUser() {
@@ -155,7 +190,7 @@ async function checkLoginStatus() {
 }
 </script>
 
-<style>
+<style scoped>
 .q-toolbar-title {
   flex-grow: 1;
 }
@@ -174,7 +209,6 @@ async function checkLoginStatus() {
   background-color: #e0e0e0 !important;
   border: none !important;
   box-shadow: none !important;
-  transition: none !important;
 }
 
 .custom-toggle .q-toggle__thumb {
@@ -182,18 +216,13 @@ async function checkLoginStatus() {
   border: none !important;
   box-shadow: none !important;
   border-radius: 50% !important;
-  transition: none !important;
 }
 
-.custom-toggle .q-toggle__thumb--on,
-.custom-toggle .q-toggle__thumb--off {
-  background-color: #ffffff !important;
-  border: none !important;
-  box-shadow: none !important;
+.q-btn-dropdown {
+  margin-left: 10px;
 }
 
-
-
-
-
+.q-btn-dropdown .q-btn {
+  color: inherit;
+}
 </style>

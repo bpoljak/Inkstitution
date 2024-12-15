@@ -19,6 +19,11 @@ export default {
     contactUs: "Contact Us",
     contactUsCaption: "Get in touch with us",
   },
+  profileButton: {
+    myProfile: "My Profile",
+    profileSettings: "Profile Settings",
+    logout: "Log Out",
+  },
   indexPage: {
     chooseYour: "Choose your",
     artist: "artist",

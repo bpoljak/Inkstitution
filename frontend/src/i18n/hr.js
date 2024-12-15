@@ -19,6 +19,11 @@ export default {
     contactUs: "Kontakt",
     contactUsCaption: "Stupite u kontakt s nama",
   },
+  profileButton: {
+    myProfile: "Moj Profil",
+    profileSettings: "Postavke Profila",
+    logout: "Odjava",
+  },
   indexPage: {
     chooseYour: "Odaberite svog",
     artist: "artista",
