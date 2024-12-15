@@ -70,7 +70,7 @@
         </q-item-label>
 
         <q-item
-          v-for="link in linksList"
+          v-for="link in filteredLinks"
           :key="link.title"
           clickable
           tag="router-link"
@@ -126,19 +126,24 @@ const changeLanguage = (value) => {
   }
 };
 
-const linksList = computed(() => [
+const isLoggedIn = ref(false);
+
+const linksList = [
   { title: t("essentialLinks.home"), caption: t("essentialLinks.homeCaption"), icon: "home", link: "/" },
   { title: t("essentialLinks.register"), caption: t("essentialLinks.registerCaption"), icon: "code", link: "/register" },
   { title: t("essentialLinks.login"), caption: t("essentialLinks.loginCaption"), icon: "login", link: "/login" },
-  { title: t("essentialLinks.studios"), caption: t("essentialLinks.studiosCaption"), icon: "store", link: "/studios" },
-  { title: t("essentialLinks.appointments"), caption: t("essentialLinks.appointmentsCaption"), icon: "book", link: "/appointments" },
-  { title: t("essentialLinks.aftercare"), caption: t("essentialLinks.aftercareCaption"), icon: "medication", link: "/aftercare" },
+  { title: t("essentialLinks.studios"), caption: t("essentialLinks.studiosCaption"), icon: "store", link: "/studios", requiresAuth: true },
+  { title: t("essentialLinks.appointments"), caption: t("essentialLinks.appointmentsCaption"), icon: "book", link: "/appointments", requiresAuth: true },
+  { title: t("essentialLinks.aftercare"), caption: t("essentialLinks.aftercareCaption"), icon: "medication", link: "/aftercare", requiresAuth: true },
   { title: t("essentialLinks.about"), caption: t("essentialLinks.aboutCaption"), icon: "info", link: "/about" },
   { title: t("essentialLinks.contactUs"), caption: t("essentialLinks.contactUsCaption"), icon: "message", link: "/contactUs" },
-]);
+];
+
+const filteredLinks = computed(() => {
+  return linksList.filter((link) => !link.requiresAuth || isLoggedIn.value);
+});
 
 const leftDrawerOpen = ref(false);
-const isLoggedIn = ref(false);
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
