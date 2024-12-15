@@ -2,28 +2,28 @@ const knex = require("../config/db.config");
 
 const Studio = function (studio) {
   this.studioName = studio.studioName;
+  this.studioCity = studio.studioCity;
   this.studioAddress = studio.studioAddress;
+  this.studioPhone = studio.studioPhone;
   this.studioWorkingHours = studio.studioWorkingHours;
   this.studioEmail = studio.studioEmail;
-  this.studioAccountName = studio.studioAccountName;
   this.studioPassword = studio.studioPassword;
-  this.createdAt = studio.createdAt;
-  this.updatedAt = studio.updatedAt;
 };
 
 Studio.createStudio = async (newStudio, result) => {
   try {
     const [id] = await knex("Studios").insert({
       StudioName: newStudio.studioName,
+      StudioCity: newStudio.studioCity,
       StudioAddress: newStudio.studioAddress,
+      StudioPhone: newStudio.studioPhone,
       StudioWorkingHours: newStudio.studioWorkingHours,
       StudioEmail: newStudio.studioEmail,
-      StudioAccountName: newStudio.studioAccountName,
       StudioPassword: newStudio.studioPassword,
     });
 
-    console.log("Created studio: ", { id, ...newStudio });
-    result(null, { id, ...newStudio });
+    console.log("Created studio: ", { StudioID: id, ...newStudio });
+    result(null, { StudioID: id, ...newStudio });
   } catch (err) {
     console.error("Error: ", err);
     result(err, null);
@@ -32,7 +32,17 @@ Studio.createStudio = async (newStudio, result) => {
 
 Studio.getAllStudios = async (result) => {
   try {
-    const studios = await knex("Studios").select("*");
+    const studios = await knex("Studios").select(
+      "StudioID",
+      "StudioName",
+      "StudioCity",
+      "StudioAddress",
+      "StudioPhone",
+      "StudioWorkingHours",
+      "StudioEmail",
+      "CreatedAt",
+      "UpdatedAt"
+    );
     console.log("Studios: ", studios);
     result(null, studios);
   } catch (err) {
@@ -43,7 +53,20 @@ Studio.getAllStudios = async (result) => {
 
 Studio.getStudioById = async (id, result) => {
   try {
-    const studio = await knex("Studios").where({ StudioID: id }).first();
+    const studio = await knex("Studios")
+      .where({ StudioID: id })
+      .select(
+        "StudioID",
+        "StudioName",
+        "StudioCity",
+        "StudioAddress",
+        "StudioPhone",
+        "StudioWorkingHours",
+        "StudioEmail",
+        "CreatedAt",
+        "UpdatedAt"
+      )
+      .first();
     if (studio) {
       console.log("Found studio: ", studio);
       result(null, studio);
@@ -96,17 +119,18 @@ Studio.updateStudioById = async (id, studio, result) => {
   try {
     const updated = await knex("Studios").where({ StudioID: id }).update({
       StudioName: studio.studioName,
+      StudioCity: studio.studioCity,
       StudioAddress: studio.studioAddress,
+      StudioPhone: studio.studioPhone,
       StudioWorkingHours: studio.studioWorkingHours,
       StudioEmail: studio.studioEmail,
-      StudioAccountName: studio.studioAccountName,
       StudioPassword: studio.studioPassword,
       UpdatedAt: knex.fn.now(),
     });
 
     if (updated) {
-      console.log("Updated studio: ", { id, ...studio });
-      result(null, { id, ...studio });
+      console.log("Updated studio: ", { StudioID: id, ...studio });
+      result(null, { StudioID: id, ...studio });
     } else {
       result({ kind: "not_found" }, null);
     }

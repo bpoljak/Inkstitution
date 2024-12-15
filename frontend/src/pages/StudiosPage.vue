@@ -15,11 +15,16 @@
         class="studio-card"
       >
         <div class="studio-logo">
-          <img src="/path/to/logo.png" alt="Studio Logo" />
+          <img
+            :src="studio.imageLink || '/path/to/default-logo.png'"
+            alt="Studio Logo"
+          />
         </div>
         <div class="studio-details">
           <h2>{{ studio.StudioName }}</h2>
+          <p>{{ studio.StudioCity }}</p>
           <p>{{ studio.StudioAddress }}</p>
+          <p>{{ studio.StudioPhone }}</p>
           <p>{{ studio.StudioEmail }}</p>
         </div>
       </q-card>
@@ -38,10 +43,24 @@ export default {
 
     const fetchStudios = async () => {
       try {
-        const response = await axios.get(`${process.env.API_URL}/api/studios`);
-        studios.value = response.data;
+        const [studiosResponse, imagesResponse] = await Promise.all([
+          axios.get(`${process.env.API_URL}/api/studios`),
+          axios.get(`${process.env.API_URL}/api/studioimages`),
+        ]);
+
+        const images = imagesResponse.data;
+
+        studios.value = studiosResponse.data.map((studio) => {
+          const image = images.find(
+            (img) => img.StudioID === studio.StudioID
+          );
+          return {
+            ...studio,
+            imageLink: image ? image.StudioProfileImageLink : null,
+          };
+        });
       } catch (error) {
-        console.error("Error fetching studios:", error);
+        console.error("Error fetching studios or images:", error);
       }
     };
 
@@ -49,9 +68,13 @@ export default {
       if (!searchQuery.value) {
         return studios.value;
       }
-      return studios.value.filter((studio) =>
-        studio.StudioName.toLowerCase().includes(searchQuery.value.toLowerCase())
-      );
+      return studios.value.filter((studio) => {
+        const query = searchQuery.value.toLowerCase();
+        return (
+          studio.StudioName.toLowerCase().includes(query) ||
+          studio.StudioCity.toLowerCase().includes(query)
+        );
+      });
     });
 
     fetchStudios();
