@@ -175,4 +175,14 @@ export default {
       placeholder: "Enter the studio name...",
     },
   },
+  appointmentsPage: {
+    searchBar: {
+      label: "Search Appointments",
+      placeholder: "Enter studio name...",
+    },
+    searchDate: {
+      label: "Appointment Date",
+    },
+    status: "Status",
+  },
 };

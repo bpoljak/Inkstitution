@@ -164,4 +164,14 @@ export default {
       placeholder: "Unesite naziv studija...",
     },
   },
+  appointmentsPage: {
+    searchBar: {
+      label: "Pretraži termine",
+      placeholder: "Unesite naziv studija...",
+    },
+    searchDate: {
+      label: "Datum termina",
+    },
+    status: "Status",
+  },
 };

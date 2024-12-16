@@ -6,6 +6,7 @@ module.exports = (app) => {
   router.get("/session", (req, res) => {
     if (req.session && req.session.userId) {
       return res.send({
+        userId: req.session.userId,
         userName: req.session.userName,
         userEmail: req.session.userEmail,
       });

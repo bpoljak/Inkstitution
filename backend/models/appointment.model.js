@@ -83,18 +83,32 @@ Appointment.getAllAppointmentsByArtistId = async (id, result) => {
   }
 };
 
-Appointment.getAllAppointmentsByUserId = async (id, result) => {
+Appointment.getAllAppointmentsByUserId = async (userId) => {
   try {
-    const appointments = await knex("Appointments").where({ UserID: id });
-    if (appointments.length) {
-      console.log("Found appointments: ", appointments);
-      result(null, appointments);
-    } else {
-      result({ kind: "not_found" }, null);
-    }
+    const appointments = await knex("Appointments")
+      .join("Studios", "Appointments.StudioID", "=", "Studios.StudioID")
+      .leftJoin(
+        "StudioImages",
+        "Studios.StudioID",
+        "=",
+        "StudioImages.StudioID"
+      )
+      .select(
+        "Appointments.AppointmentID",
+        "Appointments.AppointmentDate",
+        "Appointments.AppointmentTime",
+        "Appointments.Status",
+        "Studios.StudioName",
+        "Studios.StudioCity",
+        "Studios.StudioAddress",
+        "StudioImages.StudioProfileImageLink"
+      )
+      .where("Appointments.UserID", userId);
+
+    return appointments;
   } catch (err) {
-    console.error("Error: ", err);
-    result(err, null);
+    console.error("Error fetching appointments by UserID:", err.message);
+    throw err;
   }
 };
 

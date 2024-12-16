@@ -88,17 +88,22 @@ exports.getAllAppointmentsByArtistId = async (req, res) => {
 
 exports.getAllAppointmentsByUserId = async (req, res) => {
   try {
-    const data = await Appointment.getAllAppointmentsByUserId(req.params.id);
-    if (!data.length) {
-      res.status(404).send({
-        message: `Not found Appointments for User with id ${req.params.id}.`,
-      });
-    } else {
-      res.send(data);
+    const appointments = await Appointment.getAllAppointmentsByUserId(
+      req.params.id
+    );
+
+    if (!appointments || appointments.length === 0) {
+      return res
+        .status(404)
+        .send({ message: "No appointments found for this user." });
     }
+
+    res.send(appointments);
   } catch (error) {
+    console.error("Error in controller fetching appointments:", error.message);
     res.status(500).send({
-      message: `Error retrieving Appointments for User with id ${req.params.id}.`,
+      message: "Error fetching appointments for user.",
+      error: error.message,
     });
   }
 };
