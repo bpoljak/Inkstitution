@@ -39,17 +39,24 @@
 
 <script>
 import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useQuasar } from "quasar";
+import { useI18n } from "vue-i18n";
 import axios from "axios";
+
 
 export default {
   setup() {
+    const $q = useQuasar();
     const route = useRoute();
+    const router = useRouter();
     const appointment = ref({});
     const updatedDate = ref("");
     const updatedTime = ref("");
     const studioName = ref("N/A");
     const errorMessage = ref(null);
+    const { t } = useI18n();
+
 
     const timeOptions = [
       "08:00-09:00",
@@ -76,10 +83,10 @@ export default {
         );
         appointment.value = response.data;
 
+        studioName.value = response.data.StudioName || "N/A";
         updatedDate.value = formatDate(response.data.AppointmentDate);
         updatedTime.value = response.data.AppointmentTime;
 
-        studioName.value = response.data.StudioName || "N/A";
         console.log("Fetched appointment:", response.data);
       } catch (error) {
         console.error("Error fetching appointment:", error);
@@ -88,20 +95,39 @@ export default {
     };
 
     const updateAppointment = async () => {
-      try {
-        await axios.put(
-          `${process.env.API_URL}/api/appointments/${route.query.id}`,
-          {
-            appointmentDate: updatedDate.value,
-            appointmentTime: updatedTime.value,
-          }
-        );
-        console.log("Appointment updated successfully.");
-      } catch (error) {
-        console.error("Error updating appointment:", error);
-        errorMessage.value = "Error updating appointment.";
+  try {
+    const [startTime] = updatedTime.value.split("-");
+    await axios.put(
+      `${process.env.API_URL}/api/appointments/${route.query.id}`,
+      {
+        appointmentDate: updatedDate.value,
+        appointmentTime: startTime.trim(),
       }
-    };
+    );
+
+    $q.notify({
+      color: "green",
+      position: "top",
+      message: t("updateAppointmentPage.notifications.success"),
+      icon: "check_circle",
+    });
+
+    console.log("Appointment updated successfully.");
+    router.push("/appointments");
+  } catch (error) {
+    console.error("Error updating appointment:", error);
+
+    $q.notify({
+      color: "red",
+      position: "top",
+      message: t("updateAppointmentPage.notifications.error"),
+      icon: "error",
+    });
+    errorMessage.value = "Error updating appointment.";
+  }
+};
+
+
 
     onMounted(fetchAppointment);
 
@@ -116,6 +142,7 @@ export default {
     };
   },
 };
+
 </script>
 
 <style scoped>

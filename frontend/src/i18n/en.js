@@ -189,4 +189,14 @@ export default {
       delete: "Delete",
     },
   },
+  updateAppointmentPage: {
+    title: "Update Appointment",
+    chooseDate: "Choose Date",
+    chooseTime: "Choose Time",
+    updateButton: "Update Appointment",
+    notifications: {
+      success: "The appointment has been updated successfully!",
+      error: "An error occurred while updating the appointment.",
+    },
+  },
 };

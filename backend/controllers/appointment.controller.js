@@ -10,6 +10,7 @@ exports.createAppointment = async (req, res) => {
   const appointment = {
     appointmentDate: req.body.appointmentDate,
     appointmentTime: req.body.appointmentTime,
+    appointmentStatus: "Pending",
   };
 
   try {
@@ -125,13 +126,14 @@ exports.updateAppointmentById = async (req, res) => {
       req.params.id,
       appointment
     );
-    if (!data) {
-      res.status(404).send({
+
+    if (data.kind === "not_found") {
+      return res.status(404).send({
         message: `Not found Appointment with id ${req.params.id}.`,
       });
-    } else {
-      res.send(data);
     }
+
+    res.send(data);
   } catch (error) {
     res.status(500).send({
       message: `Error updating Appointment with id ${req.params.id}.`,

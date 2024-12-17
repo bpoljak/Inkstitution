@@ -39,11 +39,26 @@ Appointment.getAllAppointments = async (result) => {
 Appointment.getAppointmentById = async (id) => {
   try {
     const appointment = await knex("Appointments")
-      .where({ AppointmentID: id })
+      .join("Studios", "Appointments.StudioID", "=", "Studios.StudioID")
+      .select(
+        "Appointments.AppointmentID",
+        "Appointments.AppointmentDate",
+        "Appointments.AppointmentTime",
+        "Appointments.Status",
+        "Appointments.UserID",
+        "Studios.StudioName"
+      )
+      .where("Appointments.AppointmentID", id)
       .first();
-    return appointment;
+
+    if (appointment) {
+      console.log("Found appointment: ", appointment);
+      return appointment;
+    } else {
+      throw { kind: "not_found" };
+    }
   } catch (err) {
-    console.error("Error fetching appointment by ID:", err.message);
+    console.error("Error: ", err);
     throw err;
   }
 };
@@ -107,24 +122,25 @@ Appointment.getAllAppointmentsByUserId = async (userId) => {
   }
 };
 
-Appointment.updateAppointmentById = async (id, appointment, result) => {
+Appointment.updateAppointmentById = async (id, appointment) => {
   try {
     const updatedRows = await knex("Appointments")
       .where({ AppointmentID: id })
       .update({
         AppointmentDate: appointment.appointmentDate,
         AppointmentTime: appointment.appointmentTime,
+        Status: "Pending",
       });
 
     if (updatedRows) {
       console.log("Updated appointment: ", { id, ...appointment });
-      result(null, { id, ...appointment });
+      return { id, ...appointment };
     } else {
-      result({ kind: "not_found" }, null);
+      return { kind: "not_found" };
     }
   } catch (err) {
     console.error("Error: ", err);
-    result(err, null);
+    throw err;
   }
 };
 

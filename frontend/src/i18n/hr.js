@@ -183,5 +183,9 @@ export default {
     chooseDate: "Odaberi datum",
     chooseTime: "Odaberi vrijeme",
     updateButton: "Ažuriraj termin",
+    notifications: {
+      success: "Termin je uspješno ažuriran!",
+      error: "Greška prilikom ažuriranja termina.",
+    },
   },
 };
