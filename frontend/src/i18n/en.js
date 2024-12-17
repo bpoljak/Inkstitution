@@ -184,5 +184,9 @@ export default {
       label: "Appointment Date",
     },
     status: "Status",
+    buttons: {
+      update: "Update",
+      delete: "Delete",
+    },
   },
 };

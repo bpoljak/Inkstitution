@@ -36,20 +36,15 @@ Appointment.getAllAppointments = async (result) => {
   }
 };
 
-Appointment.getAppointmentById = async (id, result) => {
+Appointment.getAppointmentById = async (id) => {
   try {
     const appointment = await knex("Appointments")
       .where({ AppointmentID: id })
       .first();
-    if (appointment) {
-      console.log("Found appointment: ", appointment);
-      result(null, appointment);
-    } else {
-      result({ kind: "not_found" }, null);
-    }
+    return appointment;
   } catch (err) {
-    console.error("Error: ", err);
-    result(err, null);
+    console.error("Error fetching appointment by ID:", err.message);
+    throw err;
   }
 };
 
@@ -133,20 +128,21 @@ Appointment.updateAppointmentById = async (id, appointment, result) => {
   }
 };
 
-Appointment.deleteAppointmentById = async (id, result) => {
+Appointment.deleteAppointmentById = async (id) => {
   try {
     const deletedRows = await knex("Appointments")
       .where({ AppointmentID: id })
       .del();
     if (deletedRows) {
       console.log("Deleted appointment with id: ", id);
-      result(null, deletedRows);
+      return { success: true, message: `Appointment with ID ${id} deleted.` };
     } else {
-      result({ kind: "not_found" }, null);
+      console.log("Appointment not found with id: ", id);
+      return { success: false, message: "Appointment not found." };
     }
   } catch (err) {
-    console.error("Error: ", err);
-    result(err, null);
+    console.error("Error deleting appointment: ", err);
+    throw new Error("Failed to delete the appointment.");
   }
 };
 

@@ -18,6 +18,11 @@ const routes = [
         path: "studio-register",
         component: () => import("pages/StudioRegisterPage.vue"),
       },
+      {
+        path: "appointmentUpdate",
+        name: "AppointmentUpdatePage",
+        component: () => import("src/pages/AppointmentUpdatePage.vue"),
+      },
     ],
   },
   {

@@ -173,5 +173,15 @@ export default {
       label: "Datum termina",
     },
     status: "Status",
+    buttons: {
+      update: "Ažuriraj",
+      delete: "Obriši",
+    },
+  },
+  updateAppointmentPage: {
+    title: "Ažuriraj termin",
+    chooseDate: "Odaberi datum",
+    chooseTime: "Odaberi vrijeme",
+    updateButton: "Ažuriraj termin",
   },
 };

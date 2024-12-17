@@ -31,7 +31,20 @@
           <h2>{{ appointment.StudioName }}</h2>
           <p>{{ appointment.StudioCity }}, {{ appointment.StudioAddress }}</p>
           <p>{{ formatDate(appointment.AppointmentDate) }} - {{ appointment.AppointmentTime }}</p>
-          <p>Status: {{ appointment.Status }}</p>
+          <p>{{ $t('appointmentsPage.status') }}: {{ appointment.Status }}</p>
+        </div>
+        <div class="actions">
+          <q-btn
+            color="primary"
+            :label="$t('appointmentsPage.buttons.update')"
+            @click="updateAppointment(appointment.AppointmentID)"
+          />
+          <q-btn
+            color="red"
+            icon="delete"
+            :label="$t('appointmentsPage.buttons.delete')"
+            @click="deleteAppointment(appointment.AppointmentID)"
+          />
         </div>
       </q-card>
     </div>
@@ -39,8 +52,9 @@
 </template>
 
 <script>
-import axios from "axios";
 import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
 export default {
   setup() {
@@ -48,22 +62,20 @@ export default {
     const searchQuery = ref("");
     const searchDate = ref("");
     const userId = ref(null);
+    const router = useRouter();
 
     const fetchUserId = async () => {
-  try {
-    const response = await axios.get(
-      `${process.env.API_URL}/api/users/session`,
-      { withCredentials: true }
-    );
-    console.log("Session response:", response.data);
-    userId.value = response.data.userId;
-    console.log("Fetched UserID:", userId.value);
-    fetchAppointments();
-  } catch (error) {
-    console.error("Error fetching user session:", error.response);
-  }
-};
-
+      try {
+        const response = await axios.get(
+          `${process.env.API_URL}/api/users/session`,
+          { withCredentials: true }
+        );
+        userId.value = response.data.userId;
+        fetchAppointments();
+      } catch (error) {
+        console.error("Error fetching user session:", error);
+      }
+    };
 
     const fetchAppointments = async () => {
       if (!userId.value) return;
@@ -71,11 +83,27 @@ export default {
         const response = await axios.get(
           `${process.env.API_URL}/api/appointments/user/${userId.value}`
         );
-        console.log("Fetched appointments:", response.data);
         appointments.value = response.data;
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }
+    };
+
+    const deleteAppointment = async (id) => {
+      try {
+        await axios.delete(`${process.env.API_URL}/api/appointments/${id}`);
+        appointments.value = appointments.value.filter(
+          (appointment) => appointment.AppointmentID !== id
+        );
+        console.log("Appointment deleted and list updated.");
+      } catch (error) {
+        console.error("Error deleting appointment:", error);
+      }
+    };
+
+    const updateAppointment = (id) => {
+      console.log("Navigating to update page with ID:", id);
+      router.push({ path: "/appointmentUpdate", query: { id } });
     };
 
     const filteredAppointments = computed(() => {
@@ -110,6 +138,8 @@ export default {
       searchQuery,
       searchDate,
       filteredAppointments,
+      deleteAppointment,
+      updateAppointment,
       formatDate,
     };
   },
@@ -122,7 +152,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--q-page);
 }
 
 .search-bar {
@@ -149,7 +178,6 @@ export default {
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border: 1px solid var(--q-text-secondary);
-  width: 100%;
 }
 
 .studio-logo img {
@@ -160,15 +188,9 @@ export default {
   margin-bottom: 10px;
 }
 
-.appointment-details h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.appointment-details p {
-  margin: 5px 0;
-  font-size: 14px;
-  color: var(--q-text-secondary);
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 </style>

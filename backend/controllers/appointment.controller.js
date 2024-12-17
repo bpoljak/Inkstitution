@@ -37,15 +37,15 @@ exports.getAllAppointments = async (req, res) => {
 
 exports.getAppointmentById = async (req, res) => {
   try {
-    const data = await Appointment.getAppointmentById(req.params.id);
-    if (!data) {
-      res.status(404).send({
+    const appointment = await Appointment.getAppointmentById(req.params.id);
+    if (!appointment) {
+      return res.status(404).send({
         message: `Not found Appointment with id ${req.params.id}.`,
       });
-    } else {
-      res.send(data);
     }
+    res.send(appointment);
   } catch (error) {
+    console.error("Error retrieving Appointment by ID:", error.message);
     res.status(500).send({
       message: `Error retrieving Appointment with id ${req.params.id}.`,
     });
@@ -141,17 +141,17 @@ exports.updateAppointmentById = async (req, res) => {
 
 exports.deleteAppointmentById = async (req, res) => {
   try {
-    const data = await Appointment.deleteAppointmentById(req.params.id);
-    if (!data) {
-      res.status(404).send({
-        message: `Not found Appointment with id ${req.params.id}.`,
-      });
+    const result = await Appointment.deleteAppointmentById(req.params.id);
+
+    if (result.success) {
+      res.send({ message: result.message });
     } else {
-      res.send({ message: `Appointment was deleted successfully!` });
+      res.status(404).send({ message: result.message });
     }
   } catch (error) {
+    console.error("Error deleting appointment:", error.message);
     res.status(500).send({
-      message: `Could not delete Appointment with id ${req.params.id}.`,
+      message: "An error occurred while deleting the appointment.",
     });
   }
 };
