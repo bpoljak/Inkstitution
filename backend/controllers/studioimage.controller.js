@@ -58,6 +58,19 @@ exports.getStudioImageById = (req, res) => {
   });
 };
 
+exports.getStudioImagesByStudioId = (req, res) => {
+  const studioId = req.params.studioId;
+  StudioImage.getStudioImagesByStudioId(studioId, (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: "Error fetching studio images.",
+      });
+    } else {
+      res.send(data);
+    }
+  });
+};
+
 exports.updateStudioImageById = (req, res) => {
   if (!req.body) {
     return res.status(400).send({

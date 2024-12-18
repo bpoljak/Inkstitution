@@ -10,10 +10,12 @@
         :placeholder="$t('studiosPage.searchBar.placeholder')"
       />
       <q-card
-        v-for="studio in filteredStudios"
-        :key="studio.StudioID"
-        class="studio-card"
+      v-for="studio in filteredStudios"
+      :key="studio.StudioID"
+      class="studio-card"
+      @click="goToStudioProfile(studio.StudioID)"
       >
+
         <div class="studio-logo">
           <img
             :src="studio.imageLink || '/path/to/default-logo.png'"
@@ -35,11 +37,13 @@
 <script>
 import axios from "axios";
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const studios = ref([]);
     const searchQuery = ref("");
+    const router = useRouter();
 
     const fetchStudios = async () => {
       try {
@@ -77,15 +81,22 @@ export default {
       });
     });
 
+    const goToStudioProfile = (studioId) => {
+  router.push({ path: `/studioProfile/${studioId}` });
+};
+
+
     fetchStudios();
 
     return {
       studios,
       searchQuery,
       filteredStudios,
+      goToStudioProfile,
     };
   },
 };
+
 </script>
 
 <style scoped>
@@ -143,4 +154,24 @@ export default {
   font-size: 14px;
   color: var(--q-text-secondary);
 }
+
+.studio-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: var(--q-surface);
+  color: var(--q-text-primary);
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--q-text-secondary);
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.studio-card:hover {
+  transform: translateY(-5px);
+}
+
 </style>

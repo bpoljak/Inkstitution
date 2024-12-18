@@ -6,6 +6,7 @@ module.exports = (app) => {
   router.post("/", studioImages.createStudioImage);
   router.get("/", studioImages.getAllStudioImages);
   router.get("/:id", studioImages.getStudioImageById);
+  router.get("/:studioId", studioImages.getStudioImagesByStudioId);
   router.put("/:id", studioImages.updateStudioImageById);
   router.delete("/:id", studioImages.deleteStudioImageById);
   router.get("/:id/createdAt", studioImages.getStudioImageCreatedAt);

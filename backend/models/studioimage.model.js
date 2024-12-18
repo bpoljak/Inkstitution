@@ -9,7 +9,6 @@ const StudioImage = function (studioImage) {
   this.updatedAt = studioImage.updatedAt;
 };
 
-// Create a new studio image
 StudioImage.createStudioImage = async (newStudioImage, result) => {
   try {
     const [id] = await knex("StudioImages").insert({
@@ -28,7 +27,6 @@ StudioImage.createStudioImage = async (newStudioImage, result) => {
   }
 };
 
-// Update a studio image by ID
 StudioImage.updateStudioImageById = async (id, studioImage, result) => {
   try {
     const updated = await knex("StudioImages")
@@ -52,7 +50,6 @@ StudioImage.updateStudioImageById = async (id, studioImage, result) => {
   }
 };
 
-// Update only the UpdatedAt timestamp
 StudioImage.updateStudioImageTimestamp = async (id, result) => {
   try {
     const updated = await knex("StudioImages")
@@ -73,7 +70,6 @@ StudioImage.updateStudioImageTimestamp = async (id, result) => {
   }
 };
 
-// Get all studio images
 StudioImage.getAllStudioImages = async (result) => {
   try {
     const images = await knex("StudioImages").select("*");
@@ -85,7 +81,6 @@ StudioImage.getAllStudioImages = async (result) => {
   }
 };
 
-// Get a studio image by ID
 StudioImage.getStudioImageById = async (id, result) => {
   try {
     const image = await knex("StudioImages")
@@ -103,7 +98,16 @@ StudioImage.getStudioImageById = async (id, result) => {
   }
 };
 
-// Delete a studio image by ID
+StudioImage.getStudioImagesByStudioId = async (studioId, result) => {
+  try {
+    const images = await knex("StudioImages").where({ StudioID: studioId });
+    result(null, images);
+  } catch (err) {
+    console.error("Error fetching studio images:", err);
+    result(err, null);
+  }
+};
+
 StudioImage.deleteStudioImageById = async (id, result) => {
   try {
     const deleted = await knex("StudioImages")
@@ -121,7 +125,6 @@ StudioImage.deleteStudioImageById = async (id, result) => {
   }
 };
 
-// Get creation timestamp for a studio image
 StudioImage.getStudioImageCreatedAt = async (id, result) => {
   try {
     const createdAt = await knex("StudioImages")
@@ -141,7 +144,6 @@ StudioImage.getStudioImageCreatedAt = async (id, result) => {
   }
 };
 
-// Get update timestamp for a studio image
 StudioImage.getStudioImageUpdatedAt = async (id, result) => {
   try {
     const updatedAt = await knex("StudioImages")
