@@ -19,7 +19,7 @@
             <h2 class="text-gradient-light">{{ $t('indexPage.missionTitle') }}</h2>
             <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription1') }}</p>
             <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription2') }}</p>
-            <q-btn color="gradient-light" :label="$t('indexPage.missionButton')" class="q-my-md align-button" />
+            <q-btn color="gradient-light" :label="$t('indexPage.missionButton')" class="q-my-md align-button" @click="goToAboutUs()"/>
           </q-card-section>
         </q-card>
 
@@ -29,7 +29,7 @@
             <h2 class="text-gradient-light">{{ $t('indexPage.createAccountTitle') }}</h2>
             <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription1') }}</p>
             <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription2') }}</p>
-            <q-btn color="gradient-light" :label="$t('indexPage.createAccountButton')" class="q-my-md align-button" />
+            <q-btn color="gradient-light" :label="$t('indexPage.createAccountButton')" class="q-my-md align-button" @click="goToRegister()" />
           </q-card-section>
         </q-card>
 
@@ -38,7 +38,7 @@
             <q-icon name="store" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
             <h2 class="text-gradient-light">{{ $t('indexPage.ownStudioTitle') }}</h2>
             <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.ownStudioDescription') }}</p>
-            <q-btn color="gradient-light" :label="$t('indexPage.ownStudioButton')" class="q-my-md align-button" />
+            <q-btn color="gradient-light" :label="$t('indexPage.ownStudioButton')" class="q-my-md align-button" @click="goToStudioRegister()" />
           </q-card-section>
         </q-card>
       </div>
@@ -66,9 +66,16 @@ export default {
       });
   },
   methods: {
-    goToProfile() {
-      this.$router.push("/profile");
+    goToAboutUs() {
+      this.$router.push("/about");
     },
+    goToRegister() {
+      this.$router.push("/register");
+    },
+    goToStudioRegister() {
+      this.$router.push("/studio-register");
+    },
+
     logoutUser() {
       axios
         .post(`${process.env.API_URL}/api/users/logout`, {}, { withCredentials: true })
