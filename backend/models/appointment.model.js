@@ -98,10 +98,10 @@ Appointment.getAllAppointmentsByUserId = async (userId) => {
     const appointments = await knex("Appointments")
       .join("Studios", "Appointments.StudioID", "=", "Studios.StudioID")
       .leftJoin(
-        "StudioImages",
+        "StudioProfileImages",
         "Studios.StudioID",
         "=",
-        "StudioImages.StudioID"
+        "StudioProfileImages.StudioID"
       )
       .select(
         "Appointments.AppointmentID",
@@ -111,7 +111,7 @@ Appointment.getAllAppointmentsByUserId = async (userId) => {
         "Studios.StudioName",
         "Studios.StudioCity",
         "Studios.StudioAddress",
-        "StudioImages.StudioProfileImageLink"
+        "StudioProfileImages.StudioProfileImageLink"
       )
       .where("Appointments.UserID", userId);
 
