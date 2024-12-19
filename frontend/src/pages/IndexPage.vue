@@ -1,44 +1,126 @@
 <template>
   <q-page :class="{ 'dark-mode': $q.dark.isActive }">
-    <q-card class="hero-card" :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}">
+    <q-card
+      class="hero-card"
+      :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+    >
       <div class="q-pa-md text-center hero-content">
-        <h1 :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}">
+        <h1 :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }">
           <span v-if="userName">{{ $t('welcomeMessage', { name: userName }) }}</span>
-          <span v-else>{{ $t('indexPage.chooseYour') }} <span class="text-gradient-light">{{ $t('indexPage.artist') }}</span></span>
+          <span v-else>
+            {{ $t('indexPage.chooseYour') }}
+            <span class="text-gradient-light">{{ $t('indexPage.artist') }}</span>
+          </span>
         </h1>
-        <p :class="{'text-light-gray': $q.dark.isActive, 'text-dark-purple': !$q.dark.isActive}">{{ $t('indexPage.fastAndSimple') }}</p>
+        <p
+          :class="{
+            'text-light-gray': $q.dark.isActive,
+            'text-dark-purple': !$q.dark.isActive,
+          }"
+        >
+          {{ $t('indexPage.fastAndSimple') }}
+        </p>
         <q-btn color="gradient-light" :label="$t('indexPage.explore')" class="q-my-md" />
       </div>
     </q-card>
 
-    <q-card class="parent-card" :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}">
+    <!-- Prikaz parent-card samo ako korisnik NIJE ulogiran -->
+    <q-card
+      v-if="!isLoggedIn"
+      class="parent-card"
+      :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+    >
       <div class="flex-cards q-my-lg q-gutter-lg">
-        <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md child-card equal-height">
+        <q-card
+          :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+          class="q-pa-md child-card equal-height"
+        >
           <q-card-section class="text-center card-content">
-            <q-icon name="layers" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+            <q-icon
+              name="layers"
+              size="50px"
+              :class="{ 'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive }"
+              class="icon-style"
+            />
             <h2 class="text-gradient-light">{{ $t('indexPage.missionTitle') }}</h2>
-            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription1') }}</p>
-            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.missionDescription2') }}</p>
-            <q-btn color="gradient-light" :label="$t('indexPage.missionButton')" class="q-my-md align-button" @click="goToAboutUs()"/>
+            <p
+              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              class="text-spacing"
+            >
+              {{ $t('indexPage.missionDescription1') }}
+            </p>
+            <p
+              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              class="text-spacing"
+            >
+              {{ $t('indexPage.missionDescription2') }}
+            </p>
+            <q-btn
+              color="gradient-light"
+              :label="$t('indexPage.missionButton')"
+              class="q-my-md align-button"
+              @click="goToAboutUs()"
+            />
           </q-card-section>
         </q-card>
 
-        <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md child-card equal-height">
+        <q-card
+          :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+          class="q-pa-md child-card equal-height"
+        >
           <q-card-section class="text-center card-content">
-            <q-icon name="groups" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+            <q-icon
+              name="groups"
+              size="50px"
+              :class="{ 'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive }"
+              class="icon-style"
+            />
             <h2 class="text-gradient-light">{{ $t('indexPage.createAccountTitle') }}</h2>
-            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription1') }}</p>
-            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.createAccountDescription2') }}</p>
-            <q-btn color="gradient-light" :label="$t('indexPage.createAccountButton')" class="q-my-md align-button" @click="goToRegister()" />
+            <p
+              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              class="text-spacing"
+            >
+              {{ $t('indexPage.createAccountDescription1') }}
+            </p>
+            <p
+              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              class="text-spacing"
+            >
+              {{ $t('indexPage.createAccountDescription2') }}
+            </p>
+            <q-btn
+              color="gradient-light"
+              :label="$t('indexPage.createAccountButton')"
+              class="q-my-md align-button"
+              @click="goToRegister()"
+            />
           </q-card-section>
         </q-card>
 
-        <q-card :class="{'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive}" class="q-pa-md child-card equal-height">
+        <q-card
+          :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+          class="q-pa-md child-card equal-height"
+        >
           <q-card-section class="text-center card-content">
-            <q-icon name="store" size="50px" :class="{'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive}" class="icon-style" />
+            <q-icon
+              name="store"
+              size="50px"
+              :class="{ 'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive }"
+              class="icon-style"
+            />
             <h2 class="text-gradient-light">{{ $t('indexPage.ownStudioTitle') }}</h2>
-            <p :class="{'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive}" class="text-spacing">{{ $t('indexPage.ownStudioDescription') }}</p>
-            <q-btn color="gradient-light" :label="$t('indexPage.ownStudioButton')" class="q-my-md align-button" @click="goToStudioRegister()" />
+            <p
+              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              class="text-spacing"
+            >
+              {{ $t('indexPage.ownStudioDescription') }}
+            </p>
+            <q-btn
+              color="gradient-light"
+              :label="$t('indexPage.ownStudioButton')"
+              class="q-my-md align-button"
+              @click="goToStudioRegister()"
+            />
           </q-card-section>
         </q-card>
       </div>
@@ -48,48 +130,48 @@
 
 <script>
 import axios from "axios";
+import { ref, onMounted } from "vue";
 
 export default {
-  data() {
-    return {
-      userName: null,
-    };
-  },
-  created() {
-    axios
-      .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
-      .then((response) => {
-        this.userName = response.data.userName || null;
-      })
-      .catch(() => {
-        this.userName = null;
-      });
-  },
-  methods: {
-    goToAboutUs() {
-      this.$router.push("/about");
-    },
-    goToRegister() {
-      this.$router.push("/register");
-    },
-    goToStudioRegister() {
-      this.$router.push("/studio-register");
-    },
+  setup() {
+    const isLoggedIn = ref(false);
+    const userName = ref(null);
 
-    logoutUser() {
-      axios
-        .post(`${process.env.API_URL}/api/users/logout`, {}, { withCredentials: true })
-        .then(() => {
-          this.userName = null;
-          this.$router.push("/login");
-        })
-        .catch(() => {
-          console.error("Logout failed");
+    const checkLoginStatus = async () => {
+      try {
+        const response = await axios.get(`${process.env.API_URL}/api/users/session`, {
+          withCredentials: true,
         });
-    },
+        if (response.data && response.data.userName) {
+          isLoggedIn.value = true;
+          userName.value = response.data.userName;
+        } else {
+          isLoggedIn.value = false;
+        }
+      } catch (error) {
+        isLoggedIn.value = false;
+      }
+    };
+
+    onMounted(checkLoginStatus);
+
+    return {
+      isLoggedIn,
+      userName,
+      goToAboutUs() {
+        this.$router.push("/about");
+      },
+      goToRegister() {
+        this.$router.push("/register");
+      },
+      goToStudioRegister() {
+        this.$router.push("/studio-register");
+      },
+    };
   },
 };
 </script>
+
 
 
 <style scoped>
