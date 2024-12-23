@@ -12,7 +12,7 @@
       <q-btn
         color="orange"
         label="Book an appointment"
-        @click="bookAppointment"
+        @click="bookAppointment()"
         class="book-button"
       />
     </div>
@@ -37,48 +37,47 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { ref, onMounted } from "vue";
 
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const studioId = route.params.studioId;
     const studioData = ref({});
     const studioImages = ref([]);
 
     const fetchStudioDetails = async () => {
-  try {
-    const studioResponse = await axios.get(
-      `${process.env.API_URL}/api/studios/${studioId}`
-    );
-    console.log("Studio data response:", studioResponse.data);
-    studioData.value = studioResponse.data;
+      try {
+        const studioResponse = await axios.get(
+          `${process.env.API_URL}/api/studios/${studioId}`
+        );
+        console.log("Studio data response:", studioResponse.data);
+        studioData.value = studioResponse.data;
 
-    const imagesResponse = await axios.get(
-      `${process.env.API_URL}/api/studioimages/${studioId}`
-    );
-    console.log("Images response:", imagesResponse.data);
+        const imagesResponse = await axios.get(
+          `${process.env.API_URL}/api/studioimages/${studioId}`
+        );
+        console.log("Images response:", imagesResponse.data);
 
+        if (Array.isArray(imagesResponse.data)) {
+          studioImages.value = imagesResponse.data;
+        } else if (imagesResponse.data) {
+          studioImages.value = [imagesResponse.data];
+        } else {
+          studioImages.value = [];
+        }
 
-    if (Array.isArray(imagesResponse.data)) {
-      studioImages.value = imagesResponse.data;
-    } else if (imagesResponse.data) {
-      studioImages.value = [imagesResponse.data];
-    } else {
-      studioImages.value = [];
-    }
-
-    console.log("studioImages state:", studioImages.value);
-  } catch (error) {
-    console.error("Error fetching studio details or images:", error);
-  }
-};
-
+        console.log("studioImages state:", studioImages.value);
+      } catch (error) {
+        console.error("Error fetching studio details or images:", error);
+      }
+    };
 
     const bookAppointment = () => {
-      console.log("Redirect to booking appointment page...");
+      router.push({ name: "AppointmentBookingPage", params: { studioId } });
     };
 
     onMounted(fetchStudioDetails);

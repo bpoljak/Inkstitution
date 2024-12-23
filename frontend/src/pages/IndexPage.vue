@@ -24,7 +24,6 @@
       </div>
     </q-card>
 
-    <!-- Prikaz parent-card samo ako korisnik NIJE ulogiran -->
     <q-card
       v-if="!isLoggedIn"
       class="parent-card"

@@ -28,6 +28,11 @@ const routes = [
         name: "AppointmentUpdatePage",
         component: () => import("src/pages/AppointmentUpdatePage.vue"),
       },
+      {
+        path: "appointmentBooking/:studioId",
+        name: "AppointmentBookingPage",
+        component: () => import("pages/AppointmentBookingPage.vue"),
+      },
     ],
   },
   {

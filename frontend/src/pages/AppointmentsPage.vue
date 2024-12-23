@@ -9,13 +9,6 @@
         class="search-bar"
         :placeholder="$t('appointmentsPage.searchBar.placeholder')"
       />
-      <q-input
-        filled
-        v-model="searchDate"
-        type="date"
-        :label="$t('appointmentsPage.searchDate.label')"
-        class="search-bar"
-      />
       <q-card
         v-for="appointment in filteredAppointments"
         :key="appointment.AppointmentID"

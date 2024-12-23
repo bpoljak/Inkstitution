@@ -2,15 +2,15 @@ const Appointment = require("../models/appointment.model.js");
 
 exports.createAppointment = async (req, res) => {
   if (!req.body) {
-    return res.status(400).send({
-      message: "Content can not be empty!",
-    });
+    return res.status(400).send({ message: "Content can not be empty!" });
   }
 
   const appointment = {
     appointmentDate: req.body.appointmentDate,
     appointmentTime: req.body.appointmentTime,
     appointmentStatus: "Pending",
+    studioId: req.body.studioId,
+    userId: req.body.userId,
   };
 
   try {
@@ -21,6 +21,24 @@ exports.createAppointment = async (req, res) => {
       message:
         error.message || "Some error occurred while creating the Appointment.",
     });
+  }
+};
+
+exports.getAppointmentsByDateAndStudioId = async (req, res) => {
+  const { date, studioId } = req.query;
+
+  if (!date || !studioId) {
+    return res.status(400).send({ message: "Date and studioId are required." });
+  }
+
+  try {
+    const appointments = await Appointment.getAppointmentsByDateAndStudioId(
+      date,
+      studioId
+    );
+    res.send(appointments);
+  } catch (error) {
+    res.status(500).send({ message: "Error fetching appointments." });
   }
 };
 
@@ -39,14 +57,13 @@ exports.getAllAppointments = async (req, res) => {
 exports.getAppointmentById = async (req, res) => {
   try {
     const appointment = await Appointment.getAppointmentById(req.params.id);
-    if (!appointment) {
+    res.send(appointment);
+  } catch (error) {
+    if (error.kind === "not_found") {
       return res.status(404).send({
         message: `Not found Appointment with id ${req.params.id}.`,
       });
     }
-    res.send(appointment);
-  } catch (error) {
-    console.error("Error retrieving Appointment by ID:", error.message);
     res.status(500).send({
       message: `Error retrieving Appointment with id ${req.params.id}.`,
     });
@@ -56,33 +73,15 @@ exports.getAppointmentById = async (req, res) => {
 exports.getAllAppointmentsByStudioId = async (req, res) => {
   try {
     const data = await Appointment.getAllAppointmentsByStudioId(req.params.id);
-    if (!data.length) {
-      res.status(404).send({
+    res.send(data);
+  } catch (error) {
+    if (error.kind === "not_found") {
+      return res.status(404).send({
         message: `Not found Appointments for Studio with id ${req.params.id}.`,
       });
-    } else {
-      res.send(data);
     }
-  } catch (error) {
     res.status(500).send({
       message: `Error retrieving Appointments for Studio with id ${req.params.id}.`,
-    });
-  }
-};
-
-exports.getAllAppointmentsByArtistId = async (req, res) => {
-  try {
-    const data = await Appointment.getAllAppointmentsByArtistId(req.params.id);
-    if (!data.length) {
-      res.status(404).send({
-        message: `Not found Appointments for Artist with id ${req.params.id}.`,
-      });
-    } else {
-      res.send(data);
-    }
-  } catch (error) {
-    res.status(500).send({
-      message: `Error retrieving Appointments for Artist with id ${req.params.id}.`,
     });
   }
 };
@@ -92,28 +91,22 @@ exports.getAllAppointmentsByUserId = async (req, res) => {
     const appointments = await Appointment.getAllAppointmentsByUserId(
       req.params.id
     );
-
-    if (!appointments || appointments.length === 0) {
+    res.send(appointments);
+  } catch (error) {
+    if (error.kind === "not_found") {
       return res
         .status(404)
         .send({ message: "No appointments found for this user." });
     }
-
-    res.send(appointments);
-  } catch (error) {
-    console.error("Error in controller fetching appointments:", error.message);
     res.status(500).send({
       message: "Error fetching appointments for user.",
-      error: error.message,
     });
   }
 };
 
 exports.updateAppointmentById = async (req, res) => {
   if (!req.body) {
-    return res.status(400).send({
-      message: "Content can not be empty!",
-    });
+    return res.status(400).send({ message: "Content can not be empty!" });
   }
 
   const appointment = {
@@ -126,15 +119,13 @@ exports.updateAppointmentById = async (req, res) => {
       req.params.id,
       appointment
     );
-
-    if (data.kind === "not_found") {
+    res.send(data);
+  } catch (error) {
+    if (error.kind === "not_found") {
       return res.status(404).send({
         message: `Not found Appointment with id ${req.params.id}.`,
       });
     }
-
-    res.send(data);
-  } catch (error) {
     res.status(500).send({
       message: `Error updating Appointment with id ${req.params.id}.`,
     });
@@ -144,14 +135,11 @@ exports.updateAppointmentById = async (req, res) => {
 exports.deleteAppointmentById = async (req, res) => {
   try {
     const result = await Appointment.deleteAppointmentById(req.params.id);
-
-    if (result.success) {
-      res.send({ message: result.message });
-    } else {
-      res.status(404).send({ message: result.message });
-    }
+    res.send({ message: result.message });
   } catch (error) {
-    console.error("Error deleting appointment:", error.message);
+    if (error.message === "Appointment not found.") {
+      return res.status(404).send({ message: "Appointment not found." });
+    }
     res.status(500).send({
       message: "An error occurred while deleting the appointment.",
     });
