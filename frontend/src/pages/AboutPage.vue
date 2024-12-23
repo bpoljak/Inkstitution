@@ -1,5 +1,8 @@
 <template>
   <q-page class="about-page">
+    
+    <div class="background-overlay"></div>
+
     <div class="about-content">
       <div class="text-section">
         <h2>{{ $t('aboutPage.goalTitle') }}</h2>
@@ -8,23 +11,18 @@
         </p>
       </div>
 
-      <div class="image-section">
-        <img src="/images/aboutyou.jpg" alt="Tetoviranje u toku" />
-
-        <!-- FAQ Box -->
-        <div class="faq-box">
-          <div class="about-section faq-section" v-for="(faq, index) in faqs" :key="index">
-            <div class="box-title" @click="toggleFaq(index)">
-              {{ faq.question }}
-            </div>
-            <transition name="expand">
-              <div v-if="faq.visible" class="about-text">
-                {{ faq.answer }}
-              </div>
-            </transition>
+      <div class="faq-box">
+        <div class="faq-section" v-for="(faq, index) in faqs" :key="index">
+          <div class="box-title" @click="toggleFaq(index)">
+            {{ faq.question }}
           </div>
+          <transition name="expand">
+            <div v-if="faq.visible" class="about-text">
+              {{ faq.answer }}
+            </div>
+          </transition>
         </div>
-      </div>
+      </div> <!-- asdasdasdadasdasdasd-->
     </div>
   </q-page>
 </template>
@@ -37,105 +35,105 @@ export default {
         {
           question: this.$t('aboutPage.faq.whoAreWe.question'),
           answer: this.$t('aboutPage.faq.whoAreWe.answer'),
-          visible: false
+          visible: false,
         },
         {
           question: this.$t('aboutPage.faq.bookingProcess.question'),
           answer: this.$t('aboutPage.faq.bookingProcess.answer'),
-          visible: false
+          visible: false,
         },
         {
           question: this.$t('aboutPage.faq.paymentOptions.question'),
           answer: this.$t('aboutPage.faq.paymentOptions.answer'),
-          visible: false
+          visible: false,
         },
         {
           question: this.$t('aboutPage.faq.viewPreviousWorks.question'),
           answer: this.$t('aboutPage.faq.viewPreviousWorks.answer'),
-          visible: false
+          visible: false,
         },
         {
           question: this.$t('aboutPage.faq.careProducts.question'),
           answer: this.$t('aboutPage.faq.careProducts.answer'),
-          visible: false
-        }
-      ]
+          visible: false,
+        },
+      ],
     };
   },
   methods: {
     toggleFaq(index) {
       this.faqs[index].visible = !this.faqs[index].visible;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-/* CSS kod ostaje isti */
 .about-page {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #e0f7fa, #80deea);
   min-height: 100vh;
+  background: url('C:\dino\Inkstitution\Inkstitution\frontend\src\assets\majstor.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); 
+  z-index: 1;
 }
 
 .about-content {
-  display: flex;
-  width: 100%;
-}
-
-.text-section {
-  width: 50%;
-  padding-right: 20px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin-top: -450px;
+  align-items: center;
+  z-index: 2;
+  color: white;
+  max-width: 800px;
+  text-align: center;
 }
 
 .text-section h2 {
-  font-size: 1.75rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  font-family: Arial, sans-serif;
+  margin-bottom: 1rem;
 }
 
-.image-section {
-  width: 50%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-img {
-  width: 80%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 20px;
+.text-section p {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
 }
 
 .faq-box {
   width: 100%;
-  text-align: center;
-  padding-top: 20px;
 }
 
 .faq-section {
-  padding: 15px;
+  margin-bottom: 15px;
+  background-color: rgba(255, 255, 255, 0.1); 
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.05);
-  margin-top: 15px;
-  opacity: 0.9;
-  box-shadow: none;
+  padding: 10px;
+  transition: all 0.3s ease;
 }
 
 .box-title {
   cursor: pointer;
-  padding: 10px;
+  padding: 15px;
+  font-weight: bold;
+  font-size: 1.2rem;
   background: linear-gradient(135deg, #4a90e2, #357ABD);
-  color: #fff;
+  color: white;
   border-radius: 10px;
+  text-align: left;
   transition: background 0.3s ease, transform 0.2s;
 }
 
@@ -146,35 +144,33 @@ img {
 
 .about-text {
   padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  color: #333;
+  font-size: 1rem;
+  color: #fff;
+  line-height: 1.5;
 }
 
-.expand-enter-active, .expand-leave-active {
+.expand-enter-active,
+.expand-leave-active {
   transition: all 0.4s ease;
 }
-.expand-enter, .expand-leave-to {
+
+.expand-enter,
+.expand-leave-to {
   max-height: 0;
   opacity: 0;
 }
 
 @media (prefers-color-scheme: dark) {
   .about-text {
-    background-color: #333;
-    color: #f9f9f9;
-    border: 1px solid #444;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
   }
 
   .faq-section {
-    background-color: #444;
-    opacity: 0.85;
+    background-color: rgba(255, 255, 255, 0.05);
   }
 
   .box-title {
-    background: linear-gradient(135deg, #357ABD, #285A8D);
-  }
-  .box-title:hover {
     background: linear-gradient(135deg, #285A8D, #1f4875);
   }
 }
