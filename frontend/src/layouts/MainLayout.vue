@@ -154,8 +154,21 @@ function toggleLeftDrawer() {
 }
 
 function goToProfile() {
-  router.push("/profile");
+  axios
+    .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
+    .then((response) => {
+      if (response.data && response.data.userId) {
+        const userId = response.data.userId;
+        router.push({ name: "UserProfile", params: { userId } });
+      } else {
+        console.error("User ID not found in session.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching session data:", error);
+    });
 }
+
 
 function goToProfileSettings() {
   router.push("/profile/settings");

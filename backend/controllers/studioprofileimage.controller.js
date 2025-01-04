@@ -31,7 +31,7 @@ exports.createStudioProfileImage = (req, res) => {
 };
 
 exports.getAllStudioProfileImages = (req, res) => {
-  StudioImage.getAllStudioProfileImages((err, data) => {
+  StudioProfileImage.getAllStudioProfileImages((err, data) => {
     if (err) {
       res.status(500).send({
         message:
@@ -173,21 +173,24 @@ exports.getStudioProfileImageUpdatedAt = (req, res) => {
 };
 
 exports.updateStudioProfileImageTimestamp = (req, res) => {
-  StudioImage.updateStudioProfileImageTimestamp(req.params.id, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Not found studio profile image with id ${req.params.id}.`,
-        });
+  StudioProfileImage.updateStudioProfileImageTimestamp(
+    req.params.id,
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found studio profile image with id ${req.params.id}.`,
+          });
+        } else {
+          res.status(500).send({
+            message: `Error updating timestamp for studio profile image with id ${req.params.id}.`,
+          });
+        }
       } else {
-        res.status(500).send({
-          message: `Error updating timestamp for studio profile image with id ${req.params.id}.`,
+        res.send({
+          message: `Studio profile image timestamp was updated successfully!`,
         });
       }
-    } else {
-      res.send({
-        message: `Studio profile image timestamp was updated successfully!`,
-      });
     }
-  });
+  );
 };
