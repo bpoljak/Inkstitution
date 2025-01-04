@@ -27,10 +27,27 @@
           :src="image.StudioImageLink"
           alt="Studio Image"
           class="studio-image"
+          @click="expandImage(image)"
         />
       </div>
       <div v-else class="no-images">
         <p>No images available for this studio.</p>
+      </div>
+    </div>
+
+    <div v-if="expandedImage" class="image-modal" @click.self="closeModal">
+      <div
+        class="image-modal-card"
+        :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+      >
+        <img
+          :src="expandedImage.StudioImageLink"
+          alt="Expanded Image"
+          class="expanded-image"
+        />
+        <div class="image-modal-footer">
+          <p>{{ expandedImage.StudioImageDescription }}</p>
+        </div>
       </div>
     </div>
   </q-page>
@@ -48,6 +65,7 @@ export default {
     const studioId = route.params.studioId;
     const studioData = ref({});
     const studioImages = ref([]);
+    const expandedImage = ref(null);
 
     const fetchStudioDetails = async () => {
       try {
@@ -58,7 +76,7 @@ export default {
         studioData.value = studioResponse.data;
 
         const imagesResponse = await axios.get(
-          `${process.env.API_URL}/api/studioimages/${studioId}`
+          `${process.env.API_URL}/api/studioImages/studio/${studioId}`
         );
         console.log("Images response:", imagesResponse.data);
 
@@ -76,6 +94,14 @@ export default {
       }
     };
 
+    const expandImage = (image) => {
+      expandedImage.value = image;
+    };
+
+    const closeModal = () => {
+      expandedImage.value = null;
+    };
+
     const bookAppointment = () => {
       router.push({ name: "AppointmentBookingPage", params: { studioId } });
     };
@@ -85,6 +111,9 @@ export default {
     return {
       studioData,
       studioImages,
+      expandedImage,
+      expandImage,
+      closeModal,
       bookAppointment,
     };
   },
@@ -147,10 +176,71 @@ export default {
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.studio-image:hover {
+  transform: scale(1.05);
 }
 
 .no-images {
   text-align: center;
   color: var(--q-text-secondary);
+}
+
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.image-modal-card {
+  width: 90vw;
+  max-width: 500px;
+  background: var(--card-background-color-light);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-card-light {
+  background-color: white;
+  color: black;
+}
+
+.content-card-dark {
+  background-color: black;
+  color: white;
+}
+
+.expanded-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.image-modal-footer {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: var(--q-surface);
+  width: 100%;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--q-text-primary);
+  border-top: 1px solid var(--q-text-secondary);
 }
 </style>

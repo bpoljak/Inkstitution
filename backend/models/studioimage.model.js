@@ -83,9 +83,7 @@ StudioImage.getAllStudioImages = async (result) => {
 
 StudioImage.getStudioImageById = async (id, result) => {
   try {
-    const image = await knex("StudioImages")
-      .where({ StudioImageID: id })
-      .first();
+    const image = await knex("StudioImages").where({ StudioImageID: id });
     if (image) {
       console.log("Found studio image: ", image);
       result(null, image);

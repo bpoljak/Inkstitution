@@ -62,8 +62,13 @@ exports.getStudioImagesByStudioId = (req, res) => {
   const studioId = req.params.studioId;
   StudioImage.getStudioImagesByStudioId(studioId, (err, data) => {
     if (err) {
+      console.error("Error fetching studio images:", err);
       res.status(500).send({
         message: "Error fetching studio images.",
+      });
+    } else if (data.length === 0) {
+      res.status(404).send({
+        message: `No images found for studio ID ${studioId}.`,
       });
     } else {
       res.send(data);
