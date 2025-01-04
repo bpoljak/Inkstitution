@@ -38,16 +38,16 @@ exports.getAllUserImages = (req, res) => {
   });
 };
 
-exports.getUserImageById = (req, res) => {
-  UserImage.getUserImageById(req.params.id, (err, data) => {
+exports.getUserImagesByUserId = (req, res) => {
+  UserImage.getUserImagesByUserId(req.params.userId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found user image with id ${req.params.id}.`,
+          message: `No images found for user with ID ${req.params.userId}.`,
         });
       } else {
         res.status(500).send({
-          message: `Error retrieving user image with id ${req.params.id}.`,
+          message: `Error retrieving images for user with ID ${req.params.userId}.`,
         });
       }
     } else {

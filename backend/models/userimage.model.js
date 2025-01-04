@@ -97,19 +97,15 @@ UserImage.getUserImageCreatedAt = async (id, result) => {
   }
 };
 
-// Get User Image by ID
-UserImage.getUserImageById = async (id, result) => {
+UserImage.getUserImagesByUserId = async (userId, result) => {
   try {
-    const image = await knex("UserImages").where({ UserImageID: id }).first();
-
-    if (image) {
-      console.log("Found user image: ", image);
-      result(null, image);
-    } else {
-      result({ kind: "not_found" }, null);
+    const images = await knex("UserImages").where({ UserID: userId });
+    if (images.length === 0) {
+      return result({ kind: "not_found" }, null);
     }
+    result(null, images);
   } catch (err) {
-    console.error("Error: ", err);
+    console.error("Error fetching user images:", err);
     result(err, null);
   }
 };

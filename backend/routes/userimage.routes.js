@@ -7,7 +7,7 @@ module.exports = (app) => {
 
   router.get("/", userImages.getAllUserImages);
 
-  router.get("/:id", userImages.getUserImageById);
+  router.get("/user/:userId", userImages.getUserImagesByUserId);
 
   router.put("/:id", userImages.updateUserImageById);
 
