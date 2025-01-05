@@ -184,39 +184,75 @@ export default {
   height: 100vh;
   margin: 0 auto;
   padding: 60px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
 }
 
 .hero-content {
   margin-top: 50px;
+  text-align: center;
+  color: var(--text-color-light);
 }
 
 .parent-card {
   width: 100%;
   margin: 20px auto;
   padding: 30px;
+  background: linear-gradient(135deg, #2b5876, #4e4376);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .child-card {
   flex: 1;
+  padding: 20px;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.child-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .text-gradient-light {
   background: linear-gradient(90deg, #ff7e5f, #feb47b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 2rem;
 }
 
 .q-btn {
-  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
   color: white;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.q-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .text-dark-purple {
   color: #5a2d7b;
+  font-size: 1rem;
 }
 
 .text-light-gray {
   color: #b0b0b0;
+  font-size: 1rem;
 }
 
 .text-black {
@@ -228,13 +264,15 @@ export default {
 }
 
 .content-card-light {
-  background: var(--card-background-color-light);
-  border-radius: 10px;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .content-card-dark {
-  background: var(--card-background-color-dark);
-  border-radius: 10px;
+  background: linear-gradient(135deg, #232526, #414345);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .card-content {
@@ -243,12 +281,14 @@ export default {
   justify-content: space-between;
   align-items: center;
   height: 100%;
+  text-align: center;
 }
 
 .flex-cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  gap: 20px;
 }
 
 .q-my-lg {
@@ -265,7 +305,8 @@ export default {
   justify-content: flex-end;
   align-items: center;
   padding: 10px;
-  background-color: #333;
+  background-color: rgba(51, 51, 51, 0.8);
+  border-radius: 12px;
 }
 
 .header-bar .profile-button {
@@ -273,9 +314,16 @@ export default {
 }
 
 .logout-button {
-  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
   color: white;
   border-radius: 8px;
-  padding: 5px 15px;
+  padding: 8px 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
 }
+
+.logout-button:hover {
+  transform: scale(1.05);
+}
+
 </style>

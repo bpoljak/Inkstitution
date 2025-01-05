@@ -10,7 +10,6 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
         <q-toolbar-title>
           Inkstitution
         </q-toolbar-title>
@@ -25,21 +24,6 @@
           />
           <q-icon name="dark_mode" size="sm" />
         </div>
-
-        <q-btn-dropdown flat round icon="language" dense>
-          <q-list>
-            <q-item
-              clickable
-              v-for="lang in languages"
-              :key="lang.value"
-              @click="changeLanguage(lang.value)"
-            >
-              <q-item-section>
-                {{ lang.label }}
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
 
         <q-btn-dropdown v-if="isLoggedIn" flat round icon="account_circle" dense>
           <q-list>
@@ -65,7 +49,6 @@
 
     <q-drawer v-model="leftDrawerOpen" bordered>
       <q-list>
-
         <q-item
           v-for="link in filteredLinks"
           :key="link.title"
@@ -87,8 +70,26 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <div class="floating-language-selector">
+      <q-btn-dropdown flat round icon="language" dense>
+        <q-list>
+          <q-item
+            clickable
+            v-for="lang in languages"
+            :key="lang.value"
+            @click="changeLanguage(lang.value)"
+          >
+            <q-item-section>
+              {{ lang.label }}
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+    </div>
   </q-layout>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
@@ -212,6 +213,13 @@ async function checkLoginStatus() {
 <style scoped>
 .q-toolbar-title {
   flex-grow: 1;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  color: var(--q-text-primary);
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .row {
@@ -225,23 +233,72 @@ async function checkLoginStatus() {
 }
 
 .custom-toggle .q-toggle__track {
-  background-color: #e0e0e0 !important;
-  border: none !important;
-  box-shadow: none !important;
+  background: linear-gradient(90deg, #6a11cb, #2575fc) !important;
+  border-radius: 50px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
 }
 
 .custom-toggle .q-toggle__thumb {
-  background-color: #ffffff !important;
-  border: none !important;
-  box-shadow: none !important;
+  background-color: white !important;
   border-radius: 50% !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
-.q-btn-dropdown {
-  margin-left: 10px;
+.q-drawer {
+  background: linear-gradient(135deg, #232526, #414345); /* Dark background for both modes */
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.q-btn-dropdown .q-btn {
-  color: inherit;
+.q-item--dark {
+  background: linear-gradient(90deg, #232526, #414345); /* Light mode gradient */
+  margin: 10px 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.q-item--light {
+  background: linear-gradient(90deg, #fdfbfb, #ebedee); /* Light mode gradient */
+  margin: 10px 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.q-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .q-item:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.floating-language-selector {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.floating-language-selector .q-btn {
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.floating-language-selector .q-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 </style>
+
