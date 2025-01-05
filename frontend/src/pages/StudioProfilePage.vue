@@ -63,32 +63,41 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const studioId = route.params.studioId;
-    const studioData = ref({});
-    const studioImages = ref([]);
-    const expandedImage = ref(null);
+    const studioData = ref({}); // Objekat koji sadrži podatke studija
+    const studioImages = ref([]); // Niz slika studija
+    const expandedImage = ref(null); // Kliknuta slika
 
     const fetchStudioDetails = async () => {
       try {
+        // Dohvati podatke studija
         const studioResponse = await axios.get(
           `${process.env.API_URL}/api/studios/${studioId}`
         );
         console.log("Studio data response:", studioResponse.data);
         studioData.value = studioResponse.data;
 
+        // Dohvati profilnu sliku
+        const profileImageResponse = await axios.get(
+          `${process.env.API_URL}/api/studioProfileImages/${studioId}`
+        );
+        console.log("Studio profile image response:", profileImageResponse.data);
+
+        if (profileImageResponse.data && profileImageResponse.data.length > 0) {
+          studioData.value.StudioProfileImageLink =
+            profileImageResponse.data[0].StudioProfileImageLink;
+        } else {
+          studioData.value.StudioProfileImageLink = "/path/to/default-profile.png";
+        }
+
+        // Dohvati slike studija
         const imagesResponse = await axios.get(
           `${process.env.API_URL}/api/studioImages/studio/${studioId}`
         );
         console.log("Images response:", imagesResponse.data);
 
-        if (Array.isArray(imagesResponse.data)) {
-          studioImages.value = imagesResponse.data;
-        } else if (imagesResponse.data) {
-          studioImages.value = [imagesResponse.data];
-        } else {
-          studioImages.value = [];
-        }
-
-        console.log("studioImages state:", studioImages.value);
+        studioImages.value = Array.isArray(imagesResponse.data)
+          ? imagesResponse.data
+          : [];
       } catch (error) {
         console.error("Error fetching studio details or images:", error);
       }

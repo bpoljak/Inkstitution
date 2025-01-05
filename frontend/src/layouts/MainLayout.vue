@@ -65,9 +65,6 @@
 
     <q-drawer v-model="leftDrawerOpen" bordered>
       <q-list>
-        <q-item-label header>
-          Essential Links
-        </q-item-label>
 
         <q-item
           v-for="link in filteredLinks"

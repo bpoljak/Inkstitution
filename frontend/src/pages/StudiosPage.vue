@@ -1,5 +1,5 @@
 <template>
-  <q-page class="studios-page">
+  <q-page :class="{ 'dark-mode': $q.dark.isActive }" class="studios-page">
     <div class="studios-container">
       <q-input
         filled
@@ -10,12 +10,15 @@
         :placeholder="$t('studiosPage.searchBar.placeholder')"
       />
       <q-card
-      v-for="studio in filteredStudios"
-      :key="studio.StudioID"
-      class="studio-card"
-      @click="goToStudioProfile(studio.StudioID)"
+        v-for="studio in filteredStudios"
+        :key="studio.StudioID"
+        :class="{
+          'studio-card-dark': $q.dark.isActive,
+          'studio-card-light': !$q.dark.isActive,
+        }"
+        class="studio-card"
+        @click="goToStudioProfile(studio.StudioID)"
       >
-
         <div class="studio-logo">
           <img
             :src="studio.imageLink || '/path/to/default-logo.png'"
@@ -47,24 +50,36 @@ export default {
 
     const fetchStudios = async () => {
       try {
-        const [studiosResponse, imagesResponse] = await Promise.all([
-          axios.get(`${process.env.API_URL}/api/studios`),
-          axios.get(`${process.env.API_URL}/api/studioimages`),
-        ]);
+        const studiosResponse = await axios.get(
+          `${process.env.API_URL}/api/studios`
+        );
+        const studiosList = studiosResponse.data;
 
-        const images = imagesResponse.data;
+        const studiosWithImages = await Promise.all(
+          studiosList.map(async (studio) => {
+            try {
+              const imageResponse = await axios.get(
+                `${process.env.API_URL}/api/studioProfileImages/${studio.StudioID}`
+              );
+              const image =
+                imageResponse.data.length > 0 ? imageResponse.data[0] : null;
+              return {
+                ...studio,
+                imageLink: image ? image.StudioProfileImageLink : null,
+              };
+            } catch (error) {
+              console.error(
+                `Error fetching image for studio ${studio.StudioID}`,
+                error
+              );
+              return { ...studio, imageLink: null };
+            }
+          })
+        );
 
-        studios.value = studiosResponse.data.map((studio) => {
-          const image = images.find(
-            (img) => img.StudioID === studio.StudioID
-          );
-          return {
-            ...studio,
-            imageLink: image ? image.StudioProfileImageLink : null,
-          };
-        });
+        studios.value = studiosWithImages;
       } catch (error) {
-        console.error("Error fetching studios or images:", error);
+        console.error("Error fetching studios:", error);
       }
     };
 
@@ -72,8 +87,8 @@ export default {
       if (!searchQuery.value) {
         return studios.value;
       }
+      const query = searchQuery.value.toLowerCase().trim();
       return studios.value.filter((studio) => {
-        const query = searchQuery.value.toLowerCase();
         return (
           studio.StudioName.toLowerCase().includes(query) ||
           studio.StudioCity.toLowerCase().includes(query)
@@ -82,9 +97,8 @@ export default {
     });
 
     const goToStudioProfile = (studioId) => {
-  router.push({ path: `/studioProfile/${studioId}` });
-};
-
+      router.push({ path: `/studioProfile/${studioId}` });
+    };
 
     fetchStudios();
 
@@ -96,7 +110,6 @@ export default {
     };
   },
 };
-
 </script>
 
 <style scoped>
@@ -106,6 +119,11 @@ export default {
   flex-direction: column;
   align-items: center;
   background-color: var(--q-page);
+}
+
+.dark-mode {
+  background-color: var(--page-background-color-dark);
+  color: white;
 }
 
 .search-bar {
@@ -122,17 +140,32 @@ export default {
   max-width: 900px;
 }
 
+.studio-card-light {
+  background-color: var(--card-background-color-light);
+  color: var(--text-color-light);
+  border: 1px solid var(--border-color-light);
+}
+
+.studio-card-dark {
+  background-color: var(--card-background-color-dark);
+  color: var(--text-color-dark);
+  border: 1px solid var(--border-color-dark);
+}
+
 .studio-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 20px;
-  background-color: var(--q-surface);
-  color: var(--q-text-primary);
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--q-text-secondary);
   width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.studio-card:hover {
+  transform: translateY(-5px);
 }
 
 .studio-logo img {
@@ -152,26 +185,6 @@ export default {
 .studio-details p {
   margin: 5px 0;
   font-size: 14px;
-  color: var(--q-text-secondary);
+  color: var(--text-secondary);
 }
-
-.studio-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px;
-  background-color: var(--q-surface);
-  color: var(--q-text-primary);
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--q-text-secondary);
-  width: 100%;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
-}
-
-.studio-card:hover {
-  transform: translateY(-5px);
-}
-
 </style>
