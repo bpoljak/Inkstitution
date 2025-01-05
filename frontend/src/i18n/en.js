@@ -98,7 +98,7 @@ export default {
     findUs: "How can you find us?",
     emailSubject: "Message from Contact Us Page", // Dodano
   },
-  welcomeMessage: "Welcome, {name}!",
+  welcomeMessage: "Welcome, {name}",
   aboutPage: {
     goalTitle: "Our goal is to simplify tattoo booking",
     goalDescription:

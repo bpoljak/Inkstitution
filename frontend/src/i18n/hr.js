@@ -102,9 +102,9 @@ export default {
     errorMessage:
       "Došlo je do pogreške prilikom slanja poruke. Pokušajte ponovno.",
     findUs: "Kako nas možete pronaći?",
-    emailSubject: "Poruka sa stranice Kontakt", // Dodano
+    emailSubject: "Poruka sa stranice Kontakt",
   },
-  welcomeMessage: "Dobrodošli, {name}!",
+  welcomeMessage: "Dobrodošli, {name}",
   aboutPage: {
     goalTitle: "Naš cilj je olakšati rezervaciju termina za tetoviranje",
     goalDescription:
