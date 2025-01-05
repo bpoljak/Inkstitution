@@ -245,13 +245,13 @@ async function checkLoginStatus() {
 }
 
 .q-drawer {
-  background: linear-gradient(135deg, #232526, #414345); /* Dark background for both modes */
+  background: linear-gradient(135deg, #232526, #414345);
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .q-item--dark {
-  background: linear-gradient(90deg, #232526, #414345); /* Light mode gradient */
+  background: linear-gradient(90deg, #232526, #414345);
   margin: 10px 0;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -259,7 +259,7 @@ async function checkLoginStatus() {
 }
 
 .q-item--light {
-  background: linear-gradient(90deg, #fdfbfb, #ebedee); /* Light mode gradient */
+  background: linear-gradient(90deg, #fdfbfb, #ebedee);
   margin: 10px 0;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);

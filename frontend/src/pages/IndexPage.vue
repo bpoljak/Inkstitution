@@ -1,15 +1,27 @@
 <template>
   <q-page :class="{ 'dark-mode': $q.dark.isActive }">
-    <q-card
+    <div
       class="hero-card"
-      :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+      :class="{
+        'content-card-dark': $q.dark.isActive,
+        'content-card-light': !$q.dark.isActive,
+      }"
     >
       <div class="q-pa-md text-center hero-content">
-        <h1 :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }">
-          <span v-if="userName">{{ $t('welcomeMessage', { name: userName }) }}</span>
+        <h1
+          :class="{
+            'text-white': $q.dark.isActive,
+            'text-black': !$q.dark.isActive,
+          }"
+        >
+          <span v-if="userName">{{
+            $t("welcomeMessage", { name: userName })
+          }}</span>
           <span v-else>
-            {{ $t('indexPage.chooseYour') }}
-            <span class="text-gradient-light">{{ $t('indexPage.artist') }}</span>
+            {{ $t("indexPage.chooseYour") }}
+            <span class="text-gradient-light">{{
+              $t("indexPage.artist")
+            }}</span>
           </span>
         </h1>
         <p
@@ -18,41 +30,62 @@
             'text-dark-purple': !$q.dark.isActive,
           }"
         >
-          {{ $t('indexPage.fastAndSimple') }}
+          {{ $t("indexPage.fastAndSimple") }}
         </p>
-        <q-btn color="gradient-light" :label="$t('indexPage.explore')" class="q-my-md" />
+        <q-btn
+          color="gradient-light"
+          :label="$t('indexPage.explore')"
+          class="q-my-md"
+        />
       </div>
-    </q-card>
+    </div>
 
-    <q-card
+    <div
       v-if="!isLoggedIn"
       class="parent-card"
-      :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+      :class="{
+        'content-card-dark': $q.dark.isActive,
+        'content-card-light': !$q.dark.isActive,
+      }"
     >
       <div class="flex-cards q-my-lg q-gutter-lg">
         <q-card
-          :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+          :class="{
+            'content-card-dark': $q.dark.isActive,
+            'content-card-light': !$q.dark.isActive,
+          }"
           class="q-pa-md child-card equal-height"
         >
           <q-card-section class="text-center card-content">
             <q-icon
               name="layers"
               size="50px"
-              :class="{ 'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive }"
+              :class="{
+                'text-white': $q.dark.isActive,
+                'text-black': !$q.dark.isActive,
+              }"
               class="icon-style"
             />
-            <h2 class="text-gradient-light">{{ $t('indexPage.missionTitle') }}</h2>
+            <h2 class="text-gradient-light">
+              {{ $t("indexPage.missionTitle") }}
+            </h2>
             <p
-              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              :class="{
+                'text-white': $q.dark.isActive,
+                'text-black': !$q.dark.isActive,
+              }"
               class="text-spacing"
             >
-              {{ $t('indexPage.missionDescription1') }}
+              {{ $t("indexPage.missionDescription1") }}
             </p>
             <p
-              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              :class="{
+                'text-white': $q.dark.isActive,
+                'text-black': !$q.dark.isActive,
+              }"
               class="text-spacing"
             >
-              {{ $t('indexPage.missionDescription2') }}
+              {{ $t("indexPage.missionDescription2") }}
             </p>
             <q-btn
               color="gradient-light"
@@ -64,28 +97,42 @@
         </q-card>
 
         <q-card
-          :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+          :class="{
+            'content-card-dark': $q.dark.isActive,
+            'content-card-light': !$q.dark.isActive,
+          }"
           class="q-pa-md child-card equal-height"
         >
           <q-card-section class="text-center card-content">
             <q-icon
               name="groups"
               size="50px"
-              :class="{ 'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive }"
+              :class="{
+                'text-white': $q.dark.isActive,
+                'text-black': !$q.dark.isActive,
+              }"
               class="icon-style"
             />
-            <h2 class="text-gradient-light">{{ $t('indexPage.createAccountTitle') }}</h2>
+            <h2 class="text-gradient-light">
+              {{ $t("indexPage.createAccountTitle") }}
+            </h2>
             <p
-              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              :class="{
+                'text-white': $q.dark.isActive,
+                'text-black': !$q.dark.isActive,
+              }"
               class="text-spacing"
             >
-              {{ $t('indexPage.createAccountDescription1') }}
+              {{ $t("indexPage.createAccountDescription1") }}
             </p>
             <p
-              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              :class="{
+                'text-white': $q.dark.isActive,
+                'text-black': !$q.dark.isActive,
+              }"
               class="text-spacing"
             >
-              {{ $t('indexPage.createAccountDescription2') }}
+              {{ $t("indexPage.createAccountDescription2") }}
             </p>
             <q-btn
               color="gradient-light"
@@ -97,22 +144,33 @@
         </q-card>
 
         <q-card
-          :class="{ 'content-card-dark': $q.dark.isActive, 'content-card-light': !$q.dark.isActive }"
+          :class="{
+            'content-card-dark': $q.dark.isActive,
+            'content-card-light': !$q.dark.isActive,
+          }"
           class="q-pa-md child-card equal-height"
         >
           <q-card-section class="text-center card-content">
             <q-icon
               name="store"
               size="50px"
-              :class="{ 'text-primary': $q.dark.isActive, 'text-secondary': !$q.dark.isActive }"
+              :class="{
+                'text-white': $q.dark.isActive,
+                'text-black': !$q.dark.isActive,
+              }"
               class="icon-style"
             />
-            <h2 class="text-gradient-light">{{ $t('indexPage.ownStudioTitle') }}</h2>
+            <h2 class="text-gradient-light">
+              {{ $t("indexPage.ownStudioTitle") }}
+            </h2>
             <p
-              :class="{ 'text-white': $q.dark.isActive, 'text-black': !$q.dark.isActive }"
+              :class="{
+                'text-white': $q.dark.isActive,
+                'text-black': !$q.dark.isActive,
+              }"
               class="text-spacing"
             >
-              {{ $t('indexPage.ownStudioDescription') }}
+              {{ $t("indexPage.ownStudioDescription") }}
             </p>
             <q-btn
               color="gradient-light"
@@ -123,7 +181,7 @@
           </q-card-section>
         </q-card>
       </div>
-    </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -138,9 +196,12 @@ export default {
 
     const checkLoginStatus = async () => {
       try {
-        const response = await axios.get(`${process.env.API_URL}/api/users/session`, {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${process.env.API_URL}/api/users/session`,
+          {
+            withCredentials: true,
+          }
+        );
         if (response.data && response.data.userName) {
           isLoggedIn.value = true;
           userName.value = response.data.userName;
@@ -171,8 +232,6 @@ export default {
 };
 </script>
 
-
-
 <style scoped>
 .dark-mode {
   background: var(--page-background-color-dark);
@@ -182,14 +241,14 @@ export default {
 .hero-card {
   width: 100%;
   height: 100vh;
-  margin: 0 auto;
-  padding: 60px 0;
+  margin: 0;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #ff7e5f, #feb47b);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
+  border-radius: 0 !important;
 }
 
 .hero-content {
@@ -200,11 +259,11 @@ export default {
 
 .parent-card {
   width: 100%;
-  margin: 20px auto;
+  margin: 0;
   padding: 30px;
   background: linear-gradient(135deg, #2b5876, #4e4376);
-  border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 0 !important;
 }
 
 .child-card {
@@ -325,5 +384,4 @@ export default {
 .logout-button:hover {
   transform: scale(1.05);
 }
-
 </style>

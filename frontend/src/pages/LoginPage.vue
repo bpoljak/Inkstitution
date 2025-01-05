@@ -1,6 +1,12 @@
 <template>
-  <q-page class="q-pa-md login-page">
-    <q-card class="login-card">
+  <q-page
+    class="q-pa-md login-page"
+    :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }"
+  >
+    <q-card
+      class="login-card"
+      :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }"
+    >
       <q-form @submit="onSubmit" ref="form">
         <div class="q-gutter-md">
           <q-input
@@ -8,7 +14,7 @@
             :label="$t('login.email')"
             :hint="$t('login.emailHint')"
             outlined
-            type="email"
+            dense
             :rules="[val => !!val || $t('login.validation.required')]"
           />
           <q-input
@@ -16,10 +22,16 @@
             :label="$t('login.password')"
             :hint="$t('login.passwordHint')"
             outlined
+            dense
             type="password"
             :rules="[val => !!val || $t('login.validation.required')]"
           />
-          <q-btn :label="$t('login.submitButton')" type="submit" color="primary" class="login-button" />
+          <q-btn
+            :label="$t('login.submitButton')"
+            type="submit"
+            color="gradient-light"
+            class="login-button"
+          />
         </div>
       </q-form>
     </q-card>
@@ -27,15 +39,15 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
       form: {
-        userEmail: '',
-        userPassword: ''
-      }
+        userEmail: "",
+        userPassword: "",
+      },
     };
   },
   methods: {
@@ -55,20 +67,19 @@ export default {
               this.userName = response.data.userName;
               this.$router.push("/");
             })
-            .catch((error) => {
+            .catch(() => {
               alert(this.$t("login.errorMessage"));
             });
         }
       });
     },
     onReset() {
-      this.form.userEmail = '';
-      this.form.userPassword = '';
-    }
-  }
+      this.form.userEmail = "";
+      this.form.userPassword = "";
+    },
+  },
 };
 </script>
-
 
 <style scoped>
 .login-page {
@@ -76,19 +87,46 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: var(--page-background-color);
+  overflow: hidden;
 }
 
 .login-card {
-  background-color: var(--card-background-color);
+  background: var(--card-background-color);
   padding: 20px;
-  border-radius: 10px;
-  max-width: 400px;
+  border-radius: 12px;
+  max-width: 360px;
   width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.q-input {
+  font-size: 0.9rem;
 }
 
 .login-button {
-  background-color: var(--button-background-color);
-  color: var(--button-text-color);
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: white;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  width: calc(100% - 25px);
+  display: block;
+  margin: 10px 20px 10px 20px;
+}
+
+
+.login-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.light-mode {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+}
+
+.dark-mode {
+  background: linear-gradient(135deg, #232526, #414345);
 }
 </style>
