@@ -1,12 +1,8 @@
 <template>
-  <q-page :class="{ 'dark-mode': $q.dark.isActive }">
+  <q-page :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }">
     <div>
     <div
       class="hero-card"
-      :class="{
-        'content-card-dark': $q.dark.isActive,
-        'content-card-light': !$q.dark.isActive,
-      }"
     >
       <div class="q-pa-md text-center hero-content">
         <h1
@@ -26,10 +22,6 @@
           </span>
         </h1>
         <p
-          :class="{
-            'text-light-gray': $q.dark.isActive,
-            'text-dark-purple': !$q.dark.isActive,
-          }"
         >
           {{ $t("indexPage.fastAndSimple") }}
         </p>
@@ -44,10 +36,6 @@
     <div
       v-if="!isLoggedIn"
       class="parent-card"
-      :class="{
-        'content-card-dark': $q.dark.isActive,
-        'content-card-light': !$q.dark.isActive,
-      }"
     >
       <div class="flex-cards q-my-lg q-gutter-lg">
         <q-card
@@ -235,9 +223,12 @@ export default {
 </script>
 
 <style scoped>
+.light-mode {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+}
+
 .dark-mode {
-  background: var(--page-background-color-dark);
-  color: white;
+  background: linear-gradient(135deg, #232526, #414345);
 }
 
 .hero-card {
@@ -248,7 +239,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #ff7e5f, #feb47b);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 0 !important;
 }
@@ -263,7 +253,6 @@ export default {
   width: 100%;
   margin: 0;
   padding: 30px;
-  background: linear-gradient(135deg, #2b5876, #4e4376);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 0 !important;
 }
@@ -271,7 +260,6 @@ export default {
 .child-card {
   flex: 1;
   padding: 20px;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -281,14 +269,6 @@ export default {
 .child-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-}
-
-.text-gradient-light {
-  background: linear-gradient(90deg, #ff7e5f, #feb47b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: bold;
-  font-size: 2rem;
 }
 
 .q-btn {
@@ -304,16 +284,6 @@ export default {
 .q-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.text-dark-purple {
-  color: #5a2d7b;
-  font-size: 1rem;
-}
-
-.text-light-gray {
-  color: #b0b0b0;
-  font-size: 1rem;
 }
 
 .text-black {
