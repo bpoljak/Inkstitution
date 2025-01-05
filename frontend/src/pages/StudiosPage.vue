@@ -1,5 +1,5 @@
 <template>
-  <q-page :class="{ 'dark-mode': $q.dark.isActive }" class="studios-page">
+  <q-page :class="{ 'dark-mode': $q.dark.isActive, 'light-mode' : !$q.dark.isActive }" class="studios-page">
     <div class="studios-container">
       <q-input
         filled
@@ -12,10 +12,7 @@
       <q-card
         v-for="studio in filteredStudios"
         :key="studio.StudioID"
-        :class="{
-          'studio-card-dark': $q.dark.isActive,
-          'studio-card-light': !$q.dark.isActive,
-        }"
+        :class="{ 'studio-card-dark': $q.dark.isActive, 'studio-card-light' : !$q.dark.isActive }"
         class="studio-card"
         @click="goToStudioProfile(studio.StudioID)"
       >
@@ -122,8 +119,13 @@ export default {
 }
 
 .dark-mode {
-  background-color: var(--page-background-color-dark);
+  background: linear-gradient(135deg, #232526, #414345);
   color: white;
+}
+
+.light-mode {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  color: black;
 }
 
 .search-bar {
@@ -141,15 +143,11 @@ export default {
 }
 
 .studio-card-light {
-  background-color: var(--card-background-color-light);
-  color: var(--text-color-light);
-  border: 1px solid var(--border-color-light);
+  background: white;
 }
 
 .studio-card-dark {
-  background-color: var(--card-background-color-dark);
-  color: var(--text-color-dark);
-  border: 1px solid var(--border-color-dark);
+  background: rgb(24, 24, 24);
 }
 
 .studio-card {

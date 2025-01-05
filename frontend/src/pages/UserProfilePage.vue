@@ -1,6 +1,6 @@
 <template>
-  <q-page class="user-profile-page">
-    <div class="user-profile-header">
+  <q-page class="user-profile-page" :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }">
+    <div class="user-profile-header" :class="{ 'info-card-dark': $q.dark.isActive, 'info-card-light': !$q.dark.isActive }">
       <img :src="profileImage" alt="User Profile" class="user-profile-image" />
       <h2>{{ userData.UserAccountName || "User Name" }}</h2>
       <p>
@@ -251,5 +251,21 @@ export default {
   font-size: 16px;
   color: var(--q-text-primary);
   border-top: 1px solid var(--q-text-secondary);
+}
+
+.light-mode {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+}
+
+.dark-mode {
+  background: linear-gradient(135deg, #232526, #414345);
+}
+
+.info-card-dark {
+  background: rgb(24, 24, 24);;
+}
+
+.info-card-light {
+  background: white;
 }
 </style>

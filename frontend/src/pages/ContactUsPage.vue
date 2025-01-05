@@ -1,6 +1,6 @@
 <template>
-  <q-page padding>
-    <q-card class="form-card">
+  <q-page :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }" padding>
+    <q-card class="form-card" :class="{ 'form-card-dark': $q.dark.isActive, 'form-card-light': !$q.dark.isActive }">
       <q-card-section>
         <h1>{{ $t('contactUs.title') }}</h1>
         <p>{{ $t('contactUs.description') }}</p>
@@ -186,5 +186,21 @@ body[data-theme="dark"] .map-card {
 body[data-theme="light"] .form-card,
 body[data-theme="light"] .map-card {
   background-color: var(--card-background-color-light);
+}
+
+.light-mode {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+}
+
+.dark-mode {
+  background: linear-gradient(135deg, #232526, #414345);
+}
+
+.form-card-dark {
+  background: rgb(24, 24, 24);;
+}
+
+.form-card-light {
+  background: white;
 }
 </style>

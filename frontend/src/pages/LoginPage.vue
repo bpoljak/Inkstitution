@@ -5,7 +5,7 @@
   >
     <q-card
       class="login-card"
-      :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }"
+      :class="{ 'card-dark': $q.dark.isActive, 'card-light': !$q.dark.isActive }"
     >
       <q-form @submit="onSubmit" ref="form">
         <div class="q-gutter-md">
@@ -128,5 +128,13 @@ export default {
 
 .dark-mode {
   background: linear-gradient(135deg, #232526, #414345);
+}
+
+.card-dark {
+  background: rgb(24, 24, 24);;
+}
+
+.card-light {
+  background: white;
 }
 </style>

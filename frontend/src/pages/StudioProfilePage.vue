@@ -1,6 +1,6 @@
 <template>
-  <q-page class="studio-profile-page">
-    <div class="studio-profile-header">
+  <q-page class="studio-profile-page" :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }">
+    <div class="studio-profile-header" :class="{ 'info-card-dark': $q.dark.isActive, 'info-card-light': !$q.dark.isActive }">
       <img
         :src="studioData.StudioProfileImageLink || '/path/to/default-profile.png'"
         alt="Studio Profile"
@@ -63,20 +63,18 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const studioId = route.params.studioId;
-    const studioData = ref({}); // Objekat koji sadrži podatke studija
-    const studioImages = ref([]); // Niz slika studija
-    const expandedImage = ref(null); // Kliknuta slika
+    const studioData = ref({});
+    const studioImages = ref([]);
+    const expandedImage = ref(null);
 
     const fetchStudioDetails = async () => {
       try {
-        // Dohvati podatke studija
         const studioResponse = await axios.get(
           `${process.env.API_URL}/api/studios/${studioId}`
         );
         console.log("Studio data response:", studioResponse.data);
         studioData.value = studioResponse.data;
 
-        // Dohvati profilnu sliku
         const profileImageResponse = await axios.get(
           `${process.env.API_URL}/api/studioProfileImages/${studioId}`
         );
@@ -89,7 +87,6 @@ export default {
           studioData.value.StudioProfileImageLink = "/path/to/default-profile.png";
         }
 
-        // Dohvati slike studija
         const imagesResponse = await axios.get(
           `${process.env.API_URL}/api/studioImages/studio/${studioId}`
         );
@@ -251,5 +248,21 @@ export default {
   font-size: 16px;
   color: var(--q-text-primary);
   border-top: 1px solid var(--q-text-secondary);
+}
+
+.light-mode {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+}
+
+.dark-mode {
+  background: linear-gradient(135deg, #232526, #414345);
+}
+
+.info-card-dark {
+  background: rgb(24, 24, 24);;
+}
+
+.info-card-light {
+  background: white;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <q-page :class="{ 'dark-mode': $q.dark.isActive }">
+    <div>
     <div
       class="hero-card"
       :class="{
@@ -51,8 +52,8 @@
       <div class="flex-cards q-my-lg q-gutter-lg">
         <q-card
           :class="{
-            'content-card-dark': $q.dark.isActive,
-            'content-card-light': !$q.dark.isActive,
+            'small-card-dark': $q.dark.isActive,
+            'small-card-light': !$q.dark.isActive,
           }"
           class="q-pa-md child-card equal-height"
         >
@@ -98,8 +99,8 @@
 
         <q-card
           :class="{
-            'content-card-dark': $q.dark.isActive,
-            'content-card-light': !$q.dark.isActive,
+            'small-card-dark': $q.dark.isActive,
+            'small-card-light': !$q.dark.isActive,
           }"
           class="q-pa-md child-card equal-height"
         >
@@ -145,8 +146,8 @@
 
         <q-card
           :class="{
-            'content-card-dark': $q.dark.isActive,
-            'content-card-light': !$q.dark.isActive,
+            'small-card-dark': $q.dark.isActive,
+            'small-card-light': !$q.dark.isActive,
           }"
           class="q-pa-md child-card equal-height"
         >
@@ -181,6 +182,7 @@
           </q-card-section>
         </q-card>
       </div>
+    </div>
     </div>
   </q-page>
 </template>
@@ -383,5 +385,13 @@ export default {
 
 .logout-button:hover {
   transform: scale(1.05);
+}
+
+.small-card-dark {
+  background: rgb(24, 24, 24);
+}
+
+.small-card-light {
+  background: white;
 }
 </style>

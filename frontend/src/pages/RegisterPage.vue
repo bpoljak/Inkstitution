@@ -1,6 +1,6 @@
 <template>
   <q-page class="register-page" :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }">
-    <q-card class="register-card" :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }">
+    <q-card class="register-card" :class="{ 'card-dark': $q.dark.isActive, 'card-light': !$q.dark.isActive }">
       <q-form @submit="onSubmit" ref="form">
         <div class="form-content">
           <q-input
@@ -181,5 +181,13 @@ export default {
 
 .dark-mode {
   background: linear-gradient(135deg, #232526, #414345);
+}
+
+.card-dark {
+  background: rgb(24, 24, 24);;
+}
+
+.card-light {
+  background: white;
 }
 </style>

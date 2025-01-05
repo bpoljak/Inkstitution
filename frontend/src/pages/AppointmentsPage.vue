@@ -1,5 +1,5 @@
 <template>
-  <q-page class="appointments-page">
+  <q-page class="appointments-page" :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }">
     <div class="appointments-container">
       <q-input
         filled
@@ -13,6 +13,7 @@
         v-for="appointment in filteredAppointments"
         :key="appointment.AppointmentID"
         class="appointment-card"
+        :class="{ 'appointment-card-dark': $q.dark.isActive, 'appointment-card-light': !$q.dark.isActive }"
       >
         <div class="studio-logo">
           <img
@@ -185,5 +186,21 @@ export default {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+}
+
+.dark-mode {
+  background: linear-gradient(135deg, #232526, #414345);
+}
+
+.light-mode {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+}
+
+.appointment-card-light {
+  background: white;
+}
+
+.appointment-card-dark {
+  background: rgb(24, 24, 24);
 }
 </style>
