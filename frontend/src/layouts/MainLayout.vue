@@ -250,29 +250,33 @@ async function checkLoginStatus() {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.q-item--dark {
-  background: linear-gradient(90deg, #232526, #414345);
+.q-item {
   margin: 10px 0;
+  padding: 10px 16px;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.q-item--light {
-  background: linear-gradient(90deg, #fdfbfb, #ebedee);
-  margin: 10px 0;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  box-shadow: none;
+  background: none;
+  transition: none;
 }
 
 .q-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .q-item {
+  background: none;
+}
+
+.light-mode .q-item:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .q-item {
+  background: none;
 }
 
 .dark-mode .q-item:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .floating-language-selector {
@@ -301,4 +305,5 @@ async function checkLoginStatus() {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 </style>
+
 
