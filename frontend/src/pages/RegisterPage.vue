@@ -1,6 +1,15 @@
 <template>
-  <q-page class="register-page" :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }">
-    <q-card class="register-card" :class="{ 'card-dark': $q.dark.isActive, 'card-light': !$q.dark.isActive }">
+  <q-page
+    class="register-page"
+    :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }"
+  >
+    <q-card
+      class="register-card"
+      :class="{
+        'card-dark': $q.dark.isActive,
+        'card-light': !$q.dark.isActive,
+      }"
+    >
       <q-form @submit="onSubmit" ref="form">
         <div class="form-content">
           <q-input
@@ -9,7 +18,7 @@
             :hint="$t('registration.firstNameHint')"
             outlined
             dense
-            :rules="[val => !!val || $t('registration.validation.required')]"
+            :rules="[(val) => !!val || $t('registration.validation.required')]"
           />
           <q-input
             v-model="form.userLastName"
@@ -17,7 +26,7 @@
             :hint="$t('registration.lastNameHint')"
             outlined
             dense
-            :rules="[val => !!val || $t('registration.validation.required')]"
+            :rules="[(val) => !!val || $t('registration.validation.required')]"
           />
           <q-input
             v-model="form.userAccountName"
@@ -25,7 +34,7 @@
             :hint="$t('registration.usernameHint')"
             outlined
             dense
-            :rules="[val => !!val || $t('registration.validation.required')]"
+            :rules="[(val) => !!val || $t('registration.validation.required')]"
           />
           <q-input
             v-model="form.userEmail"
@@ -34,7 +43,11 @@
             outlined
             dense
             type="email"
-            :rules="[val => !!val || $t('registration.validation.required'), val => /.+@.+\..+/.test(val) || $t('registration.validation.email')]"
+            :rules="[
+              (val) => !!val || $t('registration.validation.required'),
+              (val) =>
+                /.+@.+\..+/.test(val) || $t('registration.validation.email'),
+            ]"
           />
           <q-input
             v-model="form.userPassword"
@@ -43,7 +56,11 @@
             outlined
             dense
             type="password"
-            :rules="[val => !!val || $t('registration.validation.required'), val => val.length >= 6 || $t('registration.validation.minLength')]"
+            :rules="[
+              (val) => !!val || $t('registration.validation.required'),
+              (val) =>
+                val.length >= 6 || $t('registration.validation.minLength'),
+            ]"
           />
           <q-input
             v-model="form.confirmPassword"
@@ -52,22 +69,35 @@
             outlined
             dense
             type="password"
-            :rules="[val => val === form.userPassword || $t('registration.validation.matchPassword')]"
+            :rules="[
+              (val) =>
+                val === form.userPassword ||
+                $t('registration.validation.matchPassword'),
+            ]"
           />
-          <q-checkbox
-            v-model="form.terms"
-            :label="$t('registration.termsLabel')"
-            dense
-            :rules="[val => !!val || $t('registration.validation.required')]"
+          <center>
+            <q-checkbox
+              v-model="form.terms"
+              :label="$t('registration.termsLabel')"
+              dense
+              :rules="[
+                (val) => !!val || $t('registration.validation.required'),
+              ]"
+            />
+          </center>
+          <q-btn
+            :label="$t('registration.submitButton')"
+            type="submit"
+            color="gradient-light"
+            class="register-button"
           />
-          <q-btn :label="$t('registration.submitButton')" type="submit" color="gradient-light" class="register-button" />
           <q-btn
             flat
             color="gradient-light"
             class="studio-link"
             @click="navigateToStudio"
           >
-            {{ $t('registration.studioLink') }}
+            {{ $t("registration.studioLink") }}
           </q-btn>
         </div>
       </q-form>
@@ -184,10 +214,43 @@ export default {
 }
 
 .card-dark {
-  background: rgb(24, 24, 24);;
+  background: rgb(24, 24, 24);
 }
 
 .card-light {
   background: white;
+}
+
+@media screen and (max-width: 768px) {
+  .register-page {
+    padding: 10px;
+    height: auto;
+  }
+
+  .register-card {
+    max-width: 95%;
+    padding: 12px;
+    height: auto;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-content {
+    gap: 6px;
+  }
+
+  .q-input,
+  .q-checkbox {
+    font-size: 0.8rem;
+  }
+
+  .register-button {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+  }
+
+  .studio-link {
+    margin-top: 8px;
+    font-size: 0.85rem;
+  }
 }
 </style>

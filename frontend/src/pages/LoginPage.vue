@@ -5,7 +5,10 @@
   >
     <q-card
       class="login-card"
-      :class="{ 'card-dark': $q.dark.isActive, 'card-light': !$q.dark.isActive }"
+      :class="{
+        'card-dark': $q.dark.isActive,
+        'card-light': !$q.dark.isActive,
+      }"
     >
       <q-form @submit="onSubmit" ref="form">
         <div class="q-gutter-md">
@@ -15,7 +18,7 @@
             :hint="$t('login.emailHint')"
             outlined
             dense
-            :rules="[val => !!val || $t('login.validation.required')]"
+            :rules="[(val) => !!val || $t('login.validation.required')]"
           />
           <q-input
             v-model="form.userPassword"
@@ -24,14 +27,16 @@
             outlined
             dense
             type="password"
-            :rules="[val => !!val || $t('login.validation.required')]"
+            :rules="[(val) => !!val || $t('login.validation.required')]"
           />
-          <q-btn
-            :label="$t('login.submitButton')"
-            type="submit"
-            color="gradient-light"
-            class="login-button"
-          />
+          <center>
+            <q-btn
+              :label="$t('login.submitButton')"
+              type="submit"
+              color="gradient-light"
+              class="login-button"
+            />
+          </center>
         </div>
       </q-form>
     </q-card>
@@ -116,7 +121,6 @@ export default {
   margin: 10px 20px 10px 20px;
 }
 
-
 .login-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
@@ -131,10 +135,34 @@ export default {
 }
 
 .card-dark {
-  background: rgb(24, 24, 24);;
+  background: rgb(24, 24, 24);
 }
 
 .card-light {
   background: white;
+}
+
+@media screen and (max-width: 768px) {
+  .login-page {
+    padding: 10px;
+    height: auto;
+  }
+
+  .login-card {
+    padding: 15px;
+    max-width: 90%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .q-input {
+    font-size: 0.8rem;
+  }
+
+  .login-button {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    width: calc(100% - 20px);
+    margin: 8px 10px 8px 10px;
+  }
 }
 </style>

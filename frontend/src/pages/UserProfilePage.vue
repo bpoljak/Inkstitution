@@ -147,6 +147,14 @@ export default {
   max-width: 500px;
   width: 100%;
   margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.user-profile-header h2 {
+  word-wrap: break-word;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-profile-image {
@@ -155,10 +163,6 @@ export default {
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 10px;
-}
-
-.book-button {
-  margin-top: 10px;
 }
 
 .divider {
@@ -171,12 +175,16 @@ export default {
 .user-images-section {
   width: 100%;
   max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .images-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
+  justify-content: center;
 }
 
 .user-image {
@@ -262,10 +270,52 @@ export default {
 }
 
 .info-card-dark {
-  background: rgb(24, 24, 24);;
+  background: rgb(24, 24, 24);
 }
 
 .info-card-light {
   background: white;
 }
+
+@media screen and (max-width: 768px) {
+  .user-profile-page {
+    padding: 10px;
+  }
+
+  .user-profile-header {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  .user-profile-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .user-profile-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .divider {
+    margin: 15px 0;
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .user-image {
+    height: 100px;
+  }
+
+  .image-modal-card {
+    max-width: 90%;
+  }
+
+  .expanded-image {
+    height: 250px;
+  }
+}
 </style>
+

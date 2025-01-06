@@ -185,4 +185,37 @@ export default {
   font-size: 14px;
   color: var(--text-secondary);
 }
+
+@media screen and (max-width: 768px) {
+  .studios-page {
+    padding: 10px;
+  }
+
+  .search-bar {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+
+  .studios-container {
+    gap: 15px;
+  }
+
+  .studio-card {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .studio-logo img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .studio-details h2 {
+    font-size: 18px;
+  }
+
+  .studio-details p {
+    font-size: 12px;
+  }
+}
 </style>

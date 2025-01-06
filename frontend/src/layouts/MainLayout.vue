@@ -284,6 +284,8 @@ async function checkLoginStatus() {
   bottom: 20px;
   right: 20px;
   z-index: 999;
+  width: 60px;
+  height: 60px;
   background: linear-gradient(90deg, #ff7e5f, #feb47b);
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -293,17 +295,21 @@ async function checkLoginStatus() {
 }
 
 .floating-language-selector .q-btn {
+  width: 100%;
+  height: 100%;
   color: white;
   font-weight: bold;
   border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  padding: 0;
 }
 
 .floating-language-selector .q-btn:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
+
 </style>
 
 

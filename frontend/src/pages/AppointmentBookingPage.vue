@@ -203,11 +203,36 @@ export default {
 @media (max-width: 768px) {
   .booking-container {
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .date-picker {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 15px;
   }
 
   .time-slots-container {
     width: 100%;
-    margin-top: 20px;
+    padding: 15px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .time-slots-title {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .time-slots-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  .time-slot-btn {
+    font-size: 0.8rem;
+    padding: 8px;
   }
 }
 </style>
+

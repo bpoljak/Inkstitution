@@ -1,15 +1,27 @@
 <template>
-  <q-page class="appointments-update-page">
-    <div class="update-container">
-      <h2 class="update-title">{{ $t('updateAppointmentPage.title') }}</h2>
+  <q-page
+    class="appointments-update-page"
+    :class="{ 'dark-mode': $q.dark.isActive, 'light-mode': !$q.dark.isActive }"
+  >
+    <div
+      class="update-container"
+      :class="{
+        'card-dark': $q.dark.isActive,
+        'card-light': !$q.dark.isActive,
+      }"
+    >
+      <h2 class="update-title">{{ $t("updateAppointmentPage.title") }}</h2>
       <div class="appointment-info">
         <h3>{{ studioName }}</h3>
         <p>
-  {{ appointment.AppointmentDate
-    ? new Date(appointment.AppointmentDate).toLocaleDateString("hr-HR")
-    : "N/A" }}
-</p>
-
+          {{
+            appointment.AppointmentDate
+              ? new Date(appointment.AppointmentDate).toLocaleDateString(
+                  "hr-HR"
+                )
+              : "N/A"
+          }}
+        </p>
       </div>
       <q-form @submit="updateAppointment">
         <q-input
@@ -44,7 +56,6 @@ import { useQuasar } from "quasar";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
 
-
 export default {
   setup() {
     const $q = useQuasar();
@@ -56,7 +67,6 @@ export default {
     const studioName = ref("N/A");
     const errorMessage = ref(null);
     const { t } = useI18n();
-
 
     const timeOptions = [
       "08:00-09:00",
@@ -95,39 +105,37 @@ export default {
     };
 
     const updateAppointment = async () => {
-  try {
-    const [startTime] = updatedTime.value.split("-");
-    await axios.put(
-      `${process.env.API_URL}/api/appointments/${route.query.id}`,
-      {
-        appointmentDate: updatedDate.value,
-        appointmentTime: startTime.trim(),
+      try {
+        const [startTime] = updatedTime.value.split("-");
+        await axios.put(
+          `${process.env.API_URL}/api/appointments/${route.query.id}`,
+          {
+            appointmentDate: updatedDate.value,
+            appointmentTime: startTime.trim(),
+          }
+        );
+
+        $q.notify({
+          color: "green",
+          position: "top",
+          message: t("updateAppointmentPage.notifications.success"),
+          icon: "check_circle",
+        });
+
+        console.log("Appointment updated successfully.");
+        router.push("/appointments");
+      } catch (error) {
+        console.error("Error updating appointment:", error);
+
+        $q.notify({
+          color: "red",
+          position: "top",
+          message: t("updateAppointmentPage.notifications.error"),
+          icon: "error",
+        });
+        errorMessage.value = "Error updating appointment.";
       }
-    );
-
-    $q.notify({
-      color: "green",
-      position: "top",
-      message: t("updateAppointmentPage.notifications.success"),
-      icon: "check_circle",
-    });
-
-    console.log("Appointment updated successfully.");
-    router.push("/appointments");
-  } catch (error) {
-    console.error("Error updating appointment:", error);
-
-    $q.notify({
-      color: "red",
-      position: "top",
-      message: t("updateAppointmentPage.notifications.error"),
-      icon: "error",
-    });
-    errorMessage.value = "Error updating appointment.";
-  }
-};
-
-
+    };
 
     onMounted(fetchAppointment);
 
@@ -142,7 +150,6 @@ export default {
     };
   },
 };
-
 </script>
 
 <style scoped>
@@ -194,5 +201,51 @@ export default {
 .appointment-info p {
   font-size: 16px;
   color: var(--q-text-secondary);
+}
+
+.light-mode {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+}
+
+.dark-mode {
+  background: linear-gradient(135deg, #232526, #414345);
+}
+
+.card-dark {
+  background: rgb(24, 24, 24);
+}
+
+.card-light {
+  background: white;
+}
+
+@media screen and (max-width: 768px) {
+  .update-container {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+  }
+
+  .update-title {
+    font-size: 20px;
+  }
+
+  .update-input {
+    margin-bottom: 10px;
+  }
+
+  .appointment-info h3 {
+    font-size: 18px;
+  }
+
+  .appointment-info p {
+    font-size: 14px;
+  }
+
+  .update-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
 </style>

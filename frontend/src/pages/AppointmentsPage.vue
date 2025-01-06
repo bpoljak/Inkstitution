@@ -174,6 +174,13 @@ export default {
   border: 1px solid var(--q-text-secondary);
 }
 
+.appointment-details h2 {
+  word-wrap: break-word;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .studio-logo img {
   width: 100px;
   height: 100px;
@@ -203,4 +210,51 @@ export default {
 .appointment-card-dark {
   background: rgb(24, 24, 24);
 }
+
+@media screen and (max-width: 768px) {
+  .appointments-page {
+    padding: 10px;
+  }
+
+  .search-bar {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+
+  .appointments-container {
+    gap: 15px;
+  }
+
+  .appointment-card {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .studio-logo img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 5px;
+  }
+
+  .appointment-details h2 {
+    font-size: 1.2rem;
+    line-height: 1.4;
+  }
+
+  .appointment-details p {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+  }
+
+  .actions q-btn {
+    width: 100%;
+  }
+}
 </style>
+

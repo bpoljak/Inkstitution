@@ -197,10 +197,41 @@ body[data-theme="light"] .map-card {
 }
 
 .form-card-dark {
-  background: rgb(24, 24, 24);;
+  background: rgb(24, 24, 24);
 }
 
 .form-card-light {
   background: white;
 }
+
+@media screen and (max-width: 768px) {
+  .form-card,
+  .map-card {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .map {
+    height: 300px;
+    border: 1px solid #ccc;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .q-btn {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+}
 </style>
+
