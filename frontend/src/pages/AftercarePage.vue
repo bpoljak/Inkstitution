@@ -26,7 +26,11 @@
           color="primary"
           @click="goToCart"
           aria-label="Cart"
-        />
+        >
+          <q-badge v-if="cartItems.length" color="orange" floating>
+            {{ cartItems.length }}
+          </q-badge>
+        </q-btn>
       </div>
     </div>
 
@@ -71,8 +75,8 @@
           <p>{{ expandedImage.AftercareProductPrice }} €</p>
           <q-btn
             class="q-my-md orange-gradient-btn"
-            :label="$t('aftercareProductsPage.cartButton')"
-            @click="goToStudioRegister"
+            :label="'Dodaj u košaricu'"
+            @click="addToCart(expandedImage)"
           />
         </div>
       </div>
@@ -91,6 +95,7 @@ export default {
     const filteredProducts = ref([]);
     const searchQuery = ref("");
     const expandedImage = ref(null);
+    const cartItems = ref(JSON.parse(localStorage.getItem("cart")) || []);
     const router = useRouter();
 
     const fetchProducts = async () => {
@@ -98,7 +103,6 @@ export default {
         const response = await axios.get(
           `${process.env.API_URL}/api/aftercareProducts`
         );
-        console.log(response);
         products.value = response.data;
         filteredProducts.value = response.data;
       } catch (error) {
@@ -130,6 +134,12 @@ export default {
       expandedImage.value = null;
     };
 
+    const addToCart = (product) => {
+      cartItems.value.push(product);
+      localStorage.setItem("cart", JSON.stringify(cartItems.value));
+      closeModal();
+    };
+
     onMounted(fetchProducts);
 
     return {
@@ -137,10 +147,12 @@ export default {
       filteredProducts,
       searchQuery,
       expandedImage,
+      cartItems,
       filterProducts,
       goToCart,
       expandImage,
       closeModal,
+      addToCart,
     };
   },
 };
@@ -153,14 +165,6 @@ export default {
 
 .dark-mode {
   background: linear-gradient(135deg, #232526, #414345);
-}
-
-.card-dark {
-  background: rgb(24, 24, 24);
-}
-
-.card-light {
-  background: white;
 }
 
 .aftercare-page {
@@ -194,15 +198,17 @@ export default {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 kartice po redu */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
-  justify-items: center;
-  margin: 50px 150px 100px 150px;
+  justify-content: center;
+  padding: 0 20px;
+  margin: 50px auto 100px auto;
+  max-width: calc(100% - 40px);
 }
 
 .product-card {
-  width: 220px; /* Fiksna širina */
-  height: 350px; /* Fiksna visina */
+  width: 100%;
+  height: 350px;
   background-color: rgb(24, 24, 24);
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -212,7 +218,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  cursor: pointer; /* Dodan pointer na hover */
+  cursor: pointer;
 }
 
 .product-card:hover {
@@ -230,7 +236,7 @@ export default {
 
 .product-image {
   width: 100%;
-  height: 150px; /* Fiksna visina za slike */
+  height: 150px;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -318,4 +324,39 @@ export default {
   transform: scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  .search-bar {
+    width: 90%;
+    margin: 0 auto 10px auto;
+    padding-top: 20px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 20px auto;
+    padding: 0 10px;
+  }
+
+  .product-card {
+    height: 250px;
+  }
+
+  .product-image {
+    height: 100px;
+  }
+
+  .product-name {
+    font-size: 0.9rem;
+    margin: 8px 0 3px 0;
+  }
+
+  .product-price {
+    font-size: 0.9rem;
+  }
+}
 </style>
+
+

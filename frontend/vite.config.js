@@ -9,4 +9,9 @@ export default defineConfig({
   define: {
     "process.env": process.env,
   },
+  resolve: {
+    alias: {
+      "@stores": path.resolve(__dirname, "./src/stores"),
+    },
+  },
 });

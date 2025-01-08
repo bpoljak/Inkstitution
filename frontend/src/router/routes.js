@@ -33,6 +33,13 @@ const routes = [
         name: "AppointmentBookingPage",
         component: () => import("pages/AppointmentBookingPage.vue"),
       },
+
+      {
+        path: "cart",
+        name: "CartPage",
+        component: () => import("pages/CartPage.vue"),
+      },
+
       {
         path: "profile/:userId",
         name: "UserProfile",
