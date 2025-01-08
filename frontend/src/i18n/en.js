@@ -1,3 +1,5 @@
+import { title } from "process";
+
 export default {
   essentialLinks: {
     home: "Home",
@@ -199,4 +201,9 @@ export default {
       error: "An error occurred while updating the appointment.",
     },
   },
+  aftercareProductsPage: {
+    title: "Aftercare Products",
+    cartButton: "Add to cart"
+  }
+
 };

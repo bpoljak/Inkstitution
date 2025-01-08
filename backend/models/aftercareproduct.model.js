@@ -3,118 +3,88 @@ const knex = require("../config/db.config");
 const AftercareProduct = function (aftercareProduct) {
   this.aftercareProductId = aftercareProduct.aftercareProductId;
   this.aftercareProductName = aftercareProduct.aftercareProductName;
-  this.aftercareProductDescription =
-    aftercareProduct.aftercareProductDescription;
+  this.aftercareProductDescription = aftercareProduct.aftercareProductDescription;
   this.aftercareProductPrice = aftercareProduct.aftercareProductPrice;
   this.aftercareProductImage = aftercareProduct.aftercareProductImage;
 };
 
-AftercareProduct.createAftercareProduct = async (
-  newAftercareProduct,
-  result
-) => {
+AftercareProduct.createAftercareProduct = async (newAftercareProduct) => {
   try {
     const [id] = await knex("AftercareProducts").insert({
       AftercareProductName: newAftercareProduct.aftercareProductName,
-      AftercareProductDescription:
-        newAftercareProduct.aftercareProductDescription,
+      AftercareProductDescription: newAftercareProduct.aftercareProductDescription,
       AftercareProductPrice: newAftercareProduct.aftercareProductPrice,
       AftercareProductImage: newAftercareProduct.aftercareProductImage,
     });
 
-    console.log("Created aftercare product: ", { id, ...newAftercareProduct });
-    result(null, { id, ...newAftercareProduct });
+    return { id, ...newAftercareProduct };
   } catch (err) {
-    console.error("Error: ", err);
-    result(err, null);
+    throw new Error(err.message || "Error creating the aftercare product.");
   }
 };
 
-AftercareProduct.getAllAftercareProducts = async (result) => {
+AftercareProduct.getAllAftercareProducts = async () => {
   try {
     const products = await knex("AftercareProducts").select("*");
-    console.log("AftercareProducts: ", products);
-    result(null, products);
+    return products;
   } catch (err) {
-    console.error("Error: ", err);
-    result(null, err);
+    throw new Error(err.message || "Error retrieving aftercare products.");
   }
 };
 
-AftercareProduct.getAftercareProductById = async (id, result) => {
+AftercareProduct.getAftercareProductById = async (id) => {
   try {
-    const product = await knex("AftercareProducts")
-      .where({ AftercareProductID: id })
-      .first();
-    if (product) {
-      console.log("Found aftercare product: ", product);
-      result(null, product);
-    } else {
-      result({ kind: "not_found" }, null);
+    const product = await knex("AftercareProducts").where({ AftercareProductID: id }).first();
+    if (!product) {
+      throw new Error(`Aftercare product with ID ${id} not found.`);
     }
+    return product;
   } catch (err) {
-    console.error("Error: ", err);
-    result(err, null);
+    throw new Error(err.message || `Error retrieving aftercare product with ID ${id}.`);
   }
 };
 
-AftercareProduct.getAllAftercareProductsByStudioId = async (id, result) => {
+AftercareProduct.getAllAftercareProductsByStudioId = async (studioId) => {
   try {
-    const products = await knex("AftercareProducts").where({ StudioID: id });
-    if (products.length) {
-      console.log("Found aftercare products: ", products);
-      result(null, products);
-    } else {
-      result({ kind: "not_found" }, null);
+    const products = await knex("AftercareProducts").where({ StudioID: studioId });
+    if (!products.length) {
+      throw new Error(`No aftercare products found for Studio ID ${studioId}.`);
     }
+    return products;
   } catch (err) {
-    console.error("Error: ", err);
-    result(err, null);
+    throw new Error(err.message || `Error retrieving aftercare products for Studio ID ${studioId}.`);
   }
 };
 
-AftercareProduct.updateAftercareProductById = async (
-  id,
-  aftercareProduct,
-  result
-) => {
+AftercareProduct.updateAftercareProductById = async (id, aftercareProduct) => {
   try {
     const updatedRows = await knex("AftercareProducts")
       .where({ AftercareProductID: id })
       .update({
         AftercareProductName: aftercareProduct.aftercareProductName,
-        AftercareProductDescription:
-          aftercareProduct.aftercareProductDescription,
+        AftercareProductDescription: aftercareProduct.aftercareProductDescription,
         AftercareProductPrice: aftercareProduct.aftercareProductPrice,
         AftercareProductImage: aftercareProduct.aftercareProductImage,
       });
 
-    if (updatedRows) {
-      console.log("Updated aftercare product: ", { id, ...aftercareProduct });
-      result(null, { id, ...aftercareProduct });
-    } else {
-      result({ kind: "not_found" }, null);
+    if (!updatedRows) {
+      throw new Error(`Aftercare product with ID ${id} not found.`);
     }
+    return { id, ...aftercareProduct };
   } catch (err) {
-    console.error("Error: ", err);
-    result(err, null);
+    throw new Error(err.message || `Error updating aftercare product with ID ${id}.`);
   }
 };
 
-AftercareProduct.deleteAftercareProductById = async (id, result) => {
+AftercareProduct.deleteAftercareProductById = async (id) => {
   try {
-    const deletedRows = await knex("AftercareProducts")
-      .where({ AftercareProductID: id })
-      .del();
-    if (deletedRows) {
-      console.log("Deleted aftercare product with id: ", id);
-      result(null, deletedRows);
-    } else {
-      result({ kind: "not_found" }, null);
+    const deletedRows = await knex("AftercareProducts").where({ AftercareProductID: id }).del();
+    if (!deletedRows) {
+      throw new Error(`Aftercare product with ID ${id} not found.`);
     }
+    return { message: `Aftercare product with ID ${id} was successfully deleted.` };
   } catch (err) {
-    console.error("Error: ", err);
-    result(err, null);
+    throw new Error(err.message || `Error deleting aftercare product with ID ${id}.`);
   }
 };
 

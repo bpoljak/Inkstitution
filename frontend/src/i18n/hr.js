@@ -188,4 +188,8 @@ export default {
       error: "Greška prilikom ažuriranja termina.",
     },
   },
+  aftercareProductsPage: {
+    title: "Proizvodi za njegu",
+    cartButton: "Dodaj u košaricu"
+  }
 };
