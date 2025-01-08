@@ -172,23 +172,38 @@ export default {
 }
 
 .search-bar {
-  max-width: 500px;
-  margin: 0 auto 20px auto;
-  padding-top: 30px;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.q-input {
+  flex-grow: 1;
+  height: 42px;
 }
 
 .cart-button {
-  position: absolute;
-  top: 25px;
-  right: -50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: 42px;
+  margin-bottom: 15px;
 }
 
 .cart-button .q-btn {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   background: linear-gradient(135deg, #ff7e5f, #feb47b);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   color: white;
   font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .cart-button .q-btn:hover {
@@ -325,7 +340,22 @@ export default {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Responsive Design for Mobile */
+.content-card-light {
+  background: white;
+}
+
+.content-card-dark {
+  background: rgb(18, 18, 18);
+}
+
+@media (min-width: 769px) {
+  .search-bar {
+    max-width: 800px;
+    margin: 0 auto 20px auto;
+    padding-top: 30px;
+  }
+}
+
 @media (max-width: 768px) {
   .search-bar {
     width: 90%;
@@ -358,5 +388,8 @@ export default {
   }
 }
 </style>
+
+
+
 
 

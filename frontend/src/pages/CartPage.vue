@@ -196,12 +196,12 @@ export default {
 .cart-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 20px;
   gap: 20px;
 }
 
 .cart-actions .q-btn {
-  width: 40%;
+  width: 45%;
 }
 
 .q-btn {
@@ -212,8 +212,6 @@ export default {
   padding: 12px 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  margin-left: 50px;
-  margin-right:50px;
 }
 
 .q-btn:hover {
@@ -230,14 +228,14 @@ export default {
 @media (max-width: 768px) {
   .cart-item {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 15px;
     width: 100%;
   }
 
   .cart-item-image {
-    width: 100%;
-    height: auto;
+    width: 100px;
+    height: 100px;
     margin-bottom: 10px;
   }
 
@@ -259,6 +257,13 @@ export default {
   .cart-item-quantity {
     justify-content: center;
     width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .cart-item .q-btn[icon="delete"] {
+    margin-top: 10px;
+    align-self: center;
+    justify-content: center;
   }
 
   .cart-actions {
@@ -277,4 +282,8 @@ export default {
   }
 }
 </style>
+
+
+
+
 
