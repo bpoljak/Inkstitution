@@ -10,7 +10,7 @@
         'card-light': !$q.dark.isActive,
       }"
     >
-      <q-form @submit="onSubmit" ref="form">
+      <q-form @submit.prevent="onSubmitAll" ref="form">
         <div class="form-content">
           <div class="profile-image-section">
             <q-avatar
@@ -26,69 +26,147 @@
               class="profile-image-btn"
             />
           </div>
-          <q-input
-            v-model="form.userFirstName"
-            label="First Name"
-            hint="Enter your first name"
-            outlined
-            dense
-            :rules="[(val) => !!val || 'Required field']"
-          />
-          <q-input
-            v-model="form.userLastName"
-            label="Last Name"
-            hint="Enter your last name"
-            outlined
-            dense
-            :rules="[(val) => !!val || 'Required field']"
-          />
-          <q-input
-            v-model="form.userEmail"
-            label="Email"
-            hint="Enter your email"
-            outlined
-            dense
-            type="email"
-            :rules="[
-              (val) => !!val || 'Required field',
-              (val) => /.+@.+\..+/.test(val) || 'Invalid email',
-            ]"
-          />
-          <q-input
-            v-model="form.userAccountName"
-            label="Username"
-            hint="Enter your username"
-            outlined
-            dense
-            :rules="[(val) => !!val || 'Required field']"
-          />
-          <q-input
-            v-model="form.newPassword"
-            label="New Password"
-            hint="Enter a new password (optional)"
-            outlined
-            dense
-            type="password"
-            :rules="[
-              (val) =>
-                !val ||
-                val.length >= 6 ||
-                'Password must be at least 6 characters long',
-            ]"
-          />
-          <q-input
-            v-model="form.confirmNewPassword"
-            label="Confirm New Password"
-            hint="Re-enter your new password"
-            outlined
-            dense
-            type="password"
-            :rules="[
-              (val) => val === form.newPassword || 'Passwords must match',
-            ]"
-          />
+
+          <div>
+            <q-btn flat dense label="First Name" @click="toggleField('firstName')" />
+            <q-input
+              v-if="expandedFields.firstName"
+              v-model="form.userFirstName"
+              label="First Name"
+              hint="Enter your first name"
+              outlined
+              dense
+              :rules="[(val) => !!val || 'Required field']"
+            />
+            <q-btn
+              v-if="expandedFields.firstName"
+              flat
+              color="gradient-light"
+              label="Save"
+              @click="onSubmitField('firstName')"
+              class="field-save-btn"
+            />
+          </div>
+
+          <div>
+            <q-btn flat dense label="Last Name" @click="toggleField('lastName')" />
+            <q-input
+              v-if="expandedFields.lastName"
+              v-model="form.userLastName"
+              label="Last Name"
+              hint="Enter your last name"
+              outlined
+              dense
+              :rules="[(val) => !!val || 'Required field']"
+            />
+            <q-btn
+              v-if="expandedFields.lastName"
+              flat
+              color="gradient-light"
+              label="Save"
+              @click="onSubmitField('lastName')"
+              class="field-save-btn"
+            />
+          </div>
+
+          <div>
+            <q-btn flat dense label="Email" @click="toggleField('email')" />
+            <q-input
+              v-if="expandedFields.email"
+              v-model="form.userEmail"
+              label="Email"
+              hint="Enter your email"
+              outlined
+              dense
+              type="email"
+              :rules="[ 
+                (val) => !!val || 'Required field',
+                (val) => /.+@.+\..+/.test(val) || 'Invalid email'
+              ]"
+            />
+            <q-btn
+              v-if="expandedFields.email"
+              flat
+              color="gradient-light"
+              label="Save"
+              @click="onSubmitField('email')"
+              class="field-save-btn"
+            />
+          </div>
+
+          <div>
+            <q-btn flat dense label="Username" @click="toggleField('username')" />
+            <q-input
+              v-if="expandedFields.username"
+              v-model="form.userAccountName"
+              label="Username"
+              hint="Enter your username"
+              outlined
+              dense
+              :rules="[(val) => !!val || 'Required field']"
+            />
+            <q-btn
+              v-if="expandedFields.username"
+              flat
+              color="gradient-light"
+              label="Save"
+              @click="onSubmitField('username')"
+              class="field-save-btn"
+            />
+          </div>
+
+          <div>
+            <q-btn flat dense label="New Password" @click="toggleField('newPassword')" />
+            <q-input
+              v-if="expandedFields.newPassword"
+              v-model="form.currentPassword"
+              label="Current Password"
+              hint="Enter your current password"
+              outlined
+              dense
+              type="password"
+              :rules="[ 
+                (val) => !!val || 'Current password is required'
+              ]"
+            />
+            <q-input
+              v-if="expandedFields.newPassword"
+              v-model="form.newPassword"
+              label="New Password"
+              hint="Enter a new password (optional)"
+              outlined
+              dense
+              type="password"
+              :rules="[ 
+                (val) => 
+                  !val || 
+                  val.length >= 6 || 'Password must be at least 6 characters long'
+              ]"
+            />
+            <q-input
+              v-if="expandedFields.newPassword"
+              v-model="form.confirmNewPassword"
+              label="Confirm New Password"
+              hint="Re-enter your new password"
+              outlined
+              dense
+              type="password"
+              :rules="[ 
+                (val) => val === form.newPassword || 'Passwords must match'
+              ]"
+            />
+            <q-btn
+              v-if="expandedFields.newPassword"
+              flat
+              color="gradient-light"
+              label="Save"
+              @click="onSubmitField('newPassword')"
+              class="field-save-btn"
+            />
+          </div>
+
           <q-btn
-            label="Save Changes"
+            label="Save All Changes"
             type="submit"
             color="gradient-light"
             class="save-button"
@@ -105,12 +183,21 @@ import axios from "axios";
 export default {
   data() {
     return {
+      userId: null,
+      expandedFields: {
+        firstName: false,
+        lastName: false,
+        email: false,
+        username: false,
+        newPassword: false,
+      },
       form: {
-        userProfileImage: "", 
+        userProfileImage: "",
         userFirstName: "",
         userLastName: "",
         userEmail: "",
         userAccountName: "",
+        currentPassword: "",
         newPassword: "",
         confirmNewPassword: "",
       },
@@ -120,9 +207,13 @@ export default {
   methods: {
     async fetchUserProfile() {
       try {
-        const response = await axios.get(`${process.env.API_URL}/api/users/session`, { withCredentials: true });
+        const response = await axios.get(
+          `${process.env.API_URL}/api/users/session`,
+          { withCredentials: true }
+        );
         const userData = response.data;
 
+        this.userId = userData.userId;
         this.form.userFirstName = userData.userFirstName || "";
         this.form.userLastName = userData.userLastName || "";
         this.form.userEmail = userData.userEmail || "";
@@ -132,31 +223,54 @@ export default {
         alert("Error fetching user details. Please log in again.");
       }
     },
-    onSubmit() {
-      this.$refs.form.validate().then((valid) => {
-        if (valid) {
-          const payload = {
-            userProfileImage: this.form.userProfileImage,
-            userFirstName: this.form.userFirstName,
-            userLastName: this.form.userLastName,
-            userEmail: this.form.userEmail,
-            userAccountName: this.form.userAccountName,
-          };
+    toggleField(field) {
+      this.expandedFields[field] = !this.expandedFields[field];
+    },
+    onSubmitField(field) {
+      const payload = {
+        currentPassword: this.form.currentPassword,
+        userFirstName: this.form.userFirstName,
+        userLastName: this.form.userLastName,
+        userEmail: this.form.userEmail,
+        userAccountName: this.form.userAccountName,
+        userPassword: this.form.newPassword || undefined,
+      };
 
-          if (this.form.newPassword) {
-            payload.newPassword = this.form.newPassword;
-          }
+      axios
+        .put(`${process.env.API_URL}/api/users/${this.userId}`, payload, {
+          withCredentials: true,
+        })
+        .then(() => {
+          alert(`${field} updated successfully.`);
+        })
+        .catch((error) => {
+          alert(
+            error.response?.data?.message ||
+              `An error occurred while updating ${field}.`
+          );
+        });
+    },
+    onSubmitAll() {
+      const payload = {
+        userProfileImage: this.form.userProfileImage,
+        userFirstName: this.form.userFirstName,
+        userLastName: this.form.userLastName,
+        userEmail: this.form.userEmail,
+        userAccountName: this.form.userAccountName,
+        currentPassword: this.form.currentPassword,
+        userPassword: this.form.newPassword || undefined,
+      };
 
-          axios
-            .put(`${process.env.API_URL}/api/users/update-profile`, payload, { withCredentials: true })
-            .then(() => {
-              alert("Your profile has been updated successfully.");
-            })
-            .catch(() => {
-              alert("An error occurred while updating your profile.");
-            });
-        }
-      });
+      axios
+        .put(`${process.env.API_URL}/api/users/${this.userId}`, payload, {
+          withCredentials: true,
+        })
+        .then(() => {
+          alert("All changes saved successfully.");
+        })
+        .catch(() => {
+          alert("An error occurred while saving changes.");
+        });
     },
     changeProfileImage() {
       const input = document.createElement("input");
@@ -174,13 +288,10 @@ export default {
     },
   },
   mounted() {
-    this.fetchUserProfile(); 
+    this.fetchUserProfile();
   },
 };
 </script>
-
-
-
 
 <style scoped>
 .settings-page {

@@ -163,7 +163,7 @@ function goToProfile() {
 }
 
 function goToProfileSettings() {
-  router.push("/profile/settings");
+  router.push({ path: `/userSettings` });
 }
 
 function logoutUser() {

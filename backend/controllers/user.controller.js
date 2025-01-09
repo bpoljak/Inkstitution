@@ -1,4 +1,5 @@
 const User = require("../models/user.model.js");
+const bcrypt = require("bcrypt");
 
 exports.createUser = (req, res) => {
   if (!req.body) {
@@ -65,21 +66,42 @@ exports.updateUserById = (req, res) => {
     userPassword: req.body.userPassword,
   };
 
-  User.updateUserById(req.params.id, updatedUser, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res
-          .status(404)
-          .send({ message: `User not found with id ${req.params.id}` });
-      } else {
-        res
-          .status(500)
-          .send({ message: `Error updating user with id ${req.params.id}` });
+  if (req.body.currentPassword) {
+    User.getUserById(req.params.id, async (err, user) => {
+      if (err) {
+        return res.status(404).send({ message: "User not found." });
       }
-    } else {
-      res.send(data);
-    }
-  });
+
+      const isMatch = await bcrypt.compare(
+        req.body.currentPassword,
+        user.UserPassword
+      );
+
+      if (!isMatch) {
+        return res
+          .status(401)
+          .send({ message: "Current password is incorrect." });
+      }
+
+      if (req.body.userPassword) {
+        updatedUser.userPassword = await bcrypt.hash(req.body.userPassword, 10);
+      }
+
+      User.updateUserById(req.params.id, updatedUser, (err, data) => {
+        if (err) {
+          return res.status(500).send({ message: "Error updating user." });
+        }
+        res.send({ message: "User updated successfully." });
+      });
+    });
+  } else {
+    User.updateUserById(req.params.id, updatedUser, (err, data) => {
+      if (err) {
+        return res.status(500).send({ message: "Error updating user." });
+      }
+      res.send({ message: "User updated successfully." });
+    });
+  }
 };
 
 exports.deleteUserById = (req, res) => {
