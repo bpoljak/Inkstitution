@@ -195,9 +195,9 @@ export default {
             withCredentials: true,
           }
         );
-        if (response.data && response.data.userName) {
+        if (response.data && response.data.userId) {
           isLoggedIn.value = true;
-          userName.value = response.data.userName;
+          userName.value = response.data.userFirstName; 
         } else {
           isLoggedIn.value = false;
         }
@@ -426,6 +426,4 @@ export default {
     padding: 10px 15px;
   }
 }
-
 </style>
-

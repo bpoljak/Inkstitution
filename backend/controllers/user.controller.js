@@ -119,10 +119,21 @@ exports.loginUser = (req, res) => {
     }
 
     req.session.userId = user.id;
-    req.session.userName = user.userFirstName;
+    req.session.userFirstName = user.userFirstName;
+    req.session.userLastName = user.userLastName;
     req.session.userEmail = user.userEmail;
+    req.session.userAccountName = user.userAccountName;
 
-    res.send({ message: "Prijava uspješna", userName: user.userFirstName });
+    res.send({
+      message: "Prijava uspješna",
+      user: {
+        id: user.id,
+        userFirstName: user.userFirstName,
+        userLastName: user.userLastName,
+        userEmail: user.userEmail,
+        userAccountName: user.userAccountName,
+      },
+    });
   });
 };
 

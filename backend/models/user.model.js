@@ -104,7 +104,7 @@ User.loginUser = (email, password, result) => {
       if (!user) {
         return result({ kind: "not_found" }, null);
       }
-
+      console.log(user);
       bcrypt.compare(password, user.UserPassword, (err, isMatch) => {
         if (err) {
           return result(err, null);
@@ -114,7 +114,9 @@ User.loginUser = (email, password, result) => {
           result(null, {
             id: user.UserID,
             userFirstName: user.UserFirstName,
+            userLastName: user.UserLastName,
             userEmail: user.UserEmail,
+            userAccountName: user.UserAccountName,
           });
         } else {
           result({ kind: "invalid_password" }, null);

@@ -125,6 +125,11 @@ const changeLanguage = (value) => {
 };
 
 const isLoggedIn = ref(false);
+const userId = ref(null);
+const userFirstName = ref(null);
+const userLastName = ref(null);
+const userEmail = ref(null);
+const userAccountName = ref(null);
 
 const linksList = [
   { title: t("essentialLinks.home"), caption: t("essentialLinks.homeCaption"), icon: "home", link: "/" },
@@ -152,21 +157,10 @@ function toggleLeftDrawer() {
 }
 
 function goToProfile() {
-  axios
-    .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
-    .then((response) => {
-      if (response.data && response.data.userId) {
-        const userId = response.data.userId;
-        router.push({ name: "UserProfile", params: { userId } });
-      } else {
-        console.error("User ID not found in session.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching session data:", error);
-    });
+  if (userId.value) {
+    router.push({ name: "UserProfile", params: { userId: userId.value } });
+  }
 }
-
 
 function goToProfileSettings() {
   router.push("/profile/settings");
@@ -198,8 +192,13 @@ async function checkLoginStatus() {
   await axios
     .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
     .then((response) => {
-      if (response.data && response.data.userName) {
+      if (response.data && response.data.userId) {
         isLoggedIn.value = true;
+        userId.value = response.data.userId;
+        userFirstName.value = response.data.userFirstName;
+        userLastName.value = response.data.userLastName;
+        userEmail.value = response.data.userEmail;
+        userAccountName.value = response.data.userAccountName;
       } else {
         isLoggedIn.value = false;
       }
@@ -209,6 +208,7 @@ async function checkLoginStatus() {
     });
 }
 </script>
+
 
 <style scoped>
 .q-toolbar-title {

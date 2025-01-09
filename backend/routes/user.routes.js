@@ -7,12 +7,15 @@ module.exports = (app) => {
     if (req.session && req.session.userId) {
       return res.send({
         userId: req.session.userId,
-        userName: req.session.userName,
+        userFirstName: req.session.userFirstName,
+        userLastName: req.session.userLastName,
         userEmail: req.session.userEmail,
+        userAccountName: req.session.userAccountName,
       });
     }
     res.status(401).send({ message: "User not logged in or session expired." });
   });
+  
 
   router.post("/", users.createUser);
 

@@ -46,6 +46,11 @@ const routes = [
         component: () => import("pages/UserProfilePage.vue"),
         props: true,
       },
+      {
+        path: "userSettings",
+        name: "UserSettingsPage",
+        component: () => import("src/pages/UserSettingsPage.vue"),
+      },
     ],
   },
   {

@@ -69,7 +69,7 @@ export default {
               { withCredentials: true }
             )
             .then((response) => {
-              this.userName = response.data.userName;
+              this.userFirstName = response.data.userFirstName;
               this.$router.push("/");
             })
             .catch(() => {
