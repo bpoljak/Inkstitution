@@ -90,9 +90,8 @@
   </q-layout>
 </template>
 
-
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRouter, onBeforeRouteUpdate } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useQuasar } from "quasar";
@@ -132,18 +131,22 @@ const userEmail = ref(null);
 const userAccountName = ref(null);
 
 const linksList = [
-  { title: t("essentialLinks.home"), caption: t("essentialLinks.homeCaption"), icon: "home", link: "/" },
-  { title: t("essentialLinks.register"), caption: t("essentialLinks.registerCaption"), icon: "code", link: "/register", hideWhenLoggedIn: true },
-  { title: t("essentialLinks.login"), caption: t("essentialLinks.loginCaption"), icon: "login", link: "/login", hideWhenLoggedIn: true },
-  { title: t("essentialLinks.studios"), caption: t("essentialLinks.studiosCaption"), icon: "store", link: "/studios", requiresAuth: true },
-  { title: t("essentialLinks.appointments"), caption: t("essentialLinks.appointmentsCaption"), icon: "book", link: "/appointments", requiresAuth: true },
-  { title: t("essentialLinks.aftercare"), caption: t("essentialLinks.aftercareCaption"), icon: "medication", link: "/aftercare", requiresAuth: true },
-  { title: t("essentialLinks.about"), caption: t("essentialLinks.aboutCaption"), icon: "info", link: "/about" },
-  { title: t("essentialLinks.contactUs"), caption: t("essentialLinks.contactUsCaption"), icon: "message", link: "/contactUs" },
+  { titleKey: "essentialLinks.home", captionKey: "essentialLinks.homeCaption", icon: "home", link: "/" },
+  { titleKey: "essentialLinks.register", captionKey: "essentialLinks.registerCaption", icon: "code", link: "/register", hideWhenLoggedIn: true },
+  { titleKey: "essentialLinks.login", captionKey: "essentialLinks.loginCaption", icon: "login", link: "/login", hideWhenLoggedIn: true },
+  { titleKey: "essentialLinks.studios", captionKey: "essentialLinks.studiosCaption", icon: "store", link: "/studios", requiresAuth: true },
+  { titleKey: "essentialLinks.appointments", captionKey: "essentialLinks.appointmentsCaption", icon: "book", link: "/appointments", requiresAuth: true },
+  { titleKey: "essentialLinks.aftercare", captionKey: "essentialLinks.aftercareCaption", icon: "medication", link: "/aftercare", requiresAuth: true },
+  { titleKey: "essentialLinks.about", captionKey: "essentialLinks.aboutCaption", icon: "info", link: "/about" },
+  { titleKey: "essentialLinks.contactUs", captionKey: "essentialLinks.contactUsCaption", icon: "message", link: "/contactUs" },
 ];
 
 const filteredLinks = computed(() => {
-  return linksList.filter(
+  return linksList.map((link) => ({
+    ...link,
+    title: t(link.titleKey),
+    caption: t(link.captionKey),
+  })).filter(
     (link) =>
       (!link.requiresAuth || isLoggedIn.value) &&
       (!link.hideWhenLoggedIn || !isLoggedIn.value)
@@ -188,6 +191,8 @@ onBeforeRouteUpdate((to, from, next) => {
   });
 });
 
+watch(() => locale.value, () => {});
+
 async function checkLoginStatus() {
   await axios
     .get(`${process.env.API_URL}/api/users/session`, { withCredentials: true })
@@ -208,7 +213,6 @@ async function checkLoginStatus() {
     });
 }
 </script>
-
 
 <style scoped>
 .q-toolbar-title {
@@ -309,7 +313,4 @@ async function checkLoginStatus() {
   transform: scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
-
 </style>
-
-

@@ -69,6 +69,7 @@ export default {
       minLength: "Lozinka mora imati najmanje 6 znakova",
       matchPassword: "Lozinke se moraju podudarati",
     },
+    successMessage: "Registracija uspješna",
   },
   login: {
     email: "Email",
@@ -190,6 +191,15 @@ export default {
   },
   aftercareProductsPage: {
     title: "Proizvodi za njegu",
-    cartButton: "Dodaj u košaricu"
-  }
+    cartButton: "Dodaj u košaricu",
+  },
+
+  appointmentPage: {
+    bookAppointment: "Rezerviraj termin",
+    timeSlotsFor: "Termini za",
+    loginToBook: "Morate biti prijavljeni da biste rezervirali termin.",
+    appointmentSuccess: "Termin uspješno rezerviran!",
+    appointmentError: "Došlo je do pogreške prilikom rezervacije termina.",
+    errorFetchingSession: "Neuspjelo dohvaćanje sesije. Prijavite se ponovno.",
+  },
 };

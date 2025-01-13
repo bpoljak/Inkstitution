@@ -65,6 +65,7 @@ export default {
       minLength: "Password must be at least 6 characters",
       matchPassword: "Passwords must match",
     },
+    successMessage: "Registration successfull",
   },
   login: {
     email: "Email",
@@ -103,35 +104,36 @@ export default {
   welcomeMessage: "Welcome, {name}",
 
   aboutPage: {
-  goalTitle: "Our goal is to simplify tattoo booking",
-  goalDescription:
-    "Our team consists of ambitious students who decided to modernize and simplify the tattoo appointment booking process. Through our app, we have enabled users to easily book appointments with their favorite tattoo artists, make payments within the app, and purchase tattoo care products. Our mission is to provide a fast, secure, and convenient service that meets all user needs in one place.",
-  faq: {
-    whoAreWe: {
-      question: "Who are we?",
-      answer:
-        "We are a team that developed an app for booking tattoo appointments. Our goal is to provide users with an easy way to schedule appointments, view styles, and choose artists based on their preferences.",
-    },
-    bookingProcess: {
-      question: "How does the booking process work?",
-      answer:
-        "The booking process is simple: select the desired studio, date, and tattoo style, then the artist confirms your appointment.",
-    },
-    paymentOptions: {
-      question: "What are the available payment methods?",
-      answer:
-        "You can pay in cash at the studio or by card through the web app, but a deposit is required for booking.",
-    },
-    viewPreviousWorks: {
-      question: "Can I view the studio's previous works?",
-      answer: "It's possible to view a gallery of each tattoo studio's works.",
-    },
-    careProducts: {
-      question: "Can I browse aftercare products?",
-      answer: "Through our site, you can find tattoo aftercare products.",
+    goalTitle: "Our goal is to simplify tattoo booking",
+    goalDescription:
+      "Our team consists of ambitious students who decided to modernize and simplify the tattoo appointment booking process. Through our app, we have enabled users to easily book appointments with their favorite tattoo artists, make payments within the app, and purchase tattoo care products. Our mission is to provide a fast, secure, and convenient service that meets all user needs in one place.",
+    faq: {
+      whoAreWe: {
+        question: "Who are we?",
+        answer:
+          "We are a team that developed an app for booking tattoo appointments. Our goal is to provide users with an easy way to schedule appointments, view styles, and choose artists based on their preferences.",
+      },
+      bookingProcess: {
+        question: "How does the booking process work?",
+        answer:
+          "The booking process is simple: select the desired studio, date, and tattoo style, then the artist confirms your appointment.",
+      },
+      paymentOptions: {
+        question: "What are the available payment methods?",
+        answer:
+          "You can pay in cash at the studio or by card through the web app, but a deposit is required for booking.",
+      },
+      viewPreviousWorks: {
+        question: "Can I view the studio's previous works?",
+        answer:
+          "It's possible to view a gallery of each tattoo studio's works.",
+      },
+      careProducts: {
+        question: "Can I browse aftercare products?",
+        answer: "Through our site, you can find tattoo aftercare products.",
+      },
     },
   },
-},
 
   studioRegistration: {
     title: "Studio Registration",
@@ -187,7 +189,15 @@ export default {
   },
   aftercareProductsPage: {
     title: "Aftercare Products",
-    cartButton: "Add to cart"
-  }
+    cartButton: "Add to cart",
+  },
 
+  appointmentPage: {
+    bookAppointment: "Book an Appointment",
+    timeSlotsFor: "Time Slots for",
+    loginToBook: "You must be logged in to book an appointment.",
+    appointmentSuccess: "Appointment booked successfully!",
+    appointmentError: "An error occurred while booking the appointment.",
+    errorFetchingSession: "Could not fetch user session. Please log in again.",
+  },
 };

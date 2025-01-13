@@ -30,52 +30,53 @@
 </template>
 
 <script>
+import { watch } from "vue";
+
 export default {
   data() {
     return {
-      faqs: [
-        { question: "", answer: "", visible: false },
-        { question: "", answer: "", visible: false },
-        { question: "", answer: "", visible: false },
-        { question: "", answer: "", visible: false },
-        { question: "", answer: "", visible: false },
-      ],
+      faqs: [],
     };
-  },
-  mounted() {
-    // Popunjavaj FAQ tekstove nakon što je komponenta montirana
-    this.faqs = [
-      {
-        question: this.$t('aboutPage.faq.whoAreWe.question'),
-        answer: this.$t('aboutPage.faq.whoAreWe.answer'),
-        visible: false,
-      },
-      {
-        question: this.$t('aboutPage.faq.bookingProcess.question'),
-        answer: this.$t('aboutPage.faq.bookingProcess.answer'),
-        visible: false,
-      },
-      {
-        question: this.$t('aboutPage.faq.paymentOptions.question'),
-        answer: this.$t('aboutPage.faq.paymentOptions.answer'),
-        visible: false,
-      },
-      {
-        question: this.$t('aboutPage.faq.viewPreviousWorks.question'),
-        answer: this.$t('aboutPage.faq.viewPreviousWorks.answer'),
-        visible: false,
-      },
-      {
-        question: this.$t('aboutPage.faq.careProducts.question'),
-        answer: this.$t('aboutPage.faq.careProducts.answer'),
-        visible: false,
-      },
-    ];
   },
   methods: {
     toggleFaq(index) {
       this.faqs[index].visible = !this.faqs[index].visible;
     },
+    updateFaqs() {
+      this.faqs = [
+        {
+          question: this.$t('aboutPage.faq.whoAreWe.question'),
+          answer: this.$t('aboutPage.faq.whoAreWe.answer'),
+          visible: false,
+        },
+        {
+          question: this.$t('aboutPage.faq.bookingProcess.question'),
+          answer: this.$t('aboutPage.faq.bookingProcess.answer'),
+          visible: false,
+        },
+        {
+          question: this.$t('aboutPage.faq.paymentOptions.question'),
+          answer: this.$t('aboutPage.faq.paymentOptions.answer'),
+          visible: false,
+        },
+        {
+          question: this.$t('aboutPage.faq.viewPreviousWorks.question'),
+          answer: this.$t('aboutPage.faq.viewPreviousWorks.answer'),
+          visible: false,
+        },
+        {
+          question: this.$t('aboutPage.faq.careProducts.question'),
+          answer: this.$t('aboutPage.faq.careProducts.answer'),
+          visible: false,
+        },
+      ];
+    },
+  },
+  watch: {
+    '$i18n.locale': 'updateFaqs',
+  },
+  mounted() {
+    this.updateFaqs();
   },
 };
 </script>
@@ -90,53 +91,50 @@ export default {
   min-height: 100vh;
 }
 
-/* Light Mode */
 .light-mode {
-  background: #ffffff !important; /* Čista bela pozadina */
+  background: #ffffff !important;
 }
 
 .light-mode .about-content {
-  color: #000; /* Crni tekst za light mode */
+  color: #000;
 }
 
 .light-mode .faq-section {
-  background-color: #f9f9f9; /* Svetla pozadina za light mode */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Lagana senka */
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .light-mode .box-title {
-  color: #000; /* Crni tekst za light mode */
+  color: #000;
 }
 
 .light-mode .about-text {
-  color: #000; /* Crni tekst za light mode */
-  background-color: #ffffff; /* Bela pozadina */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* Blaga senka */
+  color: #000;
+  background-color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Dark Mode */
 .dark-mode {
-  background: linear-gradient(135deg, #232526, #414345) !important; /* Gradient za dark mode */
+  background: linear-gradient(135deg, #232526, #414345) !important;
 }
 
 .dark-mode .about-content {
-  color: #fff; /* Beli tekst za dark mode */
+  color: #fff;
 }
 
 .dark-mode .faq-section {
-  background-color: rgba(255, 255, 255, 0.05); /* Tamnija pozadina za dark mode */
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .dark-mode .box-title {
-  color: white; /* Beli tekst za dark mode */
+  color: white;
 }
 
 .dark-mode .about-text {
-  color: #fff; /* Beli tekst za dark mode */
-  background-color: rgba(255, 255, 255, 0.1); /* Transparentna pozadina */
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Background Overlay */
 .background-overlay {
   position: absolute;
   top: 0;
@@ -147,7 +145,6 @@ export default {
   z-index: 1;
 }
 
-/* About Content */
 .about-content {
   position: relative;
   display: flex;
@@ -171,7 +168,6 @@ export default {
   margin-bottom: 2rem;
 }
 
-/* FAQ Box */
 .faq-box {
   width: 100%;
 }
@@ -182,10 +178,9 @@ export default {
   border-radius: 10px;
   padding: 10px;
   transition: all 0.3s ease;
-  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2); /* Dodata senka */
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Box Title (FAQ Questions) */
 .box-title {
   cursor: pointer;
   padding: 15px;
@@ -202,13 +197,12 @@ export default {
   transform: scale(1.02);
 }
 
-/* FAQ Answer (Clicked Question) */
 .about-text {
   padding: 15px;
   font-size: 1rem;
   color: #fff;
   line-height: 1.5;
-  background-color: rgba(0, 0, 0, 0.05); /* Default background */
+  background-color: rgba(0, 0, 0, 0.05);
   border-radius: 5px;
 }
 
@@ -223,15 +217,32 @@ export default {
   opacity: 0;
 }
 
-/* Media Queries */
-@media (prefers-color-scheme: dark) {
-  .about-text {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
+@media (max-width: 768px) {
+  .box-title {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
   }
 
   .faq-section {
-    background-color: rgba(255, 255, 255, 0.05);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .about-content {
+    padding: 10px;
+  }
+
+  .text-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .text-section p {
+    font-size: 1rem;
   }
 }
+
+
 </style>

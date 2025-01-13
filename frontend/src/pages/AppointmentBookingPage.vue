@@ -1,7 +1,9 @@
 <template>
   <div>
     <q-page class="q-pa-md booking-page">
-      <h1 class="text-center page-title">Book an Appointment</h1>
+      <h1 class="text-center page-title">
+        {{ $t("appointmentPage.bookAppointment") }}
+      </h1>
 
       <div class="booking-container">
         <q-date
@@ -9,12 +11,13 @@
           mask="YYYY-MM-DD"
           bordered
           class="q-mb-md q-ma-md date-picker"
+          :locale="$i18n.locale"
           @update:model="fetchAvailableAppointments"
         />
 
         <div class="q-mt-lg time-slots-container">
           <h3 class="text-center time-slots-title">
-            Time Slots for {{ selectedDate }}
+            {{ $t("appointmentPage.timeSlotsFor") }} {{ selectedDate }}
           </h3>
           <div class="time-slots-grid">
             <div
@@ -43,6 +46,7 @@
 import { ref, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
+import { useI18n } from "vue-i18n";
 
 export default {
   setup() {
@@ -50,20 +54,35 @@ export default {
     const selectedDate = ref(new Date().toISOString().split("T")[0]);
     const timeSlots = ref([]);
     const studioId = ref(route.params.studioId);
+    const userId = ref(null);
+    const { t: $t } = useI18n();
 
     const generateTimeSlots = () => {
       const slots = [];
       const start = new Date();
       start.setHours(10, 0, 0, 0);
       const end = new Date();
-      end.setHours(18, 0, 0, 0);
+      end.setHours(19, 0, 0, 0);
 
       while (start < end) {
         slots.push({ time: start.toTimeString().slice(0, 5), isBooked: false });
-        start.setMinutes(start.getMinutes() + 30);
+        start.setMinutes(start.getMinutes() + 60);
       }
 
       return slots;
+    };
+
+    const fetchUserSession = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.API_URL}/api/users/session`,
+          { withCredentials: true }
+        );
+        userId.value = response.data.userId;
+      } catch (error) {
+        console.error("Error fetching user session:", error);
+        alert(this.$t("appointmentPage.errorFetchingSession"));
+      }
     };
 
     const fetchAvailableAppointments = async () => {
@@ -78,8 +97,6 @@ export default {
           }
         );
 
-        console.log("Backend response:", response);
-
         if (!response.data || !Array.isArray(response.data)) {
           console.error("Invalid response data:", response.data);
           timeSlots.value = generateTimeSlots();
@@ -87,10 +104,8 @@ export default {
         }
 
         const reservedSlots = response.data.map((appointment) => {
-          return appointment.AppointmentTime.slice(0, 5); // HH:mm
+          return appointment.AppointmentTime.slice(0, 5);
         });
-
-        console.log("Filtered reserved slots:", reservedSlots);
 
         timeSlots.value = generateTimeSlots().map((slot) => {
           const isBooked = reservedSlots.includes(slot.time);
@@ -99,22 +114,51 @@ export default {
             isBooked,
           };
         });
-
-        console.log(
-          "Generated time slots with booked status:",
-          timeSlots.value
-        );
       } catch (error) {
         console.error("Error fetching appointments:", error);
         timeSlots.value = generateTimeSlots();
       }
     };
 
+    const bookAppointment = async (time) => {
+  if (!userId.value) {
+    alert($t("appointmentPage.loginToBook"));
+    return;
+  }
+
+  try {
+    const payload = {
+      appointmentDate: selectedDate.value,
+      appointmentTime: time,
+      studioId: studioId.value,
+      userId: userId.value,
+    };
+
+    await axios.post(`${process.env.API_URL}/api/appointments`, payload, {
+      withCredentials: true,
+    });
+
+    alert($t("appointmentPage.appointmentSuccess"));
+
+    const updatedSlots = timeSlots.value.map((slot) =>
+      slot.time === time ? { ...slot, isBooked: true } : slot
+    );
+    timeSlots.value = updatedSlots;
+  } catch (error) {
+    console.error("Error booking appointment:", error);
+    alert(
+      error.response?.data?.message || $t("appointmentPage.appointmentError")
+    );
+  }
+};
+
+
     watch([selectedDate, studioId], () => {
       fetchAvailableAppointments();
     });
 
-    onMounted(() => {
+    onMounted(async () => {
+      await fetchUserSession();
       timeSlots.value = generateTimeSlots();
       fetchAvailableAppointments();
     });
@@ -123,6 +167,8 @@ export default {
       selectedDate,
       timeSlots,
       fetchAvailableAppointments,
+      bookAppointment,
+      $t,
     };
   },
 };
@@ -148,7 +194,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 20px;
   width: 100%;
   max-width: 1200px;
@@ -161,7 +207,7 @@ export default {
 }
 
 .time-slots-container {
-  flex: 2;
+  flex: 1;
   padding: 20px;
   background-color: var(--q-card-background-color);
   border-radius: 8px;
@@ -169,7 +215,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  height: 370px;
+  margin-bottom: 100px;
 }
 
 .time-slots-title {
@@ -179,7 +226,7 @@ export default {
 
 .time-slots-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   width: 100%;
 }
@@ -193,6 +240,7 @@ export default {
 .time-slot-btn {
   font-size: 0.9rem;
   font-weight: bold;
+  width: 100%;
 }
 
 .no-slots-message {
@@ -235,4 +283,3 @@ export default {
   }
 }
 </style>
-
