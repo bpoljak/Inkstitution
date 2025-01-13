@@ -10,23 +10,16 @@
         'card-light': !$q.dark.isActive,
       }"
     >
+      <div class="profile-image-section">
+        <img
+          size="100px"
+          :src="profileImageSrc || defaultProfileImage"
+          class="user-profile-image"
+        />
+      </div>
+
       <q-form @submit.prevent="onSubmitAll" ref="form">
         <div class="form-content">
-          <div class="profile-image-section">
-            <q-avatar
-              size="100px"
-              :src="form.userProfileImage || defaultProfileImage"
-              class="profile-avatar"
-            />
-            <q-btn
-              flat
-              color="gradient-light"
-              label="Change Profile Image"
-              @click="changeProfileImage"
-              class="profile-image-btn"
-            />
-          </div>
-
           <div>
             <q-btn flat dense label="First Name" @click="toggleField('firstName')" />
             <q-input
@@ -79,7 +72,7 @@
               outlined
               dense
               type="email"
-              :rules="[ 
+              :rules="[
                 (val) => !!val || 'Required field',
                 (val) => /.+@.+\..+/.test(val) || 'Invalid email'
               ]"
@@ -125,7 +118,7 @@
               outlined
               dense
               type="password"
-              :rules="[ 
+              :rules="[
                 (val) => !!val || 'Current password is required'
               ]"
             />
@@ -137,9 +130,9 @@
               outlined
               dense
               type="password"
-              :rules="[ 
-                (val) => 
-                  !val || 
+              :rules="[
+                (val) =>
+                  !val ||
                   val.length >= 6 || 'Password must be at least 6 characters long'
               ]"
             />
@@ -151,7 +144,7 @@
               outlined
               dense
               type="password"
-              :rules="[ 
+              :rules="[
                 (val) => val === form.newPassword || 'Passwords must match'
               ]"
             />
@@ -184,6 +177,7 @@ export default {
   data() {
     return {
       userId: null,
+      profileImageSrc: "",
       expandedFields: {
         firstName: false,
         lastName: false,
@@ -192,7 +186,6 @@ export default {
         newPassword: false,
       },
       form: {
-        userProfileImage: "",
         userFirstName: "",
         userLastName: "",
         userEmail: "",
@@ -207,20 +200,33 @@ export default {
   methods: {
     async fetchUserProfile() {
       try {
-        const response = await axios.get(
+        const userResponse = await axios.get(
           `${process.env.API_URL}/api/users/session`,
           { withCredentials: true }
         );
-        const userData = response.data;
+        const userData = userResponse.data;
+        console.log(userData);
 
         this.userId = userData.userId;
         this.form.userFirstName = userData.userFirstName || "";
         this.form.userLastName = userData.userLastName || "";
         this.form.userEmail = userData.userEmail || "";
         this.form.userAccountName = userData.userAccountName || "";
+
+        const imageResponse = await axios.get(
+          `${process.env.API_URL}/api/userProfileImages/${this.userId}`
+        );
+        console.log(imageResponse);
+        if (imageResponse.data && imageResponse.data.length > 0) {
+          this.profileImageSrc =
+            imageResponse.data[0].UserProfileImageLink || this.defaultProfileImage;
+        } else {
+          this.profileImageSrc = this.defaultProfileImage;
+        }
+
+        console.log("Profile Image Src:", this.profileImageSrc);
       } catch (error) {
-        console.error("Error fetching user details from session:", error);
-        alert("Error fetching user details. Please log in again.");
+        console.error("Error fetching user details or profile image:", error);
       }
     },
     toggleField(field) {
@@ -252,7 +258,6 @@ export default {
     },
     onSubmitAll() {
       const payload = {
-        userProfileImage: this.form.userProfileImage,
         userFirstName: this.form.userFirstName,
         userLastName: this.form.userLastName,
         userEmail: this.form.userEmail,
@@ -271,20 +276,6 @@ export default {
         .catch(() => {
           alert("An error occurred while saving changes.");
         });
-    },
-    changeProfileImage() {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "image/*";
-      input.onchange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.form.userProfileImage = reader.result;
-        };
-        reader.readAsDataURL(file);
-      };
-      input.click();
     },
   },
   mounted() {
@@ -362,5 +353,19 @@ export default {
 
 .card-light {
   background: white;
+}
+
+.user-profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.field-save-btn {
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: white;
+  margin-top: 10px;
 }
 </style>

@@ -29,14 +29,12 @@
             type="password"
             :rules="[(val) => !!val || $t('login.validation.required')]"
           />
-          <center>
             <q-btn
               :label="$t('login.submitButton')"
               type="submit"
               color="gradient-light"
               class="login-button"
             />
-          </center>
         </div>
       </q-form>
     </q-card>
