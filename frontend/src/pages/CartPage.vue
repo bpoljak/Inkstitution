@@ -102,6 +102,10 @@ export default {
 </script>
 
 <style scoped>
+.q-page {
+  padding-top: 25px;
+}
+
 .dark-mode {
   background: linear-gradient(135deg, #232526, #414345);
   color: white;

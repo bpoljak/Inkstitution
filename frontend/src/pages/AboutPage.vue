@@ -92,7 +92,7 @@ export default {
 }
 
 .light-mode {
-  background: #ffffff !important;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
 }
 
 .light-mode .about-content {
@@ -100,7 +100,7 @@ export default {
 }
 
 .light-mode .faq-section {
-  background-color: #f9f9f9;
+  background-color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -110,12 +110,13 @@ export default {
 
 .light-mode .about-text {
   color: #000;
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
 }
 
 .dark-mode {
-  background: linear-gradient(135deg, #232526, #414345) !important;
+  background: linear-gradient(135deg, #232526, #414345);
 }
 
 .dark-mode .about-content {
@@ -123,7 +124,7 @@ export default {
 }
 
 .dark-mode .faq-section {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(24, 24, 24);
 }
 
 .dark-mode .box-title {
@@ -133,6 +134,7 @@ export default {
 .dark-mode .about-text {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.1);
+  margin-top: 10px;
 }
 
 .background-overlay {
