@@ -10,7 +10,6 @@ const User = function (user) {
   this.userPassword = user.userPassword;
 };
 
-// Kreiranje korisnika
 User.createUser = async (newUser, result) => {
   try {
     const hashedPassword = await bcrypt.hash(newUser.userPassword, 10);
@@ -29,7 +28,6 @@ User.createUser = async (newUser, result) => {
   }
 };
 
-// Dohvat svih korisnika
 User.getAllUsers = async (result) => {
   try {
     const users = await knex("Users").select("*");
@@ -41,7 +39,6 @@ User.getAllUsers = async (result) => {
   }
 };
 
-// Dohvat korisnika po ID-u
 User.getUserById = async (id, result) => {
   try {
     const user = await knex("Users").where("UserID", id).first();
@@ -57,7 +54,6 @@ User.getUserById = async (id, result) => {
   }
 };
 
-// Ažuriranje korisnika po ID-u
 User.updateUserById = async (id, user, result) => {
   try {
     const updatedRows = await knex("Users").where("UserID", id).update({
@@ -79,7 +75,6 @@ User.updateUserById = async (id, user, result) => {
   }
 };
 
-// Brisanje korisnika po ID-u
 User.deleteUserById = async (id, result) => {
   try {
     const deletedRows = await knex("Users").where("UserID", id).del();
@@ -95,7 +90,6 @@ User.deleteUserById = async (id, result) => {
   }
 };
 
-// Prijava korisnika
 User.loginUser = (email, password, result) => {
   knex("Users")
     .where({ UserEmail: email })

@@ -6,11 +6,11 @@ try {
   const db = knex({
     client: "mysql",
     connection: {
-      host: process.env.host, // Vaš host iz .env datoteke
-      user: process.env.user, // Vaše korisničko ime iz .env datoteke
-      password: process.env.password, // Vaša lozinka iz .env datoteke
-      database: process.env.database, // Naziv baze podataka iz .env datoteke
-      port: process.env.port, // Port iz .env datoteke
+      host: process.env.host,
+      user: process.env.user,
+      password: process.env.password,
+      database: process.env.database,
+      port: process.env.port,
     },
   });
 
