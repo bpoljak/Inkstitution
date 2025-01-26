@@ -192,6 +192,7 @@ export default {
   aftercareProductsPage: {
     title: "Proizvodi za njegu",
     cartButton: "Dodaj u košaricu",
+    searchBar: "Pretraži proizvode...",
   },
 
   appointmentPage: {
@@ -201,5 +202,12 @@ export default {
     appointmentSuccess: "Termin uspješno rezerviran!",
     appointmentError: "Došlo je do pogreške prilikom rezervacije termina.",
     errorFetchingSession: "Neuspjelo dohvaćanje sesije. Prijavite se ponovno.",
+  },
+
+  cartPage: {
+    sumLabel: "Ukupno: ",
+    continueButton: "Nastavi kupovinu",
+    checkoutButton: "Plaćanje",
+    emptyCart: "Vaša košarica je prazna",
   },
 };

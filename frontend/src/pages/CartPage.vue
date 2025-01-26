@@ -30,13 +30,13 @@
       </div>
     </div>
     <div v-else class="empty-cart">
-      <p>Vaša košarica je prazna.</p>
+      <p>{{ $t('cartPage.emptyCart')}}</p>
     </div>
     <div v-if="cartItems.length" class="cart-summary">
-      <p>Total cost: {{ totalCost.toFixed(2) }} €</p>
+      <p><span>{{ $t('cartPage.sumLabel')}}</span>{{ totalCost.toFixed(2) }} €</p>
       <div class="cart-actions">
-        <q-btn flat label="Continue shopping" @click="goToAftercare" />
-        <q-btn flat class="checkout-btn" label="Checkout" color="primary" />
+        <q-btn flat :label="$t('cartPage.continueButton')" @click="goToAftercare" />
+        <q-btn flat class="checkout-btn" :label="$t('cartPage.checkoutButton')" />
       </div>
     </div>
   </q-page>
@@ -228,7 +228,6 @@ export default {
   background: linear-gradient(159deg, rgba(34, 139, 34, 1) 0%, rgba(50, 205, 50, 1) 100%);
 }
 
-/* Responsive Design for Mobile */
 @media (max-width: 768px) {
   .cart-item {
     flex-direction: column;

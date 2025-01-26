@@ -190,6 +190,7 @@ export default {
   aftercareProductsPage: {
     title: "Aftercare Products",
     cartButton: "Add to cart",
+    searchBar: "Search products...",
   },
 
   appointmentPage: {
@@ -199,5 +200,12 @@ export default {
     appointmentSuccess: "Appointment booked successfully!",
     appointmentError: "An error occurred while booking the appointment.",
     errorFetchingSession: "Could not fetch user session. Please log in again.",
+  },
+
+  cartPage: {
+    sumLabel: "Total cost: ",
+    continueButton: "Continue shopping",
+    checkoutButton: "Checkout",
+    emptyCart: "Your cart is empty",
   },
 };

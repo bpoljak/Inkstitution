@@ -38,6 +38,7 @@
             color="gradient-light"
             :label="$t('indexPage.explore')"
             class="q-my-md"
+            @click="goToStudios"
           />
         </div>
       </div>
@@ -85,7 +86,7 @@
                 color="gradient-light"
                 :label="$t('indexPage.missionButton')"
                 class="q-my-md align-button"
-                @click="goToAboutUs()"
+                @click="goToAboutUs"
               />
             </q-card-section>
           </q-card>
@@ -131,7 +132,7 @@
                 color="gradient-light"
                 :label="$t('indexPage.createAccountButton')"
                 class="q-my-md align-button"
-                @click="goToRegister()"
+                @click="goToRegister"
               />
             </q-card-section>
           </q-card>
@@ -168,7 +169,7 @@
                 color="gradient-light"
                 :label="$t('indexPage.ownStudioButton')"
                 class="q-my-md align-button"
-                @click="goToStudioRegister()"
+                @click="goToStudioRegister"
               />
             </q-card-section>
           </q-card>
@@ -181,11 +182,13 @@
 <script>
 import axios from "axios";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const isLoggedIn = ref(false);
     const userName = ref(null);
+    const router = useRouter();
 
     const checkLoginStatus = async () => {
       try {
@@ -197,7 +200,7 @@ export default {
         );
         if (response.data && response.data.userId) {
           isLoggedIn.value = true;
-          userName.value = response.data.userFirstName; 
+          userName.value = response.data.userFirstName;
         } else {
           isLoggedIn.value = false;
         }
@@ -206,20 +209,29 @@ export default {
       }
     };
 
+    const goToAboutUs = () => {
+      router.push("/about");
+    };
+    const goToRegister = () => {
+      router.push("/register");
+    };
+    const goToStudioRegister = () => {
+      router.push("/studio-register");
+    };
+    const goToStudios = () => {
+      router.push("/studios");
+    };
+
+
     onMounted(checkLoginStatus);
 
     return {
       isLoggedIn,
       userName,
-      goToAboutUs() {
-        this.$router.push("/about");
-      },
-      goToRegister() {
-        this.$router.push("/register");
-      },
-      goToStudioRegister() {
-        this.$router.push("/studio-register");
-      },
+      goToAboutUs,
+      goToRegister,
+      goToStudioRegister,
+      goToStudios
     };
   },
 };

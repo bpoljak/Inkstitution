@@ -5,7 +5,7 @@
   >
     <div class="search-bar">
       <q-input
-        placeholder="Search for a product..."
+        :placeholder="$t('aftercareProductsPage.searchBar')"
         v-model="searchQuery"
         outlined
         dense
@@ -74,7 +74,7 @@
           <p>{{ expandedImage.AftercareProductPrice }} €</p>
           <q-btn
             class="q-my-md orange-gradient-btn"
-            :label="'Dodaj u košaricu'"
+            :label="$t('aftercareProductsPage.cartButton')"
             @click="addToCart(expandedImage)"
           />
         </div>
