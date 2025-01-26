@@ -11,7 +11,6 @@
         dense
         clearable
         debounce="300"
-        @input="filterProducts"
         class="q-mb-md"
       >
         <template v-slot:prepend>
@@ -86,7 +85,7 @@
 
 <script>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
@@ -111,14 +110,18 @@ export default {
     };
 
     const filterProducts = () => {
-      if (searchQuery.value) {
+      if (!products.value.length) {
+        return;
+      }
+
+      if (searchQuery.value.trim()) {
         filteredProducts.value = products.value.filter((product) =>
           product.AftercareProductName.toLowerCase().includes(
             searchQuery.value.toLowerCase()
           )
         );
       } else {
-        filteredProducts.value = products.value;
+        filteredProducts.value = [...products.value];
       }
     };
 
@@ -141,6 +144,10 @@ export default {
     };
 
     onMounted(fetchProducts);
+
+    watch(searchQuery, () => {
+      filterProducts();
+    });
 
     return {
       products,
@@ -388,8 +395,3 @@ export default {
   }
 }
 </style>
-
-
-
-
-
