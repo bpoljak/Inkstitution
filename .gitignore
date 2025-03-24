@@ -70,3 +70,5 @@ src-cordova/app/build/
 *.xcuserstate
 *.xcworkspace
 *.xcodeproj/
+
+inkstitution.code-workspace

@@ -1,22 +1,19 @@
-const User = require("../models/user.model.js");
+const UserAuth = require("../models/userauth.model.js");
 const bcrypt = require("bcrypt");
 
-exports.createUser = (req, res) => {
-  if (!req.body) {
+exports.createUserAuth = (req, res) => {
+  if (!req.body.userEmail || !req.body.userPassword) {
     return res.status(400).send({
-      message: "Content can not be empty!",
+      message: "Email and password are required.",
     });
   }
 
-  const user = {
-    userFirstName: req.body.userFirstName,
-    userLastName: req.body.userLastName,
+  const userAuth = {
     userEmail: req.body.userEmail,
-    userAccountName: req.body.userAccountName,
     userPassword: req.body.userPassword,
   };
 
-  User.createUser(user, (err, data) => {
+  UserAuth.createUserAuth(userAuth, (err, data) => {
     if (err) {
       res.status(500).send({ message: err.message || "Error creating user." });
     } else {
@@ -25,8 +22,8 @@ exports.createUser = (req, res) => {
   });
 };
 
-exports.getAllUsers = (req, res) => {
-  User.getAllUsers((err, data) => {
+exports.getAllUserAuths = (req, res) => {
+  UserAuth.getAllUserAuths((err, data) => {
     if (err) {
       res.status(500).send({ message: err.message || "Error fetching users." });
     } else {
@@ -35,8 +32,8 @@ exports.getAllUsers = (req, res) => {
   });
 };
 
-exports.getUserById = (req, res) => {
-  User.getUserById(req.params.id, (err, data) => {
+exports.getUserAuthById = (req, res) => {
+  UserAuth.getUserAuthById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res
@@ -53,22 +50,21 @@ exports.getUserById = (req, res) => {
   });
 };
 
-exports.updateUserById = (req, res) => {
-  if (!req.body) {
-    return res.status(400).send({ message: "Content can not be empty!" });
+exports.updateUserAuthById = (req, res) => {
+  if (!req.body.userEmail || !req.body.userPassword) {
+    return res
+      .status(400)
+      .send({ message: "Email and password are required." });
   }
 
-  const updatedUser = {
-    userFirstName: req.body.userFirstName,
-    userLastName: req.body.userLastName,
+  const updatedUserAuth = {
     userEmail: req.body.userEmail,
-    userAccountName: req.body.userAccountName,
     userPassword: req.body.userPassword,
   };
 
   if (req.body.currentPassword) {
-    User.getUserById(req.params.id, async (err, user) => {
-      if (err) {
+    UserAuth.getUserAuthById(req.params.id, async (err, user) => {
+      if (err || !user) {
         return res.status(404).send({ message: "User not found." });
       }
 
@@ -84,10 +80,13 @@ exports.updateUserById = (req, res) => {
       }
 
       if (req.body.userPassword) {
-        updatedUser.userPassword = await bcrypt.hash(req.body.userPassword, 10);
+        updatedUserAuth.userPassword = await bcrypt.hash(
+          req.body.userPassword,
+          10
+        );
       }
 
-      User.updateUserById(req.params.id, updatedUser, (err, data) => {
+      UserAuth.updateUserAuthById(req.params.id, updatedUserAuth, (err) => {
         if (err) {
           return res.status(500).send({ message: "Error updating user." });
         }
@@ -95,7 +94,7 @@ exports.updateUserById = (req, res) => {
       });
     });
   } else {
-    User.updateUserById(req.params.id, updatedUser, (err, data) => {
+    UserAuth.updateUserAuthById(req.params.id, updatedUserAuth, (err) => {
       if (err) {
         return res.status(500).send({ message: "Error updating user." });
       }
@@ -104,8 +103,8 @@ exports.updateUserById = (req, res) => {
   }
 };
 
-exports.deleteUserById = (req, res) => {
-  User.deleteUserById(req.params.id, (err, data) => {
+exports.deleteUserAuthById = (req, res) => {
+  UserAuth.deleteUserAuthById(req.params.id, (err) => {
     if (err) {
       if (err.kind === "not_found") {
         res
@@ -122,44 +121,40 @@ exports.deleteUserById = (req, res) => {
   });
 };
 
-exports.loginUser = (req, res) => {
+exports.loginUserAuth = (req, res) => {
   const { userEmail, userPassword } = req.body;
 
   if (!userEmail || !userPassword) {
-    return res.status(400).send({ message: "Email i lozinka su obavezni!" });
+    return res
+      .status(400)
+      .send({ message: "Email and password are required." });
   }
 
-  User.loginUser(userEmail, userPassword, (err, user) => {
+  UserAuth.loginUserAuth(userEmail, userPassword, (err, user) => {
     if (err) {
       if (err.kind === "not_found") {
-        return res.status(404).send({ message: "Korisnik nije pronađen." });
+        return res.status(404).send({ message: "User not found." });
       } else if (err.kind === "invalid_password") {
-        return res.status(401).send({ message: "Neispravna lozinka." });
+        return res.status(401).send({ message: "Invalid password." });
       } else {
-        return res.status(500).send({ message: "Greška prilikom prijave." });
+        return res.status(500).send({ message: "Login error." });
       }
     }
 
     req.session.userId = user.id;
-    req.session.userFirstName = user.userFirstName;
-    req.session.userLastName = user.userLastName;
     req.session.userEmail = user.userEmail;
-    req.session.userAccountName = user.userAccountName;
 
     res.send({
-      message: "Prijava uspješna",
+      message: "Login successful",
       user: {
         id: user.id,
-        userFirstName: user.userFirstName,
-        userLastName: user.userLastName,
         userEmail: user.userEmail,
-        userAccountName: user.userAccountName,
       },
     });
   });
 };
 
-exports.logoutUser = (req, res) => {
+exports.logoutUserAuth = (req, res) => {
   console.log("Logout initiated. Current session data:", req.session);
   req.session.destroy((err) => {
     if (err) {

@@ -39,7 +39,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to Inkstitution!." });
 });
 
-require("./routes/user.routes.js")(app);
 require("./routes/aftercareproduct.routes.js")(app);
 require("./routes/studio.routes.js")(app);
 require("./routes/artist.routes.js")(app);
@@ -49,6 +48,8 @@ require("./routes/studioprofileimage.routes.js")(app);
 require("./routes/appointment.routes.js")(app);
 require("./routes/email.routes.js")(app);
 require("./routes/userprofileimage.routes.js")(app);
+require("./routes/userprofile.routes.js")(app);
+require("./routes/userauth.routes.js")(app);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server listening on port ${PORT}`);
