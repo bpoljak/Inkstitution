@@ -40,7 +40,8 @@ app.get("/", (req, res) => {
 });
 
 require("./routes/aftercareproduct.routes.js")(app);
-require("./routes/studio.routes.js")(app);
+require("./routes/studioauth.routes.js")(app);
+require("./routes/studioprofile.routes.js")(app);
 require("./routes/artist.routes.js")(app);
 require("./routes/userimage.routes.js")(app);
 require("./routes/studioimage.routes.js")(app);
