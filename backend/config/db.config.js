@@ -2,21 +2,25 @@ const knex = require("knex");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
-try {
-  const db = knex({
-    client: "mysql",
-    connection: {
-      host: process.env.host,
-      user: process.env.user,
-      password: process.env.password,
-      database: process.env.database,
-      port: process.env.port,
-    },
-  });
+const db = knex({
+  client: "mysql",
+  connection: {
+    host: process.env.host,
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database,
+    port: Number(process.env.port),
+  },
+});
 
-  console.log("Successfully connected to the database using Knex.");
+(async () => {
+  try {
+    await db.raw("SELECT 1");
+    console.log("Spojeno na MySQL bazu!");
+  } catch (err) {
+    console.error("Greška prilikom spajanja:", err);
+    process.exit(1);
+  }
+})();
 
-  module.exports = db;
-} catch (error) {
-  console.error("Error in Knex database config setup:", error);
-}
+module.exports = db;

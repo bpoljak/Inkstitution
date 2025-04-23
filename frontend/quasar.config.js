@@ -12,9 +12,16 @@ const { configure } = require("quasar/wrappers");
 const { config } = require("dotenv");
 
 module.exports = configure(function (ctx) {
-  const env = ctx.mode.cordova
-    ? config({ path: ".env.android" }).parsed
-    : config({ path: ctx.dev ? ".env.development" : ".env.production" }).parsed;
+  const isFirebase = process.env.FIREBASE === "true";
+
+  const env = config({
+    path: ctx.mode.cordova
+      ? ".env.android"
+      : isFirebase || !ctx.dev
+      ? ".env.production"
+      : ".env.development",
+  }).parsed;
+
   console.log("Loaded environment variables:", env);
 
   return {

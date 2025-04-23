@@ -2,6 +2,18 @@
     "folders": [
         {
             "path": "."
+        },
+        {
+            "path": "../../Završni Rad"
+        },
+        {
+            "path": "../ink_promo"
+        },
+        {
+            "path": "../MTG_Deck_Tracker"
+        },
+        {
+            "path": "../../New folder"
         }
     ]
 }

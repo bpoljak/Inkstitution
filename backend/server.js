@@ -1,7 +1,18 @@
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+
+console.log(">>>>> TEST .env:");
+console.log("host:", process.env.host);
+console.log("user:", process.env.user);
+console.log("database:", process.env.database);
+
 const express = require("express");
 const session = require("express-session");
 const KnexSessionStore = require("connect-session-knex")(session);
-const knex = require("./config/db.config");
+const knex = require("./config/db.config.js");
+console.log("🔍 KORISTI SE KNEX KONFIG:");
+console.log(knex.client.config.connection);
+
 const cors = require("cors");
 
 const app = express();
